@@ -19,6 +19,55 @@ import swervelib.parser.PIDFConfig;
  */
 public final class Constants
 {
+  public static final class CANConstants
+  {
+    public static final int LeftShooter = 10;
+    public static final int RightShooter = 11;
+    public static final int IntakeGrabberID = 20;
+    public static final int IntakeArmID     = 21;
+  }
+  public static final class ShooterConstants
+  {
+    public static final double ShootSpeed = 480.0;
+  }
+  public static final class IntakeGrabberConstants
+  {
+    public static final double InputSpeed = 0.1;  
+    public static final double OutputSpeed = -0.1;  
+  }
+  
+  public static final class IntakeArmConstants
+  {
+    public static final int kPIDProfileSlotIndex = 0;
+    public static final int kPIDLoopIndex = 0;
+
+    public static final double kArmMaxForwardSpeed = 0.05;
+    public static final double kArmMaxReverseSpeed = 0.12;
+    
+    public static final double kEArmForwardPositionMultiplier = 30;
+    public static final double kArmReversePositionMultiplier = 30;
+
+    public static final double kArmMaxPeakOutputForward = 0.7;
+    public static final double kArmMaxPeakOutputReverse = -0.7;
+    
+    public static final double kArmCruiseVelocity = 700;//450; //200
+    public static final double kArmAcceleration = 500;//450; //200
+
+    public static final int kArmHomePosition = 0;
+    public static final int kArmDeployedPosition = 5000;
+    
+    public static final double kArmMaxGravityFF = 0.08;  //power required to hold forearm horizontal.
+     
+    /**
+	   * Gains used in Motion Magic, to be adjusted accordingly
+     * Gains(kp, ki, kd, kf, izone, peak output);
+     */
+    public static final Gains ArmGains = new Gains(4, 0.0, 0.0, 0.32, 0, 1.0);
+    
+    public static final int kEncoderCountsPerRev = 4096;
+    public static final double kArmGearRatio = 1.0;  //1:1 gearing (100:1 gearbox is in front of the encoder 
+  }
+
 
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);

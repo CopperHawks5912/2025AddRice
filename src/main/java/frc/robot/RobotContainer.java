@@ -14,13 +14,21 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.intake.DeployIntakeCommand;
+import frc.robot.commands.intake.SpitNoteCommand;
+import frc.robot.commands.intake.EatNoteCommand;
+import frc.robot.commands.intake.HomeIntakeCommand;
+import frc.robot.commands.shooter.PukeNoteCommand;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.intake.IntakeArmSubsystem;
+import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+
 import java.io.File;
 
 /**
@@ -34,12 +42,14 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/5912"));
-  // CommandJoystick rotationController = new CommandJoystick(1);
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  CommandJoystick driverController = new CommandJoystick(1);
+  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
+  private final IntakeArmSubsystem m_IntakeArmSubsystem = new IntakeArmSubsystem();
+  private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem = new IntakeGrabberSubsystem();
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
+
+  
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -102,8 +112,21 @@ public class RobotContainer
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+    
+    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value)
+            .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
+    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value)
+            .whileTrue(new SpitNoteCommand(m_IntakeGrabberSubsystem));    
+    new JoystickButton(driverXbox, XboxController.Button.kY.value)
+            .onTrue(new HomeIntakeCommand(m_IntakeArmSubsystem));
+    new JoystickButton(driverXbox, XboxController.Button.kA.value)
+            .onTrue(new DeployIntakeCommand(m_IntakeArmSubsystem));
+    new JoystickButton(driverXbox, XboxController.Button.kB.value)
+            .whileTrue(new PukeNoteCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
+    
+    
+    // new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    // new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
     new JoystickButton(driverXbox,
                        2).whileTrue(
         Commands.deferredProxy(() -> drivebase.driveToPose(
