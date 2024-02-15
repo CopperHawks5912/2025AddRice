@@ -2,13 +2,9 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
@@ -39,29 +35,29 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_armTalon.configNominalOutputForward(0, kTimeoutMs);
     m_armTalon.configNominalOutputReverse(0, kTimeoutMs);
 		
-    m_armTalon.configPeakOutputForward(IntakeArmConstants.kArmMaxPeakOutputForward, kTimeoutMs);
-	  m_armTalon.configPeakOutputReverse(IntakeArmConstants.kArmMaxPeakOutputReverse, kTimeoutMs);
+    m_armTalon.configPeakOutputForward(IntakeArmConstants.ArmMaxPeakOutputForward, kTimeoutMs);
+	  m_armTalon.configPeakOutputReverse(IntakeArmConstants.ArmMaxPeakOutputReverse, kTimeoutMs);
    
     /* Set Motion Magic gains in slot0 - see documentation */
-    m_armTalon.selectProfileSlot( IntakeArmConstants.kPIDProfileSlotIndex, IntakeArmConstants.kPIDLoopIndex);
-    m_armTalon.config_kF(IntakeArmConstants.kPIDProfileSlotIndex, IntakeArmConstants.ArmGains.kF, kTimeoutMs);
-    m_armTalon.config_kP(IntakeArmConstants.kPIDProfileSlotIndex, IntakeArmConstants.ArmGains.kP, kTimeoutMs);
-    m_armTalon.config_kI(IntakeArmConstants.kPIDProfileSlotIndex, IntakeArmConstants.ArmGains.kI, kTimeoutMs);
-    m_armTalon.config_kD(IntakeArmConstants.kPIDProfileSlotIndex, IntakeArmConstants.ArmGains.kD, kTimeoutMs);    
+    m_armTalon.selectProfileSlot( IntakeArmConstants.PIDProfileSlotIndex, IntakeArmConstants.PIDLoopIndex);
+    m_armTalon.config_kF(IntakeArmConstants.PIDProfileSlotIndex, IntakeArmConstants.ArmGains.kF, kTimeoutMs);
+    m_armTalon.config_kP(IntakeArmConstants.PIDProfileSlotIndex, IntakeArmConstants.ArmGains.kP, kTimeoutMs);
+    m_armTalon.config_kI(IntakeArmConstants.PIDProfileSlotIndex, IntakeArmConstants.ArmGains.kI, kTimeoutMs);
+    m_armTalon.config_kD(IntakeArmConstants.PIDProfileSlotIndex, IntakeArmConstants.ArmGains.kD, kTimeoutMs);    
 
     /* Set acceleration and vcruise velocity - see documentation */
-    m_armTalon.configMotionCruiseVelocity(IntakeArmConstants.kArmCruiseVelocity, kTimeoutMs);
-    m_armTalon.configMotionAcceleration( IntakeArmConstants.kArmAcceleration, kTimeoutMs);
+    m_armTalon.configMotionCruiseVelocity(IntakeArmConstants.ArmCruiseVelocity, kTimeoutMs);
+    m_armTalon.configMotionAcceleration( IntakeArmConstants.ArmAcceleration, kTimeoutMs);
     
     /* Zero the sensor once on robot boot up */
-    m_armTalon.setSelectedSensorPosition(0, IntakeArmConstants.kPIDLoopIndex, kTimeoutMs);	
+    m_armTalon.setSelectedSensorPosition(0, IntakeArmConstants.PIDLoopIndex, kTimeoutMs);	
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putData(this);
-    SmartDashboard.putNumber( "Arm Position", m_armTalon.getSelectedSensorPosition(IntakeArmConstants.kPIDLoopIndex) );
+    SmartDashboard.putNumber( "Arm Position", m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) );
     SmartDashboard.putNumber( "Arm Power", m_armTalon.getMotorOutputPercent() );
     //SmartDashboard.putNumber( "Arm Target", m_currentTarget.getShoulderPosition() );
     //SmartDashboard.putBoolean( "Shoulder Switch", m_shoulderLimitSwitch.get() );
@@ -73,20 +69,20 @@ public class IntakeArmSubsystem extends SubsystemBase {
   public void moveArmToPosition( int position )
   {
     m_currentTarget = position;    
-    double currentPos = m_armTalon.getSelectedSensorPosition(IntakeArmConstants.kPIDLoopIndex);    
-    m_armTalon.set( ControlMode.MotionMagic, currentPos );
+    //double currentPos = m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex);    
+    m_armTalon.set( ControlMode.MotionMagic, m_currentTarget, DemandType.ArbitraryFeedForward, m_ArbitraryFeedForward );
   }  
 
   public boolean isDeployed()
   {
-    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.kPIDLoopIndex) - IntakeArmConstants.kArmDeployedPosition ) < 50 )
+    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmDeployedPosition ) < 50 )
       return true;
     else 
       return false;
   }
   public boolean isHome()
   {
-    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.kPIDLoopIndex) - IntakeArmConstants.kArmHomePosition ) < 50 )
+    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmHomePosition ) < 50 )
       return true;
     else 
       return false;
@@ -94,14 +90,14 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   private double calculateArbitraryFeedForward( )
   {
-    double kTicksPerDegree = IntakeArmConstants.kEncoderCountsPerRev * IntakeArmConstants.kArmGearRatio / 360; 
+    double kTicksPerDegree = IntakeArmConstants.EncoderCountsPerRev * IntakeArmConstants.ArmGearRatio / 360; 
     double currentPos = m_armTalon.getSelectedSensorPosition();    
    
-    double degrees = ( currentPos - IntakeArmConstants.kArmDeployedPosition) / kTicksPerDegree;
+    double degrees = ( currentPos - IntakeArmConstants.ArmDeployedPosition) / kTicksPerDegree;
     double radians = java.lang.Math.toRadians(degrees);
     double cosineScalar = java.lang.Math.cos(radians);
     
-    double arbitraryFF = IntakeArmConstants.kArmMaxGravityFF * cosineScalar;
+    double arbitraryFF = IntakeArmConstants.ArmMaxGravityFF * cosineScalar;
      return arbitraryFF;
   }  
 }

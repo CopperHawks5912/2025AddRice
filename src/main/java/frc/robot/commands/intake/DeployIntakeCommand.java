@@ -30,7 +30,7 @@ public class DeployIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeArmSubsystem.moveArmToPosition(IntakeArmConstants.kArmDeployedPosition);
+    m_IntakeArmSubsystem.moveArmToPosition(IntakeArmConstants.ArmDeployedPosition);
   }
 
   // Called once the command ends or is interrupted.

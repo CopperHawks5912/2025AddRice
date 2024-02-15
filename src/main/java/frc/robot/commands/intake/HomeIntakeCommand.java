@@ -30,7 +30,7 @@ public class HomeIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeArmSubsystem.moveArmToPosition(IntakeArmConstants.kArmHomePosition);
+    m_IntakeArmSubsystem.moveArmToPosition(IntakeArmConstants.ArmHomePosition);
   }
 
   // Called once the command ends or is interrupted.

@@ -5,7 +5,6 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
 
 /** An example command that uses an example subsystem. */
