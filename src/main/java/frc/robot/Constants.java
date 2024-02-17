@@ -27,14 +27,34 @@ public final class Constants
     public static final int IntakeGrabberID = 20;
     public static final int IntakeArmID     = 21;
   }
+
+  public static class ControllerConstants
+  {
+    public static final int kDriverControllerPort = 0;
+    public static final int kSecondControllerPort = 1;
+    
+    public static final int ButtonBlueUpper = 1;
+    public static final int ButtonBlueLower =  5;
+    public static final int ButtonRedUpper1 =  2;
+    public static final int ButtonRedUpper2 =  3;
+    public static final int ButtonRedUpper3 =  4;
+    public static final int ButtonRedLower1 =  6;
+    public static final int ButtonRedLower2 =  7;
+    public static final int ButtonRedLower3 =  8;
+    public static final int ButtonBlack1    = 10;
+    public static final int ButtonBlack2    =  9;
+    public static final int HorizontalAxis  = 0;
+    public static final int VerticalAxis    = 1;
+  }
+
   public static final class ShooterConstants
   {
-    public static final double ShootSpeed = 480.0;
+    public static final double ShootSpeed = 80.0;
   }
   public static final class IntakeGrabberConstants
   {
-    public static final double InputSpeed = 0.1;  
-    public static final double OutputSpeed = -0.1;  
+    public static final double InputSpeed = 0.6;  
+    public static final double OutputSpeed = -0.6;  
   }
   
   public static final class IntakeArmConstants
@@ -42,20 +62,21 @@ public final class Constants
     public static final int PIDProfileSlotIndex = 0;
     public static final int PIDLoopIndex = 0;
 
-    public static final double ArmMaxForwardSpeed = 0.05;
-    public static final double ArmMaxReverseSpeed = 0.12;
+    // public static final double ArmMaxForwardSpeed = 0.05;
+    // public static final double ArmMaxReverseSpeed = 0.12;
     
-    public static final double EArmForwardPositionMultiplier = 30;
-    public static final double ArmReversePositionMultiplier = 30;
+    // public static final double ArmForwardPositionMultiplier = 30;
+    // public static final double ArmReversePositionMultiplier = 30;
 
-    public static final double ArmMaxPeakOutputForward = 0.7;
-    public static final double ArmMaxPeakOutputReverse = -0.7;
+    public static final double ArmMaxPeakOutputForward = 0.5;//0.7;
+    public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
     
-    public static final double ArmCruiseVelocity = 700;//450; //200
-    public static final double ArmAcceleration = 500;//450; //200
+    public static final double ArmCruiseVelocity = 400;//700;
+    public static final double ArmAcceleration = 300;//500;
 
     public static final int ArmHomePosition = 0;
-    public static final int ArmDeployedPosition = 5000;
+    public static final int ArmDeployedPosition = 2380; //2440;
+    public static final int ArmAmpPosition = 1280; //2440;
     
     public static final double ArmMaxGravityFF = 0.08;  //power required to hold forearm horizontal.
      

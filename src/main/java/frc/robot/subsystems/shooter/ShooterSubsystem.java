@@ -5,8 +5,10 @@ import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
+import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase{
@@ -24,6 +26,14 @@ public class ShooterSubsystem extends SubsystemBase{
     m_right.setInverted(true);
 
     
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber( "Shooter Speed", m_left.getVelocity().getValue() );
+    //SmartDashboard.putNumber( "Arm Target", m_currentTarget.getShoulderPosition() );
+    //SmartDashboard.putBoolean( "Shoulder Switch", m_shoulderLimitSwitch.get() );
   }
   public void fireShooter() {
         m_left.setVoltage(12);

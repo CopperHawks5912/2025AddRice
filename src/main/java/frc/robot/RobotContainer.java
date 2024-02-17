@@ -14,10 +14,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.intake.AmpIntakeCommand;
 import frc.robot.commands.intake.DeployIntakeCommand;
 import frc.robot.commands.intake.SpitNoteCommand;
 import frc.robot.commands.intake.EatNoteCommand;
@@ -48,7 +51,8 @@ public class RobotContainer
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
-
+ CommandGenericHID m_secondController = new CommandGenericHID(1);
+  
   
 
   /**
@@ -112,26 +116,39 @@ public class RobotContainer
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
+    m_secondController.button(ControllerConstants.ButtonBlueUpper)
+        .onTrue(new DeployIntakeCommand(m_IntakeArmSubsystem));
+    m_secondController.button(ControllerConstants.ButtonBlueLower)
+        .onTrue(new HomeIntakeCommand(m_IntakeArmSubsystem));
+    m_secondController.button(ControllerConstants.ButtonRedUpper1)
+        .onTrue(new AmpIntakeCommand(m_IntakeArmSubsystem));
+    m_secondController.button(ControllerConstants.ButtonRedUpper3)
+        .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
+    m_secondController.button(ControllerConstants.ButtonRedLower3)
+        .whileTrue(new SpitNoteCommand(m_IntakeGrabberSubsystem));
+    m_secondController.button(ControllerConstants.ButtonBlack2)
+        .whileTrue(new PukeNoteCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
     
-    new JoystickButton(driverXbox, XboxController.Button.kLeftBumper.value)
-            .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
-    new JoystickButton(driverXbox, XboxController.Button.kRightBumper.value)
-            .whileTrue(new SpitNoteCommand(m_IntakeGrabberSubsystem));    
-    new JoystickButton(driverXbox, XboxController.Button.kY.value)
-            .onTrue(new HomeIntakeCommand(m_IntakeArmSubsystem));
-    new JoystickButton(driverXbox, XboxController.Button.kA.value)
-            .onTrue(new DeployIntakeCommand(m_IntakeArmSubsystem));
-    new JoystickButton(driverXbox, XboxController.Button.kB.value)
-            .whileTrue(new PukeNoteCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
+    
+    
+    //     .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
+    // new JoystickButton(m_secondController, 6 )//XboxController.Button.kRightBumper.value)
+    //         .whileTrue(new SpitNoteCommand(m_IntakeGrabberSubsystem));    
+    // new JoystickButton(m_secondController, 4 )//XboxController.Button.kY.value)
+    //         .onTrue(new HomeIntakeCommand(m_IntakeArmSubsystem));
+    // new JoystickButton(m_secondController, 1 )//XboxController.Button.kA.value)
+    //         .onTrue(new DeployIntakeCommand(m_IntakeArmSubsystem));
+    // new JoystickButton(m_secondController, 2 )//XboxController.Button.kB.value)
+    //         .whileTrue(new PukeNoteCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
     
     
     // new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     // new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    new JoystickButton(driverXbox,
-                       2).whileTrue(
-        Commands.deferredProxy(() -> drivebase.driveToPose(
-                                   new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              ));
+    // new JoystickButton(driverXbox,
+    //                    2).whileTrue(
+    //     Commands.deferredProxy(() -> drivebase.driveToPose(
+    //                                new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
+    //                           ));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 

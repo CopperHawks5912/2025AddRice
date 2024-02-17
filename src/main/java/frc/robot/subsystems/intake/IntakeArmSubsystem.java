@@ -2,6 +2,7 @@ package frc.robot.subsystems.intake;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -20,7 +21,6 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_armTalon.configFactoryDefault();   
     m_armTalon.stopMotor();
     m_armTalon.setNeutralMode( NeutralMode.Brake); 
-    //m_armTalon.setInverted(InvertType.None);    
  
     /* (sample code comment)
        set deadband to super small 0.001 (0.1 %).
@@ -51,19 +51,24 @@ public class IntakeArmSubsystem extends SubsystemBase {
     
     /* Zero the sensor once on robot boot up */
     m_armTalon.setSelectedSensorPosition(0, IntakeArmConstants.PIDLoopIndex, kTimeoutMs);	
-  }
+    m_armTalon.setSensorPhase(false);   
+    m_armTalon.setInverted(InvertType.None);  
+      
+ }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putData(this);
-    SmartDashboard.putNumber( "Arm Position", m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) );
-    SmartDashboard.putNumber( "Arm Power", m_armTalon.getMotorOutputPercent() );
-    //SmartDashboard.putNumber( "Arm Target", m_currentTarget.getShoulderPosition() );
-    //SmartDashboard.putBoolean( "Shoulder Switch", m_shoulderLimitSwitch.get() );
+    //m_armTalon.setSensorPhase(false);     
+ 
+    // SmartDashboard.putData(this);
+    // SmartDashboard.putNumber( "Arm Position", m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) );
+    // SmartDashboard.putNumber( "Arm Power", m_armTalon.getMotorOutputPercent() );
+    // //SmartDashboard.putNumber( "Arm Target", m_currentTarget.getShoulderPosition() );
+    // //SmartDashboard.putBoolean( "Shoulder Switch", m_shoulderLimitSwitch.get() );
 
-    m_ArbitraryFeedForward = calculateArbitraryFeedForward();
-    SmartDashboard.putNumber( "Arm Arb FF", m_ArbitraryFeedForward );           
+    // m_ArbitraryFeedForward = calculateArbitraryFeedForward();
+    // SmartDashboard.putNumber( "Arm Arb FF", m_ArbitraryFeedForward );           
   }
 
   public void moveArmToPosition( int position )
@@ -75,14 +80,14 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   public boolean isDeployed()
   {
-    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmDeployedPosition ) < 50 )
+    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmDeployedPosition ) < 25 )
       return true;
     else 
       return false;
   }
   public boolean isHome()
   {
-    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmHomePosition ) < 50 )
+    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmHomePosition ) < 25 )
       return true;
     else 
       return false;
