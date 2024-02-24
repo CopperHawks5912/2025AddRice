@@ -1,5 +1,5 @@
 {
-  "maxSpeed": 7.5,
+  "maxSpeed": 1.5,
   "optimalVoltage": 12,
   "imu": {
     "type": "navx_spi",

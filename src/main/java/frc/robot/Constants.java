@@ -49,7 +49,11 @@ public final class Constants
 
   public static final class ShooterConstants
   {
-    public static final double ShootSpeed = 80.0;
+    public static final double PrelaunchTargetSpeed = 50;
+    public static final double SpeakerShootTargetSpeed = 40.0;
+    public static final double SpeakerShootMinSpeed = 38.0;
+    public static final double AmpShootTargetSpeed = 25.0;
+    public static final double AmpShootMinSpeed = 25.0;
   }
   public static final class IntakeGrabberConstants
   {
@@ -75,7 +79,7 @@ public final class Constants
     public static final double ArmAcceleration = 300;//500;
 
     public static final int ArmHomePosition = 0;
-    public static final int ArmDeployedPosition = 2380; //2440;
+    public static final int ArmDeployedPosition = 2410; //2440;
     public static final int ArmAmpPosition = 1280; //2440;
     
     public static final double ArmMaxGravityFF = 0.08;  //power required to hold forearm horizontal.

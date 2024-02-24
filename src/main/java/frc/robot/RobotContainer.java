@@ -25,7 +25,9 @@ import frc.robot.commands.intake.DeployIntakeCommand;
 import frc.robot.commands.intake.SpitNoteCommand;
 import frc.robot.commands.intake.EatNoteCommand;
 import frc.robot.commands.intake.HomeIntakeCommand;
-import frc.robot.commands.shooter.PukeNoteCommand;
+import frc.robot.commands.shooter.AmpShootCommand;
+import frc.robot.commands.shooter.SpeakerPrelaunchCommand;
+import frc.robot.commands.shooter.SpeakerShootCommand;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.intake.IntakeArmSubsystem;
 import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
@@ -53,7 +55,7 @@ public class RobotContainer
   XboxController driverXbox = new XboxController(0);
  CommandGenericHID m_secondController = new CommandGenericHID(1);
   
-  
+  Command driveFieldOriented270;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -64,11 +66,11 @@ public class RobotContainer
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
+                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftY() / 1.5,
                                                                                                 OperatorConstants.LEFT_Y_DEADBAND),
-                                                                   () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
+                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftX() / 1.5,
                                                                                                 OperatorConstants.LEFT_X_DEADBAND),
-                                                                   () -> MathUtil.applyDeadband(driverXbox.getRightX(),
+                                                                   () -> MathUtil.applyDeadband( 0, //driverXbox.getRightX(),
                                                                                                 OperatorConstants.RIGHT_X_DEADBAND),
                                                                    driverXbox::getYButtonPressed,
                                                                    driverXbox::getAButtonPressed,
@@ -92,9 +94,9 @@ public class RobotContainer
     // left stick controls translation
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverXbox.getRawAxis(2));
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> driverXbox.getRawAxis(4));
 
     Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
         () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
@@ -102,7 +104,7 @@ public class RobotContainer
         () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
+        !RobotBase.isSimulation() ? closedAbsoluteDriveAdv : driveFieldOrientedDirectAngleSim);
   }
 
   /**
@@ -120,35 +122,22 @@ public class RobotContainer
         .onTrue(new DeployIntakeCommand(m_IntakeArmSubsystem));
     m_secondController.button(ControllerConstants.ButtonBlueLower)
         .onTrue(new HomeIntakeCommand(m_IntakeArmSubsystem));
-    m_secondController.button(ControllerConstants.ButtonRedUpper1)
-        .onTrue(new AmpIntakeCommand(m_IntakeArmSubsystem));
+    //m_secondController.button(ControllerConstants.ButtonRedUpper1)
+     //   .whileTrue(new SpeakerPrelaunchCommand(m_shooterSubsystem));
     m_secondController.button(ControllerConstants.ButtonRedUpper3)
         .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
-    m_secondController.button(ControllerConstants.ButtonRedLower3)
-        .whileTrue(new SpitNoteCommand(m_IntakeGrabberSubsystem));
+    m_secondController.button(ControllerConstants.ButtonBlack1)
+        .whileTrue(new AmpShootCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
     m_secondController.button(ControllerConstants.ButtonBlack2)
-        .whileTrue(new PukeNoteCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
+        .whileTrue(new SpeakerShootCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
+        
     
-    
-    
-    //     .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
-    // new JoystickButton(m_secondController, 6 )//XboxController.Button.kRightBumper.value)
-    //         .whileTrue(new SpitNoteCommand(m_IntakeGrabberSubsystem));    
-    // new JoystickButton(m_secondController, 4 )//XboxController.Button.kY.value)
-    //         .onTrue(new HomeIntakeCommand(m_IntakeArmSubsystem));
-    // new JoystickButton(m_secondController, 1 )//XboxController.Button.kA.value)
-    //         .onTrue(new DeployIntakeCommand(m_IntakeArmSubsystem));
-    // new JoystickButton(m_secondController, 2 )//XboxController.Button.kB.value)
-    //         .whileTrue(new PukeNoteCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
-    
-    
-    // new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     // new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    // new JoystickButton(driverXbox,
-    //                    2).whileTrue(
-    //     Commands.deferredProxy(() -> drivebase.driveToPose(
-    //                                new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-    //                           ));
+     //new JoystickButton(driverXbox,
+     //                   2).whileTrue(
+     //    Commands.deferredProxy(() -> drivebase.driveToPose(
+     //                               new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
+     //                          ));
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
@@ -160,7 +149,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("Nothing");
+    return drivebase.getAutonomousCommand("Center-2Note");
   }
 
   public void setDriveMode()

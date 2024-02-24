@@ -9,7 +9,7 @@ import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class PukeNoteCommand extends Command {
+public class AmpShootCommand extends Command {
   private final ShooterSubsystem m_ShooterSubsystem;
   private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem;
 
@@ -18,7 +18,7 @@ public class PukeNoteCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public PukeNoteCommand(ShooterSubsystem shooterSubsystem, IntakeGrabberSubsystem intakeGrabberSubsystem) {
+  public AmpShootCommand(ShooterSubsystem shooterSubsystem, IntakeGrabberSubsystem intakeGrabberSubsystem) {
     m_ShooterSubsystem = shooterSubsystem;
     m_IntakeGrabberSubsystem = intakeGrabberSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,8 +32,8 @@ public class PukeNoteCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_ShooterSubsystem.fireShooter();
-    if( m_ShooterSubsystem.isAtLaunchSpeed() )
+    m_ShooterSubsystem.ampShoot();
+    if( m_ShooterSubsystem.isAtAmpSpeed() )
       m_IntakeGrabberSubsystem.feedShooter();
   }
 
