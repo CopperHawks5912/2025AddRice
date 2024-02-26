@@ -17,6 +17,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.intake.DeployArmCommand;
 import frc.robot.commands.intake.EatNoteCommand;
 import frc.robot.commands.intake.HomeArmCommand;
+import frc.robot.commands.intake.StopIntakeCommand;
 import frc.robot.commands.shooter.ShootToAmpCommand;
 import frc.robot.commands.shooter.ShootToSpeakerCommand;
 import frc.robot.commands.shooter.ShootToSpeakerWithDelayCommand;
@@ -56,7 +57,8 @@ public class RobotContainer
     NamedCommands.registerCommand ("DeployArm", new DeployArmCommand(m_IntakeArmSubsystem));
     NamedCommands.registerCommand("HomeArm", new HomeArmCommand(m_IntakeArmSubsystem));
     NamedCommands.registerCommand("EatNote", new EatNoteCommand(m_IntakeGrabberSubsystem));
-    NamedCommands.registerCommand("ShootToSpeakerThenDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds ));
+    NamedCommands.registerCommand("StopIntake", new StopIntakeCommand(m_IntakeGrabberSubsystem));
+    NamedCommands.registerCommand("ShootToSpeakerWithDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds ));
    
     configureBindings();
 
@@ -78,26 +80,26 @@ public class RobotContainer
     // left stick controls translation
     // right stick controls the desired angle NOT angular rotation
     
-    Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
-        () -> -driverXbox.getRightX(),
-        () -> -driverXbox.getRightY());
+    // Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
+    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
+    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
+    //     () -> -driverXbox.getRightX(),
+    //     () -> -driverXbox.getRightY());
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-    Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
-        () -> driverXbox.getRawAxis(4));
+    // Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
+    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
+    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
+    //     () -> driverXbox.getRawAxis(4));
 
-    Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
-        () -> driverXbox.getRawAxis(2));
+    // Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
+    //     () -> MathUtil.applyDeadband(driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
+    //     () -> MathUtil.applyDeadband(driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
+    //     () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? closedAbsoluteDriveAdv : closedAbsoluteDriveAdv);
