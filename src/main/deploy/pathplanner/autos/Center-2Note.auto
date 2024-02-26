@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "ShootToSpeakerWithDelay"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -28,19 +34,13 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "OpenMouthCommand"
+                        "name": "DeployArm"
                       }
                     },
                     {
                       "type": "named",
                       "data": {
-                        "name": "EatNoteCommand"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "CloseMouthCommand"
+                        "name": "EatNote"
                       }
                     }
                   ]
@@ -50,15 +50,34 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "Ring2ToCenterShoot"
+            "name": "StopIntake"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Ring2ToCenterShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "HomeArm"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "PukeNoteCommand"
+            "name": "ShootToSpeakerWithDelay"
           }
         }
       ]

@@ -2,25 +2,27 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.IntakeArmConstants;
-import frc.robot.subsystems.intake.IntakeArmSubsystem;
+import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
+import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class AmpIntakeCommand extends Command {
-  private final IntakeArmSubsystem m_IntakeArmSubsystem;
+public class ShootToAmpCommand extends Command {
+  private final ShooterSubsystem m_ShooterSubsystem;
+  private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AmpIntakeCommand(IntakeArmSubsystem intakeArmSubsystem) {
-    m_IntakeArmSubsystem = intakeArmSubsystem;
+  public ShootToAmpCommand(ShooterSubsystem shooterSubsystem, IntakeGrabberSubsystem intakeGrabberSubsystem) {
+    m_ShooterSubsystem = shooterSubsystem;
+    m_IntakeGrabberSubsystem = intakeGrabberSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intakeArmSubsystem);
+    addRequirements(shooterSubsystem, intakeGrabberSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -30,19 +32,23 @@ public class AmpIntakeCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeArmSubsystem.moveArmToPosition(IntakeArmConstants.ArmAmpPosition);
+    m_ShooterSubsystem.ampShoot();
+    if( m_ShooterSubsystem.isAtAmpSpeed() )
+      m_IntakeGrabberSubsystem.feedShooter();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
+      m_ShooterSubsystem.stopShooter();
+      m_IntakeGrabberSubsystem.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-  
-    return m_IntakeArmSubsystem.isDeployed();
+
+    return false;
   }
 }

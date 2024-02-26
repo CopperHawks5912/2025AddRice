@@ -12,18 +12,20 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.intake.DeployIntakeCommand;
+import frc.robot.commands.intake.DeployArmCommand;
 import frc.robot.commands.intake.EatNoteCommand;
-import frc.robot.commands.intake.HomeIntakeCommand;
-import frc.robot.commands.shooter.AmpShootCommand;
-import frc.robot.commands.shooter.SpeakerShootCommand;
+import frc.robot.commands.intake.HomeArmCommand;
+import frc.robot.commands.shooter.ShootToAmpCommand;
+import frc.robot.commands.shooter.ShootToSpeakerCommand;
+import frc.robot.commands.shooter.ShootToSpeakerWithDelayCommand;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.intake.IntakeArmSubsystem;
 import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import java.io.File;
 
@@ -44,25 +46,27 @@ public class RobotContainer
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController driverXbox = new XboxController(0);
- CommandGenericHID m_secondController = new CommandGenericHID(1);
+  CommandGenericHID m_secondController = new CommandGenericHID(1);
   
-  Command driveFieldOriented270;
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer()
   {
-    // Configure the trigger bindings
+    NamedCommands.registerCommand ("DeployArm", new DeployArmCommand(m_IntakeArmSubsystem));
+    NamedCommands.registerCommand("HomeArm", new HomeArmCommand(m_IntakeArmSubsystem));
+    NamedCommands.registerCommand("EatNote", new EatNoteCommand(m_IntakeGrabberSubsystem));
+    NamedCommands.registerCommand("ShootToSpeakerThenDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds ));
+   
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
                                                                    () -> MathUtil.applyDeadband(-driverXbox.getLeftY() / 1.5,
-                                                                                                OperatorConstants.LEFT_Y_DEADBAND),
+                                                                                                ControllerConstants.LeftYDeadband),
                                                                    () -> MathUtil.applyDeadband(-driverXbox.getLeftX() / 1.5,
-                                                                                                OperatorConstants.LEFT_X_DEADBAND),
+                                                                                                ControllerConstants.LeftXDeadband),
                                                                    () -> MathUtil.applyDeadband( driverXbox.getRightX(),
-                                                                                                OperatorConstants.RIGHT_X_DEADBAND),
+                                                                                                ControllerConstants.RightXDeadband),
                                                                    driverXbox::getYButtonPressed,
                                                                    driverXbox::getAButtonPressed,
                                                                    driverXbox::getXButtonPressed,
@@ -75,8 +79,8 @@ public class RobotContainer
     // right stick controls the desired angle NOT angular rotation
     
     Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
         () -> -driverXbox.getRightX(),
         () -> -driverXbox.getRightY());
 
@@ -86,13 +90,13 @@ public class RobotContainer
     // left stick controls translation
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
         () -> driverXbox.getRawAxis(4));
 
     Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
-        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
         () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
@@ -111,17 +115,17 @@ public class RobotContainer
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
     m_secondController.button(ControllerConstants.ButtonBlueUpper)
-        .onTrue(new DeployIntakeCommand(m_IntakeArmSubsystem));
+        .onTrue(new DeployArmCommand(m_IntakeArmSubsystem));
     m_secondController.button(ControllerConstants.ButtonBlueLower)
-        .onTrue(new HomeIntakeCommand(m_IntakeArmSubsystem));
+        .onTrue(new HomeArmCommand(m_IntakeArmSubsystem));
     //m_secondController.button(ControllerConstants.ButtonRedUpper1)
      //   .whileTrue(new SpeakerPrelaunchCommand(m_shooterSubsystem));
     m_secondController.button(ControllerConstants.ButtonRedUpper3)
         .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
     m_secondController.button(ControllerConstants.ButtonBlack1)
-        .whileTrue(new AmpShootCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
+        .whileTrue(new ShootToAmpCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
     m_secondController.button(ControllerConstants.ButtonBlack2)
-        .whileTrue(new SpeakerShootCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
+        .whileTrue(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
         
     
     // new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));

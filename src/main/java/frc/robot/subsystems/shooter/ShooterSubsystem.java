@@ -13,8 +13,8 @@ import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase{
-    private TalonFX m_left = new TalonFX(CANConstants.LeftShooter);
-    private TalonFX m_right = new TalonFX(CANConstants.RightShooter);  
+    private TalonFX m_left = new TalonFX(CANConstants.LeftShooterID);
+    private TalonFX m_right = new TalonFX(CANConstants.RightShooterID);  
     private TalonFXConfiguration configuration = new TalonFXConfiguration();
     private VelocityVoltage m_velocityVoltage = new VelocityVoltage(0);
     

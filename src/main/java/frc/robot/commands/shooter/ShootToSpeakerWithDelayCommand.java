@@ -4,23 +4,32 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class SpeakerShootCommand extends Command {
+public class ShootToSpeakerWithDelayCommand extends Command {
   private final ShooterSubsystem m_ShooterSubsystem;
   private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem;
+  private Timer m_finishedShootingTimer;
+  private final double m_delayAfterShooting;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public SpeakerShootCommand(ShooterSubsystem shooterSubsystem, IntakeGrabberSubsystem intakeGrabberSubsystem) {
+  public ShootToSpeakerWithDelayCommand(ShooterSubsystem shooterSubsystem, 
+                                        IntakeGrabberSubsystem intakeGrabberSubsystem,
+                                        double delayAfterShooting) {
     m_ShooterSubsystem = shooterSubsystem;
     m_IntakeGrabberSubsystem = intakeGrabberSubsystem;
+    m_delayAfterShooting = delayAfterShooting;
+
+    m_finishedShootingTimer = new Timer();
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem, intakeGrabberSubsystem);
   }
@@ -34,7 +43,11 @@ public class SpeakerShootCommand extends Command {
   public void execute() {
     m_ShooterSubsystem.speakerShoot();
     if( m_ShooterSubsystem.isAtSpeakerSpeed() )
+    {
       m_IntakeGrabberSubsystem.feedShooter();
+      m_finishedShootingTimer.reset();
+      m_finishedShootingTimer.start();
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -43,12 +56,15 @@ public class SpeakerShootCommand extends Command {
 
       m_ShooterSubsystem.stopShooter();
       m_IntakeGrabberSubsystem.stop();
+      m_finishedShootingTimer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
-    return false;
+    if (m_finishedShootingTimer.hasElapsed(m_delayAfterShooting))
+      return true;
+    else
+      return false;
   }
 }
