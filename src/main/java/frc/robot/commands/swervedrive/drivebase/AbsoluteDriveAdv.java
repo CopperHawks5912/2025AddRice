@@ -130,7 +130,9 @@ public class AbsoluteDriveAdv extends Command
     if (headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) > 0)
     {
       resetHeading = true;
-      swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
+      //swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
+      swerve.drive(translation, Math.pow(headingAdjust.getAsDouble(), 3) * swerve.getMaximumAngularVelocity(), true);
+      
     } else
     {
       swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);
