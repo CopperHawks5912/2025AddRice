@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CenterShootToRing2"
+                  "pathName": "CenterShootToNote2"
                 }
               },
               {
@@ -62,7 +62,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Ring2ToCenterShoot"
+                  "pathName": "Note2ToCenterShoot"
                 }
               },
               {
