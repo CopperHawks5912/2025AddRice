@@ -66,8 +66,8 @@ public class IntakeArmSubsystem extends SubsystemBase {
     // //SmartDashboard.putNumber( "Arm Target", m_currentTarget.getShoulderPosition() );
     // //SmartDashboard.putBoolean( "Shoulder Switch", m_shoulderLimitSwitch.get() );
 
-    // m_ArbitraryFeedForward = calculateArbitraryFeedForward();
-    // SmartDashboard.putNumber( "Arm Arb FF", m_ArbitraryFeedForward );           
+     m_ArbitraryFeedForward = calculateArbitraryFeedForward();
+     //SmartDashboard.putNumber( "Arm Arb FF", m_ArbitraryFeedForward );           
   }
 
   public void moveArmToPosition( int position )
@@ -79,29 +79,29 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   public boolean isDeployed()
   {
-    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmDeployedPosition ) < 25 )
+    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmDeployedPosition ) < 30 )
       return true;
     else 
       return false;
   }
   public boolean isHome()
   {
-    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmHomePosition ) < 25 )
+    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmHomePosition ) < 30 )
       return true;
     else 
       return false;
   }
 
-  // private double calculateArbitraryFeedForward( )
-  // {
-  //   double kTicksPerDegree = IntakeArmConstants.EncoderCountsPerRev * IntakeArmConstants.ArmGearRatio / 360; 
-  //   double currentPos = m_armTalon.getSelectedSensorPosition();    
+  private double calculateArbitraryFeedForward( )
+  {
+    double kTicksPerDegree = IntakeArmConstants.EncoderCountsPerRev * IntakeArmConstants.ArmGearRatio / 360; 
+    double currentPos = m_armTalon.getSelectedSensorPosition();    
    
-  //   double degrees = ( currentPos - IntakeArmConstants.ArmDeployedPosition) / kTicksPerDegree;
-  //   double radians = java.lang.Math.toRadians(degrees);
-  //   double cosineScalar = java.lang.Math.cos(radians);
+    double degrees = ( currentPos - IntakeArmConstants.ArmDeployedPosition) / kTicksPerDegree;
+    double radians = java.lang.Math.toRadians(degrees);
+    double cosineScalar = java.lang.Math.cos(radians);
     
-  //   double arbitraryFF = IntakeArmConstants.ArmMaxGravityFF * cosineScalar;
-  //    return arbitraryFF;
-  // }  
+    double arbitraryFF = IntakeArmConstants.ArmMaxGravityFF * cosineScalar;
+     return arbitraryFF;
+  }  
 }

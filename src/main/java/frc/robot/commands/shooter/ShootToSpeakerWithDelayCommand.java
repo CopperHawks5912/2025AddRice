@@ -15,6 +15,7 @@ public class ShootToSpeakerWithDelayCommand extends Command {
   private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem;
   private Timer m_finishedShootingTimer;
   private final double m_delayAfterShooting;
+  private boolean m_isAtShootSpeed;
 
   /**
    * Creates a new ExampleCommand.
@@ -36,7 +37,10 @@ public class ShootToSpeakerWithDelayCommand extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_isAtShootSpeed = false;
+    m_finishedShootingTimer.reset();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -44,9 +48,13 @@ public class ShootToSpeakerWithDelayCommand extends Command {
     m_ShooterSubsystem.speakerShoot();
     if( m_ShooterSubsystem.isAtSpeakerSpeed() )
     {
-      m_IntakeGrabberSubsystem.feedShooter();
-      m_finishedShootingTimer.reset();
-      m_finishedShootingTimer.start();
+      if( !m_isAtShootSpeed )
+      {
+        m_IntakeGrabberSubsystem.feedShooter();        
+        m_finishedShootingTimer.start();
+      }
+      m_isAtShootSpeed = true;
+    
     }
   }
 
@@ -63,7 +71,10 @@ public class ShootToSpeakerWithDelayCommand extends Command {
   @Override
   public boolean isFinished() {
     if (m_finishedShootingTimer.hasElapsed(m_delayAfterShooting))
+    {
+      m_IntakeGrabberSubsystem.stop();      
       return true;
+    }
     else
       return false;
   }

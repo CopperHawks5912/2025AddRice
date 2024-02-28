@@ -1,12 +1,6 @@
 {
   "version": 1.0,
-  "startingPose": {
-    "position": {
-      "x": 1.3842846515935527,
-      "y": 5.562647359246215
-    },
-    "rotation": 0
-  },
+  "startingPose": null,
   "command": {
     "type": "sequential",
     "data": {
@@ -22,22 +16,9 @@
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.0
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "CenterShootToNote2"
-                      }
-                    }
-                  ]
+                  "pathName": "RightToNote3"
                 }
               },
               {
@@ -48,12 +29,6 @@
                       "type": "named",
                       "data": {
                         "name": "DeployArm"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.5
                       }
                     },
                     {
@@ -75,7 +50,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note2ToCenterShoot"
+                  "pathName": "Note3ToRight"
                 }
               },
               {
@@ -96,6 +71,6 @@
       ]
     }
   },
-  "folder": "Center",
+  "folder": "Right",
   "choreoAuto": false
 }

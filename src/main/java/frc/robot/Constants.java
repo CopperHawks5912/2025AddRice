@@ -54,7 +54,8 @@ public final class Constants
 
   public static final class AutoConstants
   {
-    public static final double ShooterDelaySeconds = 1.0;
+    public static final double ShooterDelaySeconds = 0.5  ;
+    public static final double IntakeDelaySeconds = 0.67;
   }
 
   public static final class ShooterConstants
@@ -86,11 +87,11 @@ public final class Constants
     public static final double ArmMaxPeakOutputForward = 0.5;//0.7;
     public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
     
-    public static final double ArmCruiseVelocity = 400;//700;
-    public static final double ArmAcceleration = 300;//500;
+    public static final double ArmCruiseVelocity = 500;//700;
+    public static final double ArmAcceleration = 500;//500;
 
     public static final int ArmHomePosition = 0;
-    public static final int ArmDeployedPosition = 2410; //2440;
+    public static final int ArmDeployedPosition = 2400; //2410;
     public static final int ArmAmpPosition = 1280; //2440;
     
     public static final double ArmMaxGravityFF = 0.08;  //power required to hold forearm horizontal.
@@ -99,14 +100,14 @@ public final class Constants
 	   * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    public static final Gains ArmGains = new Gains(4, 0.0, 0.0, 0.32, 0, 1.0);
+    public static final Gains ArmGains = new Gains(3, 0.0, 0.0, 0.32, 0, 1.0);
     
     public static final int EncoderCountsPerRev = 4096;
     public static final double ArmGearRatio = 1.0;  //1:1 gearing (100:1 gearbox is in front of the encoder 
   }
 
 
-  public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+  public static final double ROBOT_MASS = (100) * 0.453592; // 32lbs * kg per pound
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
 

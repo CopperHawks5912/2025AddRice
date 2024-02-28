@@ -16,6 +16,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.intake.DeployArmCommand;
 import frc.robot.commands.intake.EatNoteCommand;
+import frc.robot.commands.intake.EatNoteWithDelayCommand;
 import frc.robot.commands.intake.HomeArmCommand;
 import frc.robot.commands.intake.StopIntakeCommand;
 import frc.robot.commands.shooter.ShootToAmpCommand;
@@ -56,7 +57,7 @@ public class RobotContainer
   {
     NamedCommands.registerCommand ("DeployArm", new DeployArmCommand(m_IntakeArmSubsystem));
     NamedCommands.registerCommand("HomeArm", new HomeArmCommand(m_IntakeArmSubsystem));
-    NamedCommands.registerCommand("EatNote", new EatNoteCommand(m_IntakeGrabberSubsystem));
+    NamedCommands.registerCommand("EatNote", new EatNoteWithDelayCommand(m_IntakeGrabberSubsystem, AutoConstants.IntakeDelaySeconds));
     NamedCommands.registerCommand("StopIntake", new StopIntakeCommand(m_IntakeGrabberSubsystem));
     NamedCommands.registerCommand("ShootToSpeakerWithDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds ));
    
@@ -147,7 +148,8 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("Center-2Note");
+    return drivebase.getAutonomousCommand("Left-Note1");
+    //return drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
   }
 
   public void setDriveMode()

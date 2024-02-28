@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "CenterShootToNote2"
+                        "pathName": "CenterShootToNote1"
                       }
                     }
                   ]
@@ -75,7 +75,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note2ToCenterShoot"
+                  "pathName": "Note1ToCenterShoot"
                 }
               },
               {
