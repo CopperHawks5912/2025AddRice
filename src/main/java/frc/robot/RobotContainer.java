@@ -9,8 +9,10 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
@@ -18,6 +20,7 @@ import frc.robot.commands.intake.DeployArmCommand;
 import frc.robot.commands.intake.EatNoteCommand;
 import frc.robot.commands.intake.EatNoteWithDelayCommand;
 import frc.robot.commands.intake.HomeArmCommand;
+import frc.robot.commands.intake.SpitNoteCommand;
 import frc.robot.commands.intake.StopIntakeCommand;
 import frc.robot.commands.shooter.ShootToAmpCommand;
 import frc.robot.commands.shooter.ShootToSpeakerCommand;
@@ -64,9 +67,9 @@ public class RobotContainer
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftY() / 1.5,
+                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftY() / 1.3,
                                                                                                 ControllerConstants.LeftYDeadband),
-                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftX() / 1.5,
+                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftX() / 1.3,
                                                                                                 ControllerConstants.LeftXDeadband),
                                                                    () -> MathUtil.applyDeadband( driverXbox.getRightX(),
                                                                                                 ControllerConstants.RightXDeadband),
@@ -92,10 +95,10 @@ public class RobotContainer
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-    // Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
-    //     () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
-    //     () -> driverXbox.getRawAxis(4));
+     Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
+         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
+         () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
+         () -> -driverXbox.getRawAxis(4));
 
     // Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
     //     () -> MathUtil.applyDeadband(driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
@@ -116,7 +119,9 @@ public class RobotContainer
   private void configureBindings()
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
+    
+    new JoystickButton(driverXbox, 5).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    
     m_secondController.button(ControllerConstants.ButtonBlueUpper)
         .onTrue(new DeployArmCommand(m_IntakeArmSubsystem));
     m_secondController.button(ControllerConstants.ButtonBlueLower)
@@ -125,6 +130,8 @@ public class RobotContainer
      //   .whileTrue(new SpeakerPrelaunchCommand(m_shooterSubsystem));
     m_secondController.button(ControllerConstants.ButtonRedUpper3)
         .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
+    m_secondController.button(ControllerConstants.ButtonRedLower3)
+        .whileTrue(new SpitNoteCommand(m_IntakeGrabberSubsystem));
     m_secondController.button(ControllerConstants.ButtonBlack1)
         .whileTrue(new ShootToAmpCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
     m_secondController.button(ControllerConstants.ButtonBlack2)
@@ -148,7 +155,7 @@ public class RobotContainer
   public Command getAutonomousCommand()
   {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("Left-Note1");
+    return drivebase.getAutonomousCommand("CenterTest");
     //return drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
   }
 

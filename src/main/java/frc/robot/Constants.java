@@ -55,7 +55,7 @@ public final class Constants
   public static final class AutoConstants
   {
     public static final double ShooterDelaySeconds = 0.5  ;
-    public static final double IntakeDelaySeconds = 0.67;
+    public static final double IntakeDelaySeconds = 0.5;
   }
 
   public static final class ShooterConstants
@@ -69,8 +69,8 @@ public final class Constants
   
   public static final class IntakeGrabberConstants
   {
-    public static final double InputSpeed = 0.6;  
-    public static final double OutputSpeed = -0.6;  
+    public static final double InputSpeed = 0.9;  
+    public static final double OutputSpeed = -0.8;  
   }
   
   public static final class IntakeArmConstants
@@ -91,7 +91,7 @@ public final class Constants
     public static final double ArmAcceleration = 500;//500;
 
     public static final int ArmHomePosition = 0;
-    public static final int ArmDeployedPosition = 2400; //2410;
+    public static final int ArmDeployedPosition = 2350; //2410;
     public static final int ArmAmpPosition = 1280; //2440;
     
     public static final double ArmMaxGravityFF = 0.08;  //power required to hold forearm horizontal.
