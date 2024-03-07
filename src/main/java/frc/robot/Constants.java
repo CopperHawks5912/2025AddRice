@@ -22,10 +22,12 @@ public final class Constants
 {
   public static final class CANConstants
   {
-    public static final int LeftShooterID = 10;
-    public static final int RightShooterID = 11;
+    public static final int LeftShooterID   = 10;
+    public static final int RightShooterID  = 11;
     public static final int IntakeGrabberID = 20;
     public static final int IntakeArmID     = 21;
+    public static final int LeftClimberID   = 30;
+    public static final int RightClimberID  = 11;
   }
 
   public static class ControllerConstants
@@ -65,6 +67,12 @@ public final class Constants
     public static final double SpeakerShootMinSpeed = 38.0;
     public static final double AmpShootTargetSpeed = 25.0;
     public static final double AmpShootMinSpeed = 25.0;
+  }
+  
+  public static final class ClimberConstants
+  {
+    public static final double ExtendSpeed = 1.0;  
+    public static final double RetractSpeed = -1.0;  
   }
   
   public static final class IntakeGrabberConstants

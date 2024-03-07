@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.commands.climber.ClimbCommand;
 import frc.robot.commands.intake.DeployArmCommand;
 import frc.robot.commands.intake.EatNoteCommand;
 import frc.robot.commands.intake.EatNoteWithDelayCommand;
@@ -26,6 +27,7 @@ import frc.robot.commands.shooter.ShootToAmpCommand;
 import frc.robot.commands.shooter.ShootToSpeakerCommand;
 import frc.robot.commands.shooter.ShootToSpeakerWithDelayCommand;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.climber.ClimberSubsystem;
 import frc.robot.subsystems.intake.IntakeArmSubsystem;
 import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
 import frc.robot.subsystems.shooter.ShooterSubsystem;
@@ -48,10 +50,11 @@ public class RobotContainer
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
   private final IntakeArmSubsystem m_IntakeArmSubsystem = new IntakeArmSubsystem();
   private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem = new IntakeGrabberSubsystem();
+  private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
 
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
-  XboxController driverXbox = new XboxController(0);
-  CommandGenericHID m_secondController = new CommandGenericHID(1);
+  XboxController m_driverXboxController = new XboxController(0);
+  CommandGenericHID m_operatorController = new CommandGenericHID(1);
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -67,18 +70,18 @@ public class RobotContainer
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
+                                                                   () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(),
                                                                                                 ControllerConstants.LeftYDeadband),
-                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
+                                                                   () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX(),
                                                                                                 ControllerConstants.LeftXDeadband),
-                                                                   () -> MathUtil.applyDeadband( driverXbox.getRightX(),
+                                                                   () -> MathUtil.applyDeadband( m_driverXboxController.getRightX(),
                                                                                                 ControllerConstants.RightXDeadband),
-                                                                   driverXbox::getYButtonPressed,
-                                                                   driverXbox::getAButtonPressed,
-                                                                   driverXbox::getXButtonPressed,
-                                                                   driverXbox::getBButtonPressed, 
-                                                                   driverXbox::getLeftBumperPressed,
-                                                                   driverXbox::getRightBumperPressed);
+                                                                   m_driverXboxController::getYButtonPressed,
+                                                                   m_driverXboxController::getAButtonPressed,
+                                                                   m_driverXboxController::getXButtonPressed,
+                                                                   m_driverXboxController::getBButtonPressed, 
+                                                                   m_driverXboxController::getLeftBumperPressed,
+                                                                   m_driverXboxController::getRightBumperPressed);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -98,15 +101,15 @@ public class RobotContainer
     // left stick controls translation
     // right stick controls the angular velocity of the robot
      Command driveCommand = drivebase.driveCommand(
-         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
-         () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
-         () -> -driverXbox.getRawAxis(4));
+         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(), ControllerConstants.LeftYDeadband),
+         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX(), ControllerConstants.LeftXDeadband),
+         () -> -m_driverXboxController.getRawAxis(4));
 
      Command driveTriggerRotate = drivebase.driveTriggerRotate(
-         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
-         () -> MathUtil.applyDeadband(-driverXbox.getRightX(), ControllerConstants.LeftXDeadband),
-         () -> driverXbox.getRawAxis(2), 
-         () -> driverXbox.getRawAxis(3));
+         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(), ControllerConstants.LeftYDeadband),
+         () -> MathUtil.applyDeadband(-m_driverXboxController.getRightX(), ControllerConstants.LeftXDeadband),
+         () -> m_driverXboxController.getRawAxis(2), 
+         () -> m_driverXboxController.getRawAxis(3));
 
     // Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
     //     () -> MathUtil.applyDeadband(driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
@@ -128,21 +131,23 @@ public class RobotContainer
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     
-    new JoystickButton(driverXbox, 5).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    //climbCommand current uses ButtonRedUpper1, ButtonRedLower1, ButtonRedUpper2, ButtonRedLower2;
+    //we're passing in the driver controller so we could potentially make it rumble.
+    m_ClimberSubsystem.setDefaultCommand(new ClimbCommand(m_ClimberSubsystem, m_operatorController, m_driverXboxController));
+
+    new JoystickButton(m_driverXboxController, 5).onTrue((new InstantCommand(drivebase::zeroGyro)));
     
-    m_secondController.button(ControllerConstants.ButtonBlueUpper)
+    m_operatorController.button(ControllerConstants.ButtonBlueUpper)
         .onTrue(new DeployArmCommand(m_IntakeArmSubsystem));
-    m_secondController.button(ControllerConstants.ButtonBlueLower)
+    m_operatorController.button(ControllerConstants.ButtonBlueLower)
         .onTrue(new HomeArmCommand(m_IntakeArmSubsystem));
-    //m_secondController.button(ControllerConstants.ButtonRedUpper1)
-     //   .whileTrue(new SpeakerPrelaunchCommand(m_shooterSubsystem));
-    m_secondController.button(ControllerConstants.ButtonRedUpper3)
+    m_operatorController.button(ControllerConstants.ButtonRedUpper3)
         .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem));
-    m_secondController.button(ControllerConstants.ButtonRedLower3)
+    m_operatorController.button(ControllerConstants.ButtonRedLower3)
         .whileTrue(new SpitNoteCommand(m_IntakeGrabberSubsystem));
-    m_secondController.button(ControllerConstants.ButtonBlack1)
+    m_operatorController.button(ControllerConstants.ButtonBlack1)
         .whileTrue(new ShootToAmpCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
-    m_secondController.button(ControllerConstants.ButtonBlack2)
+    m_operatorController.button(ControllerConstants.ButtonBlack2)
         .whileTrue(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
         
     
