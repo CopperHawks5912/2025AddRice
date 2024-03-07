@@ -67,16 +67,18 @@ public class RobotContainer
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftY() / 1.3,
+                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftY(),
                                                                                                 ControllerConstants.LeftYDeadband),
-                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftX() / 1.3,
+                                                                   () -> MathUtil.applyDeadband(-driverXbox.getLeftX(),
                                                                                                 ControllerConstants.LeftXDeadband),
                                                                    () -> MathUtil.applyDeadband( driverXbox.getRightX(),
                                                                                                 ControllerConstants.RightXDeadband),
                                                                    driverXbox::getYButtonPressed,
                                                                    driverXbox::getAButtonPressed,
                                                                    driverXbox::getXButtonPressed,
-                                                                   driverXbox::getBButtonPressed);
+                                                                   driverXbox::getBButtonPressed, 
+                                                                   driverXbox::getLeftBumperPressed,
+                                                                   driverXbox::getRightBumperPressed);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -99,6 +101,12 @@ public class RobotContainer
          () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
          () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
          () -> -driverXbox.getRawAxis(4));
+
+     Command driveTriggerRotate = drivebase.driveTriggerRotate(
+         () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
+         () -> MathUtil.applyDeadband(-driverXbox.getRightX(), ControllerConstants.LeftXDeadband),
+         () -> driverXbox.getRawAxis(2), 
+         () -> driverXbox.getRawAxis(3));
 
     // Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
     //     () -> MathUtil.applyDeadband(driverXbox.getLeftY(), ControllerConstants.LeftYDeadband),
