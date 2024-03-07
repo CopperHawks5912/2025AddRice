@@ -149,7 +149,7 @@ public class AbsoluteDriveAdv extends Command
     {
       resetHeading = true;
       //swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
-      swerve.drive(translation, Math.pow(headingAdjust.getAsDouble(), 3) * swerve.getMaximumAngularVelocity(), true);
+      swerve.drive(translation, Math.pow(headingAdjust.getAsDouble(), 1) * swerve.getMaximumAngularVelocity(), true);
       
     } else
     {

@@ -271,8 +271,8 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return run(() -> {
       // Make the robot move
-      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
-                                          Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
+      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 1) * swerveDrive.getMaximumVelocity(),
+                                          Math.pow(translationY.getAsDouble(), 1) * swerveDrive.getMaximumVelocity()),
                         Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
                         true,
                         false);
@@ -457,8 +457,8 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle)
   {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = Math.pow(xInput, 1);
+    yInput = Math.pow(yInput, 1);
     return swerveDrive.swerveController.getTargetSpeeds(xInput,
                                                         yInput,
                                                         angle.getRadians(),
