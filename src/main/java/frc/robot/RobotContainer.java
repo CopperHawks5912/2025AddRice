@@ -8,8 +8,11 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -57,17 +60,18 @@ public class RobotContainer
   XboxController m_driverXboxController = new XboxController(0);
   CommandGenericHID m_operatorController = new CommandGenericHID(1);
   
+
+  private final SendableChooser<String> m_autoDelayChooser = new SendableChooser<>();
+  private final SendableChooser<String> m_autoPathChooser = new SendableChooser<>();
+  private String m_selectedDelayAuto;
+  private String m_selectedPathAuto;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer()
   {
-    NamedCommands.registerCommand ("DeployArm", new DeployArmCommand(m_IntakeArmSubsystem));
-    NamedCommands.registerCommand("HomeArm", new HomeArmCommand(m_IntakeArmSubsystem));
-    NamedCommands.registerCommand("EatNote", new EatNoteWithDelayCommand(m_IntakeGrabberSubsystem, AutoConstants.IntakeDelaySeconds));
-    NamedCommands.registerCommand("StopIntake", new StopIntakeCommand(m_IntakeGrabberSubsystem));
-    NamedCommands.registerCommand("ShootToSpeakerWithDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds ));
-   
+    configureAutos();
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
@@ -164,6 +168,36 @@ public class RobotContainer
 //    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
+  private void configureAutos()
+  {
+    NamedCommands.registerCommand ("DeployArm", new DeployArmCommand(m_IntakeArmSubsystem));
+    NamedCommands.registerCommand("HomeArm", new HomeArmCommand(m_IntakeArmSubsystem));
+    NamedCommands.registerCommand("EatNote", new EatNoteWithDelayCommand(m_IntakeGrabberSubsystem, AutoConstants.IntakeDelaySeconds));
+    NamedCommands.registerCommand("StopIntake", new StopIntakeCommand(m_IntakeGrabberSubsystem));
+    NamedCommands.registerCommand("ShootToSpeakerWithDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds ));
+   
+
+    m_autoDelayChooser.setDefaultOption( "0 Sec Delay", "0");
+    m_autoDelayChooser.addOption( "1 Sec Delay", "1");
+    m_autoDelayChooser.addOption( "2 Sec Delay", "2");
+    m_autoDelayChooser.addOption( "3 Sec Delay", "3");
+    m_autoDelayChooser.addOption( "5 Sec Delay", "5");
+    
+    m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
+    m_autoPathChooser.addOption( "Center M", "C-M");
+    m_autoPathChooser.addOption( "Center M-A", "C-MA");
+    m_autoPathChooser.addOption( "AmpSide A", "A-A");
+    m_autoPathChooser.addOption( "AmpSide A-M", "A-AM");
+    m_autoPathChooser.addOption( "StageSide S", "S-S");
+    m_autoPathChooser.addOption( "StageSide S-M", "S-SM");
+    m_autoPathChooser.addOption( "None", "N");
+    
+    SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
+    SmartDashboard.putData("Auto-Drive:", m_autoPathChooser );
+
+  }
+
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -171,8 +205,65 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
+    Command delayCommand = null;
+    Command pathCommand = null;
+    m_selectedDelayAuto = m_autoDelayChooser.getSelected();
+    m_selectedPathAuto = m_autoPathChooser.getSelected();
+
+    switch( m_selectedDelayAuto )
+    {
+      case "1":
+        delayCommand = new WaitCommand(1);
+        break;
+      case "2":
+        delayCommand = new WaitCommand(2);
+        break;
+      case "3":
+        delayCommand = new WaitCommand(3);
+        break; 
+      case "4":
+        delayCommand = new WaitCommand(4);
+        break;   
+      case "5":
+        delayCommand = new WaitCommand(5);
+        break;   
+      
+    }
+    switch( m_selectedDelayAuto )
+    {  
+      case "P":
+        pathCommand = new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds );
+        break;
+      case "C-M":
+        pathCommand =  drivebase.getAutonomousCommand("Center-Note2");
+        break;
+      case "C-MA":
+        pathCommand =  drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
+        break;
+      case "A-A":
+        pathCommand =  drivebase.getAutonomousCommand("Left-Note1");
+        break;
+      case "A-AM":
+        pathCommand =  drivebase.getAutonomousCommand("Left-Note1").andThen(drivebase.getAutonomousCommand("Left-Note1"));
+        break;
+      case "S-S":
+        pathCommand =  drivebase.getAutonomousCommand("Right-Note3");
+        break;
+      case "S-SM":
+        pathCommand =  drivebase.getAutonomousCommand("Right-Note3").andThen(drivebase.getAutonomousCommand("Left-Note1"));
+        break;
+    }
+
+    if( delayCommand != null && pathCommand != null)
+      return delayCommand.andThen(pathCommand);
+    else if( pathCommand != null )
+      return pathCommand;
+    else
+      return null;
+  
+
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("CenterTest");
+    //return drivebase.getAutonomousCommand("CenterTest");
     //return drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
   }
 
