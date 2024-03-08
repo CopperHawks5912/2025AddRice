@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.commands.TestRumbleCommand;
 import frc.robot.commands.climber.ClimbCommand;
 import frc.robot.commands.intake.DeployArmCommand;
 import frc.robot.commands.intake.EatNoteCommand;
@@ -117,7 +118,7 @@ public class RobotContainer
     //     () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? closedAbsoluteDriveAdv : closedAbsoluteDriveAdv);
+        !RobotBase.isSimulation() ? closedAbsoluteDriveAdv : driveCommand);
   }
 
   /**
@@ -137,6 +138,9 @@ public class RobotContainer
 
     new JoystickButton(m_driverXboxController, 5).onTrue((new InstantCommand(drivebase::zeroGyro)));
     
+    new JoystickButton(m_driverXboxController, 1).whileTrue(new TestRumbleCommand( m_driverXboxController ));
+     
+
     m_operatorController.button(ControllerConstants.ButtonBlueUpper)
         .onTrue(new DeployArmCommand(m_IntakeArmSubsystem));
     m_operatorController.button(ControllerConstants.ButtonBlueLower)
