@@ -9,7 +9,7 @@ import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.subsystems.intake.IntakeArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class HomeArmCommand extends Command {
+public class RetractArmCommand extends Command {
   private final IntakeArmSubsystem m_IntakeArmSubsystem;
 
   /**
@@ -17,7 +17,7 @@ public class HomeArmCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public HomeArmCommand(IntakeArmSubsystem intakeArmSubsystem) {
+  public RetractArmCommand(IntakeArmSubsystem intakeArmSubsystem) {
     m_IntakeArmSubsystem = intakeArmSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeArmSubsystem);

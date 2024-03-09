@@ -4,46 +4,52 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
+import frc.robot.Constants.DIOConstants;
+import frc.robot.Constants.IntakeArmConstants;
+import frc.robot.subsystems.intake.IntakeArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class EatNoteCommand extends Command {
-  private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem;
-  
+public class RetractArmIfTriggeredCommand extends Command {
+  private final IntakeArmSubsystem m_IntakeArmSubsystem;
+  private DigitalInput m_intakeLimitSwitch = new DigitalInput(DIOConstants.IntakeLimitSwitchPort);
+  private boolean m_intakeTriggered = false;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public EatNoteCommand(IntakeGrabberSubsystem intakeGrabberSubsystem) {
-    m_IntakeGrabberSubsystem = intakeGrabberSubsystem;
+  public RetractArmIfTriggeredCommand(IntakeArmSubsystem intakeArmSubsystem) {
+    m_IntakeArmSubsystem = intakeArmSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intakeGrabberSubsystem);
+    addRequirements(intakeArmSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_intakeTriggered = m_intakeLimitSwitch.get();
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeGrabberSubsystem.intake();
+    if( m_intakeTriggered )
+      m_IntakeArmSubsystem.moveArmToPosition(IntakeArmConstants.ArmHomePosition);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_IntakeGrabberSubsystem.stop();
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if( m_IntakeGrabberSubsystem.getGotNote() ) 
-      return true;
-    else 
-      return false;
+  
+    return m_IntakeArmSubsystem.isHome();
   }
 }

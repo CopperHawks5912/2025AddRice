@@ -29,7 +29,11 @@ public final class Constants
     public static final int LeftClimberID   = 30;
     public static final int RightClimberID  = 11;
   }
+  public static final class DIOConstants
+  {
+    public static final int IntakeLimitSwitchPort = 9;
 
+  }
   public static class ControllerConstants
   {
     public static final int kDriverControllerPort = 0;
@@ -131,6 +135,20 @@ public final class Constants
 
     // Hold time on motor brakes when disabled
     public static final double WheelLockTime = 10; // seconds
+  }
+  public static class PWMConstants{
+    public static final int LEDStringID = 0;
+  }
+
+  public static class LEDConstants{
+    public static final int LEDStringLength = 140;
+    public static final int LEDModeOff = -1;
+    public static final int LEDModeAllianceBlue = 0;
+    public static final int LEDModeAllianceRed = 1;  
+    public static final int LEDModeRainbow = 2;  
+    public static final int LEDModeNoteEaten = 10;
+    public static final int LEDModeShooting = 11;
+    
   }
 
 }
