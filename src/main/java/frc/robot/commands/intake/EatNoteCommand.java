@@ -41,9 +41,9 @@ public class EatNoteCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if( m_IntakeGrabberSubsystem.getGotNote() ) 
-      return true;
-    else 
+    //if( m_IntakeGrabberSubsystem.getGotNote() ) 
+   //   return true;
+   // else 
       return false;
   }
 }

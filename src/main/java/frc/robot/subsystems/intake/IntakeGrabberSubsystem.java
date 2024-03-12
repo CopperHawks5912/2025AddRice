@@ -26,12 +26,12 @@ public class IntakeGrabberSubsystem extends SubsystemBase {
 
   public void intake()
   {
-    if( m_intakeLimitSwitch.get()  ) 
-    {
-      m_grabberVictor.set(0);
-      m_gotNote = true;
-    }
-    else
+    //if( m_intakeLimitSwitch.get()  ) 
+    //{
+    //  m_grabberVictor.set(0);
+    //  m_gotNote = true;
+   // }
+    //else
     {      
       m_grabberVictor.set( IntakeGrabberConstants.InputSpeed );
       m_gotNote = false;

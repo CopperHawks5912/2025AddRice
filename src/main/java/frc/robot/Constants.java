@@ -22,12 +22,12 @@ public final class Constants
 {
   public static final class CANConstants
   {
-    public static final int LeftShooterID   = 10;
-    public static final int RightShooterID  = 11;
+    public static final int LeftShooterID   = 11;
+    public static final int RightShooterID  = 10;
     public static final int IntakeGrabberID = 20;
     public static final int IntakeArmID     = 21;
     public static final int LeftClimberID   = 30;
-    public static final int RightClimberID  = 11;
+    public static final int RightClimberID  = 31;
   }
   public static final class DIOConstants
   {
@@ -67,16 +67,18 @@ public final class Constants
   public static final class ShooterConstants
   {
     public static final double PrelaunchTargetSpeed = 50;
-    public static final double SpeakerShootTargetSpeed = 40.0;
-    public static final double SpeakerShootMinSpeed = 38.0;
+    public static final double SpeakerShootTargetSpeed = 45.0;
+    public static final double SpeakerShootMinSpeed = 43.0;
     public static final double AmpShootTargetSpeed = 25.0;
     public static final double AmpShootMinSpeed = 25.0;
   }
   
   public static final class ClimberConstants
   {
-    public static final double ExtendSpeed = 1.0;  
-    public static final double RetractSpeed = -1.0;  
+    public static final double ExtendSpeed = -0.6;  
+    public static final double RetractSpeed = 0.6;  
+    public static final double HomePosition = 0;
+    public static final double ExtendedPosition = -30000;
   }
   
   public static final class IntakeGrabberConstants
@@ -103,7 +105,7 @@ public final class Constants
     public static final double ArmAcceleration = 500;//500;
 
     public static final int ArmHomePosition = 0;
-    public static final int ArmDeployedPosition = 2350; //2410;
+    public static final int ArmDeployedPosition = 2300; //2410;
     public static final int ArmAmpPosition = 1280; //2440;
     
     public static final double ArmMaxGravityFF = 0.08;  //power required to hold forearm horizontal.

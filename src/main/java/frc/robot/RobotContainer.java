@@ -61,8 +61,8 @@ public class RobotContainer
   private final IntakeArmSubsystem m_IntakeArmSubsystem = new IntakeArmSubsystem();
   private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem = new IntakeGrabberSubsystem();
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  private DigitalInput m_intakeLimitSwitch = new DigitalInput(DIOConstants.IntakeLimitSwitchPort);
-  private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
+  //private DigitalInput m_intakeLimitSwitch = new DigitalInput(DIOConstants.IntakeLimitSwitchPort);
+  //private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
   
   // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController m_driverXboxController = new XboxController(0);
@@ -114,9 +114,9 @@ public class RobotContainer
     // left stick controls translation
     // right stick controls the angular velocity of the robot
      Command driveCommand = drivebase.driveCommand(
-         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(), ControllerConstants.LeftYDeadband),
-         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX(), ControllerConstants.LeftXDeadband),
-         () -> -m_driverXboxController.getRawAxis(4));
+         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() / 1.5, ControllerConstants.LeftYDeadband),
+         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() / 1.5, ControllerConstants.LeftXDeadband),
+         () -> -m_driverXboxController.getRawAxis(4) / 1.5);
 
      Command driveTriggerRotate = drivebase.driveTriggerRotate(
          () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(), ControllerConstants.LeftYDeadband),
@@ -130,7 +130,7 @@ public class RobotContainer
     //     () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? closedAbsoluteDriveAdv : driveCommand);
+        !RobotBase.isSimulation() ? driveCommand : driveCommand);
   }
 
   /**
@@ -144,10 +144,10 @@ public class RobotContainer
   {
     Command retractArmCommand = new RetractArmCommand(m_IntakeArmSubsystem);
 
-    Trigger intakeTrigger = new Trigger(m_intakeLimitSwitch::get );
+    //Trigger intakeTrigger = new Trigger(m_intakeLimitSwitch::get );
     
-    intakeTrigger.onTrue( retractArmCommand.andThen( new NoteLEDCommand( m_addressableLEDSubsystem )));
-    intakeTrigger.onFalse(new AllianceLEDCommand( m_addressableLEDSubsystem ));
+    //intakeTrigger.onTrue( retractArmCommand );//.andThen( new NoteLEDCommand( m_addressableLEDSubsystem )));
+    //intakeTrigger.onFalse(new AllianceLEDCommand( m_addressableLEDSubsystem ));
    
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     
@@ -155,9 +155,9 @@ public class RobotContainer
     //we're passing in the driver controller so we could potentially make it rumble.
     m_ClimberSubsystem.setDefaultCommand(new ClimbCommand(m_ClimberSubsystem, m_operatorController, m_driverXboxController));
 
-    new JoystickButton(m_driverXboxController, 5).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(m_driverXboxController, 6).onTrue((new InstantCommand(drivebase::zeroGyro)));
     
-    new JoystickButton(m_driverXboxController, 1).whileTrue(new TestRumbleCommand( m_driverXboxController ));
+    //new JoystickButton(m_driverXboxController, 1).whileTrue(new TestRumbleCommand( m_driverXboxController ));
      
 
     m_operatorController.button(ControllerConstants.ButtonBlueUpper)
@@ -244,7 +244,7 @@ public class RobotContainer
         break;   
       
     }
-    switch( m_selectedDelayAuto )
+    switch( m_selectedPathAuto )
     {  
       case "P":
         pathCommand = new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds );
