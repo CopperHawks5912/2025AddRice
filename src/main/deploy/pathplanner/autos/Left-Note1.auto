@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.72,
+      "x": 0.7167669684840067,
       "y": 6.68
     },
     "rotation": 60.0
@@ -22,13 +22,13 @@
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "sequential",
                 "data": {
                   "commands": [
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.5
+                        "waitTime": 1.0
                       }
                     },
                     {
@@ -48,6 +48,12 @@
                       "type": "named",
                       "data": {
                         "name": "DeployArm"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.8
                       }
                     },
                     {

@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
@@ -45,6 +47,7 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import java.io.File;
+import java.util.Optional;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -113,10 +116,7 @@ public class RobotContainer
     // controls are front-left positive
     // left stick controls translation
     // right stick controls the angular velocity of the robot
-     Command driveCommand = drivebase.driveCommand(
-         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() / 1.5, ControllerConstants.LeftYDeadband),
-         () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() / 1.5, ControllerConstants.LeftXDeadband),
-         () -> -m_driverXboxController.getRawAxis(4) / 1.5);
+     
 
      Command driveTriggerRotate = drivebase.driveTriggerRotate(
          () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(), ControllerConstants.LeftYDeadband),
@@ -129,8 +129,7 @@ public class RobotContainer
     //     () -> MathUtil.applyDeadband(driverXbox.getLeftX(), ControllerConstants.LeftXDeadband),
     //     () -> driverXbox.getRawAxis(2));
 
-    drivebase.setDefaultCommand(
-        !RobotBase.isSimulation() ? driveCommand : driveCommand);
+    
   }
 
   /**
@@ -201,6 +200,7 @@ public class RobotContainer
     m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
     m_autoPathChooser.addOption( "Center M", "C-M");
     m_autoPathChooser.addOption( "Center M-A", "C-MA");
+    m_autoPathChooser.addOption( "Center A", "C-A");
     m_autoPathChooser.addOption( "AmpSide A", "A-A");
     m_autoPathChooser.addOption( "AmpSide A-M", "A-AM");
     m_autoPathChooser.addOption( "StageSide S", "S-S");
@@ -255,6 +255,9 @@ public class RobotContainer
       case "C-MA":
         pathCommand =  drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
         break;
+      case "C-A":
+        pathCommand = drivebase.getAutonomousCommand("Center-Note1");
+        break;
       case "A-A":
         pathCommand =  drivebase.getAutonomousCommand("Left-Note1");
         break;
@@ -284,7 +287,25 @@ public class RobotContainer
 
   public void setDriveMode()
   {
-    //drivebase.setDefaultCommand();
+    Command driveCommand;
+    
+    Optional<Alliance>  alliance = DriverStation.getAlliance();
+    if( alliance.get() == Alliance.Blue)
+    {
+      driveCommand = drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() / 1.5, ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() / 1.5, ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4));
+    }
+    else
+    {
+      driveCommand = drivebase.driveCommand(
+        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY() / 1.5, ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX() / 1.5, ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4));
+    }
+    drivebase.setDefaultCommand(
+        !RobotBase.isSimulation() ? driveCommand : driveCommand);
   }
 
   public void setMotorBrake(boolean brake)

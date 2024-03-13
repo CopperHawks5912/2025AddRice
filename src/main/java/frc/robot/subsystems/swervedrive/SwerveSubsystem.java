@@ -71,6 +71,8 @@ public class SwerveSubsystem extends SubsystemBase
     System.out.println("\t\"drive\": " + driveConversionFactor);
     System.out.println("}");
 
+    
+
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
@@ -194,8 +196,8 @@ public class SwerveSubsystem extends SubsystemBase
    * @param headingY     Heading Y to calculate angle of the joystick.
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
-                              DoubleSupplier headingY)
+  public Command driveCommand( DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier headingX,
+                              DoubleSupplier headingY )
   {
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
     return run(() -> {
