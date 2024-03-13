@@ -4,18 +4,15 @@
 
 package frc.robot.commands.climber;
 
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
-import frc.robot.Constants.CANConstants;
+//import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.subsystems.climber.ClimberSubsystem;
 
 /** An example command that uses an example subsystem. */
 public class ClimbCommand extends Command {
   private final ClimberSubsystem m_ClimberSubsystem;
-  private final XboxController m_driverXboxController;
   private final CommandGenericHID m_operatorController;
   /**
    * Creates a new ExampleCommand.
@@ -23,10 +20,8 @@ public class ClimbCommand extends Command {
    * @param subsystem The subsystem used by this command.
    */
   public ClimbCommand(ClimberSubsystem climberSubsystem, 
-                      CommandGenericHID operatorController, 
-                      XboxController driverXboxController ) {
+                      CommandGenericHID operatorController ) {
     m_ClimberSubsystem = climberSubsystem;
-    m_driverXboxController = driverXboxController;
     m_operatorController = operatorController;
 
     // Use addRequirements() here to declare subsystem dependencies.

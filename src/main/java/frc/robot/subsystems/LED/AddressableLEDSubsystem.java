@@ -17,6 +17,7 @@ public class AddressableLEDSubsystem extends SubsystemBase {
   private int m_rainbowFirstPixelHue;
   private int m_ledMode;
   private int m_noteStatus = 0;
+  private int m_ShootingStatus = 0;
 
   public AddressableLEDSubsystem() {
     m_led = new AddressableLED(PWMConstants.LEDStringID);
@@ -84,25 +85,45 @@ public class AddressableLEDSubsystem extends SubsystemBase {
 
   private void noteMode() {
     // For every pixel
-
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      if( (i-m_noteStatus) % 3 == 0)
-        m_ledBuffer.setRGB( i, 255, 68, 0);
-      else if( (i-m_noteStatus) % 3 == 1)
-        m_ledBuffer.setRGB( i, 127, 34, 0);
-      else if( (i-m_noteStatus) % 3 == 2)
-        m_ledBuffer.setRGB( i, 0, 0, 0);
+    if( m_noteStatus < 3 )
+    {
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+          m_ledBuffer.setRGB( i, 255, 68, 0);      
+      }
+    }
+    else 
+    {
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+          m_ledBuffer.setRGB( i, 0, 0, 0);      
+      }
     }
     m_noteStatus++;
-    if( m_noteStatus == 3)
+    if( m_noteStatus == 6)
       m_noteStatus = 0;
   }
 
   private void shootingMode() {
     // For every pixel
+    int index;
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setRGB( i, 255, 68, 0);
+      index = (i-m_ShootingStatus) % 7;
+      switch( index )
+      {
+        case 0:
+        case 1:
+          m_ledBuffer.setRGB( i, 255, 0, 0);
+          break;
+        case 2:
+        case 3:
+        case 4:
+          m_ledBuffer.setRGB( i, 127, 0, 0);
+          break;
+        default:
+          m_ledBuffer.setRGB( i, 0, 0, 0);
+      }
     }
+    m_ShootingStatus++;
+    if( m_ShootingStatus == 7)
+      m_ShootingStatus = 0;
   }
-
 }

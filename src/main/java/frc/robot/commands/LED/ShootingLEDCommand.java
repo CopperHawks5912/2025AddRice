@@ -9,14 +9,14 @@ import frc.robot.subsystems.LED.AddressableLEDSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /** An example command that uses an example subsystem. */
-public class NoteLEDCommand extends Command {
+public class ShootingLEDCommand extends Command {
   private final AddressableLEDSubsystem m_addressableLEDSubsystem;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public NoteLEDCommand(AddressableLEDSubsystem addressableLEDSubsystem) {
+  public ShootingLEDCommand(AddressableLEDSubsystem addressableLEDSubsystem) {
     m_addressableLEDSubsystem = addressableLEDSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(addressableLEDSubsystem);
