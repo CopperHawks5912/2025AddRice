@@ -185,11 +185,7 @@ public class RobotContainer
     m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
     m_autoPathChooser.addOption( "Center M", "C-M");
     m_autoPathChooser.addOption( "Center M-A", "C-MA");
-    m_autoPathChooser.addOption( "Center A", "C-A");
     m_autoPathChooser.addOption( "AmpSide A", "A-A");
-    m_autoPathChooser.addOption( "AmpSide A-M", "A-AM");
-    m_autoPathChooser.addOption( "StageSide S", "S-S");
-    m_autoPathChooser.addOption( "StageSide S-M", "S-SM");
     m_autoPathChooser.addOption( "None", "N");
     
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
@@ -290,16 +286,16 @@ public class RobotContainer
     if( alliance.get() == Alliance.Blue)
     {
       driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() / 1.5, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() / 1.5, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4));
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() * 0.65, ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() * 0.65, ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4)* 0.8);
     }
     else
     {
       driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY() / 1.5, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX() / 1.5, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4));
+        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY() * 0.65, ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX() * 0.65, ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4) * 0.8);
     }
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveCommand : driveCommand);
