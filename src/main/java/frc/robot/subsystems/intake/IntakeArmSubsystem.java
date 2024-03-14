@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.DIOConstants;
@@ -72,7 +73,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     // //SmartDashboard.putBoolean( "Shoulder Switch", m_shoulderLimitSwitch.get() );
 
      m_ArbitraryFeedForward = calculateArbitraryFeedForward();
-     //SmartDashboard.putNumber( "Arm Arb FF", m_ArbitraryFeedForward );           
+     SmartDashboard.putNumber( "Arm Arb FF", m_ArbitraryFeedForward );           
   }
 
   public void moveArmToPosition( int position )
@@ -110,7 +111,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     double kTicksPerDegree = IntakeArmConstants.EncoderCountsPerRev * IntakeArmConstants.ArmGearRatio / 360; 
     double currentPos = m_armTalon.getSelectedSensorPosition();    
    
-    double degrees = ( currentPos - IntakeArmConstants.ArmDeployedPosition) / kTicksPerDegree;
+    double degrees = ( currentPos - IntakeArmConstants.ArmHorizontalPosition) / kTicksPerDegree;
     double radians = java.lang.Math.toRadians(degrees);
     double cosineScalar = java.lang.Math.cos(radians);
     

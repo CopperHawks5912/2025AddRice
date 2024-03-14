@@ -38,7 +38,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void extendClimbers()
   {
-    if( m_leftClimber.getSelectedSensorPosition(0) >= ClimberConstants.ExtendedPosition )
+    if( m_leftClimber.getSelectedSensorPosition(0) <= ClimberConstants.ExtendedPosition )
     {
       extendClimber( m_leftClimber );
     //extendClimber( m_rightClimber );
@@ -50,7 +50,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }  
   public void retractClimbers()
   {
-    if( m_leftClimber.getSelectedSensorPosition(0) <= -10 )
+    if( m_leftClimber.getSelectedSensorPosition(0) >= ClimberConstants.HomePosition )
     {
       retractClimber( m_leftClimber );
       //retractClimber( m_rightClimber );

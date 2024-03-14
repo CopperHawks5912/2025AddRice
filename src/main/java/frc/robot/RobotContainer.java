@@ -86,20 +86,6 @@ public class RobotContainer
     configureAutos();
     configureBindings();
 
-    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-                                                                   () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(),
-                                                                                                ControllerConstants.LeftYDeadband),
-                                                                   () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX(),
-                                                                                                ControllerConstants.LeftXDeadband),
-                                                                   () -> MathUtil.applyDeadband( m_driverXboxController.getRightX(),
-                                                                                                ControllerConstants.RightXDeadband),
-                                                                   m_driverXboxController::getYButtonPressed,
-                                                                   m_driverXboxController::getAButtonPressed,
-                                                                   m_driverXboxController::getXButtonPressed,
-                                                                   m_driverXboxController::getBButtonPressed, 
-                                                                   m_driverXboxController::getLeftBumperPressed,
-                                                                   m_driverXboxController::getRightBumperPressed);
-
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -142,11 +128,9 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    Command retractArmCommand = new RetractArmCommand(m_IntakeArmSubsystem);
-
     Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
     
-    intakeTrigger.onFalse( new ParallelDeadlineGroup( retractArmCommand, new NoteLEDCommand( m_addressableLEDSubsystem )).andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
+    intakeTrigger.onFalse( new ParallelDeadlineGroup( new RetractArmCommand(m_IntakeArmSubsystem), new NoteLEDCommand( m_addressableLEDSubsystem )).andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
     
     //climbCommand current uses ButtonRedUpper1, ButtonRedLower1, ButtonRedUpper2, ButtonRedLower2;
     //we're passing in the driver controller so we could potentially make it rumble.
@@ -154,15 +138,15 @@ public class RobotContainer
 
     new JoystickButton(m_driverXboxController, 7).onTrue((new InstantCommand(drivebase::zeroGyro)));
     
-    //new JoystickButton(m_driverXboxController, 1).onTrue((new NoteLEDCommand(m_addressableLEDSubsystem)));
-    //new JoystickButton(m_driverXboxController, 2).onTrue((new ShootingLEDCommand(m_addressableLEDSubsystem)));
+    new JoystickButton(m_driverXboxController, 1).onTrue((new NoteLEDCommand(m_addressableLEDSubsystem)));
+    new JoystickButton(m_driverXboxController, 2).onTrue((new ShootingLEDCommand(m_addressableLEDSubsystem)));
     //new JoystickButton(m_driverXboxController, 1).whileTrue(new TestRumbleCommand( m_driverXboxController ));
      
 
     m_operatorController.button(ControllerConstants.ButtonBlueUpper)
         .onTrue(new ExtendArmCommand(m_IntakeArmSubsystem));
     m_operatorController.button(ControllerConstants.ButtonBlueLower)
-        .onTrue( retractArmCommand );
+        .onTrue( new RetractArmCommand(m_IntakeArmSubsystem) );
     m_operatorController.button(ControllerConstants.ButtonRedUpper3)
         .whileTrue(new EatNoteCommand(m_IntakeGrabberSubsystem) );
     m_operatorController.button(ControllerConstants.ButtonRedLower3)
@@ -290,6 +274,18 @@ public class RobotContainer
   {
     Command driveCommand;
     
+    AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
+                                                                   () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(),
+                                                                                                ControllerConstants.LeftYDeadband),
+                                                                   () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX(),
+                                                                                                ControllerConstants.LeftXDeadband),
+                                                                   () -> MathUtil.applyDeadband( m_driverXboxController.getRightX(),
+                                                                                                ControllerConstants.RightXDeadband),
+                                                                   m_driverXboxController::getYButtonPressed,
+                                                                   m_driverXboxController::getAButtonPressed,
+                                                                   m_driverXboxController::getXButtonPressed,
+                                                                   m_driverXboxController::getBButtonPressed);
+
     Optional<Alliance>  alliance = DriverStation.getAlliance();
     if( alliance.get() == Alliance.Blue)
     {

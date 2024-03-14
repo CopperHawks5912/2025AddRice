@@ -76,10 +76,10 @@ public final class Constants
   
   public static final class ClimberConstants
   {
-    public static final double ExtendSpeed = -0.6;  
-    public static final double RetractSpeed = 0.6;  
+    public static final double ExtendSpeed = 0.8;  
+    public static final double RetractSpeed = -0.8;  
     public static final double HomePosition = 0;
-    public static final double ExtendedPosition = -30000;
+    public static final double ExtendedPosition = 30000;
   }
   
   public static final class IntakeGrabberConstants
@@ -99,23 +99,24 @@ public final class Constants
     // public static final double ArmForwardPositionMultiplier = 30;
     // public static final double ArmReversePositionMultiplier = 30;
 
-    public static final double ArmMaxPeakOutputForward = 0.4;//0.7;
-    public static final double ArmMaxPeakOutputReverse = -0.4;//-0.7;
+    public static final double ArmMaxPeakOutputForward = 0.5;//0.7;
+    public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
     
-    public static final double ArmCruiseVelocity = 400;//700;
-    public static final double ArmAcceleration = 400;//500;
+    public static final double ArmCruiseVelocity = 300;//700;
+    public static final double ArmAcceleration = 300;//500;
 
     public static final int ArmHomePosition = 0;
-    public static final int ArmDeployedPosition = 2300; //2410;
-    public static final int ArmAmpPosition = 1280; //2440;
+    public static final int ArmHorizontalPosition = 2050;
+    public static final int ArmDeployedPosition = 2250; //2410;
+    public static final int ArmAmpPosition = 1280; //;
     
-    public static final double ArmMaxGravityFF = 0.01;  //power required to hold forearm horizontal.
+    public static final double ArmMaxGravityFF = 0.2;  //power required to hold forearm horizontal.
      
     /**
 	   * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    public static final Gains ArmGains = new Gains(3, 0.0, 0.0, 0.32, 0, 1.0);
+    public static final Gains ArmGains = new Gains(3.0, 0.0, 2.0, 0.0, 0, 0);
     
     public static final int EncoderCountsPerRev = 4096;
     public static final double ArmGearRatio = 1.0;  //1:1 gearing (100:1 gearbox is in front of the encoder 
@@ -144,7 +145,7 @@ public final class Constants
   }
 
   public static class LEDConstants{
-    public static final int LEDStringLength = 30;
+    public static final int LEDStringLength = 66;
     public static final int LEDModeOff = -1;
     public static final int LEDModeAllianceBlue = 0;
     public static final int LEDModeAllianceRed = 1;  

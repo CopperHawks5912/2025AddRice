@@ -105,33 +105,49 @@ public class AddressableLEDSubsystem extends SubsystemBase {
   private void shootingMode() {
     // For every pixel
     int index;
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      index = (i+m_ShootingStatus) % 10;
+    for (var i = 0; i < m_ledBuffer.getLength() /2; i++) {
+      index = (i+m_ShootingStatus) % 20;
       switch( index )
       {
+        case 19:
+        case 18:
+        case 17:
+          m_ledBuffer.setRGB( i*2, 255, 0, 0);
+          m_ledBuffer.setRGB( i*2+1, 255, 0, 0);
+          break;
+        case 16:
+        case 15:
+          m_ledBuffer.setRGB( i*2, 100, 0, 0);
+          m_ledBuffer.setRGB( i*2+1, 100, 0, 0);
+          
+          break;
+        case 14:
+        case 13:
+        case 12:
+        case 11:
+        case 10:
+         m_ledBuffer.setRGB( i*2, 35, 0, 0);
+         m_ledBuffer.setRGB( i*2+1, 35, 0, 0);
+          break;
         case 9:
         case 8:
-          m_ledBuffer.setRGB( i, 255, 0, 0);
-          break;
         case 7:
         case 6:
-          m_ledBuffer.setRGB( i, 170, 0, 0);
-          break;
-        case 5:
-        case 4:
-          m_ledBuffer.setRGB( i, 85, 0, 0);
-          break;
-        case 3:
-        case 2:
-          m_ledBuffer.setRGB( i, 42, 0, 0);
+          m_ledBuffer.setRGB( i*2, 5, 0, 0);
+          m_ledBuffer.setRGB( i*2+1, 5, 0, 0);
           break;
         default:
-          m_ledBuffer.setRGB( i, 0, 0, 0);
+          m_ledBuffer.setRGB( i*2, 0, 0, 0);
+          m_ledBuffer.setRGB( i*2+1, 0, 0, 0);
       }
     }
+    
+    // for (var i = 0; i < m_ledBuffer.getLength() /2; i++) {
+    //     m_ledBuffer.setRGB( i*2+1, 0, 0, 0);
+    // }
 
     m_ShootingStatus--;
     if( m_ShootingStatus <= 0)
-      m_ShootingStatus = 10;
+      m_ShootingStatus = 20;
   }
 }

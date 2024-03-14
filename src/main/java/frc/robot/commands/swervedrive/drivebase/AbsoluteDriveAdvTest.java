@@ -22,13 +22,13 @@ import swervelib.math.SwerveMath;
 /**
  * A more advanced Swerve Control System that has 4 buttons for which direction to face
  */
-public class AbsoluteDriveAdv extends Command
+public class AbsoluteDriveAdvTest extends Command
 {
 
   private final SwerveSubsystem swerve;
   private final DoubleSupplier  vX, vY;
   private final DoubleSupplier  headingAdjust;
-  private final BooleanSupplier lookAway, lookTowards, lookLeft, lookRight;
+  private final BooleanSupplier lookAway, lookTowards, lookLeft, lookRight, lookLeftSource, lookRightSource;
   private       boolean         resetHeading = false;
 
   /**
@@ -50,10 +50,13 @@ public class AbsoluteDriveAdv extends Command
    * @param lookTowards   Face the robot towards the driver
    * @param lookLeft      Face the robot left
    * @param lookRight     Face the robot right
+   * @param lookLeftSource Face the robot towards the source on the left side of the field (red alliance, -60 deg)
+   * @param lookRightSource Face the robot towards the source on the right side of the field (blue alliance, 60 deg)
+   * 
    */
-  public AbsoluteDriveAdv(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier headingAdjust,
+  public AbsoluteDriveAdvTest(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier headingAdjust,
                           BooleanSupplier lookAway, BooleanSupplier lookTowards, BooleanSupplier lookLeft,
-                          BooleanSupplier lookRight)
+                          BooleanSupplier lookRight, BooleanSupplier lookLeftSource, BooleanSupplier lookRightSource )
   {
     this.swerve = swerve;
     this.vX = vX;
@@ -63,6 +66,8 @@ public class AbsoluteDriveAdv extends Command
     this.lookTowards = lookTowards;
     this.lookLeft = lookLeft;
     this.lookRight = lookRight;
+    this.lookLeftSource = lookLeftSource;
+    this.lookRightSource = lookRightSource;        
 
     addRequirements(swerve);
   }
@@ -77,48 +82,59 @@ public class AbsoluteDriveAdv extends Command
   @Override
   public void execute()
   {
-    double headingX = 0;
-    double headingY = 0;
+    double headingDegrees = 0;
+    boolean headingButtonPressed = true;
 
-    // These are written to allow combinations for 45 angles
+    // These are No Longer written to allow combinations for 45 angles
     // Face Away from Drivers
-    if (lookAway.getAsBoolean())
+    if( lookLeftSource.getAsBoolean() )
     {
-      headingY = 1;
+      headingDegrees = -60;
+    }
+    else if( lookRightSource.getAsBoolean() )
+    {
+      headingDegrees = 60;
+    }
+    else if (lookAway.getAsBoolean())
+    {
+      headingDegrees = 0;
     }
     // Face Right
-    if (lookRight.getAsBoolean())
+    else if (lookRight.getAsBoolean())
     {
-      headingX = -1;
+      headingDegrees = 90;
     }
     // Face Left
-    if (lookLeft.getAsBoolean())
+    else if (lookLeft.getAsBoolean())
     {
-      headingX = 1;
+      headingDegrees = -90;
     }
     // Face Towards the Drivers
-    if (lookTowards.getAsBoolean())
+    else if (lookTowards.getAsBoolean())
     {
-      headingY = -1;
+      headingDegrees = 180;
     }
+    else 
+    {
+      headingButtonPressed = false;
+    } 
 
     // Prevent Movement After Auto
     if (resetHeading)
     {
-      if (headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) == 0)
+      if ( !headingButtonPressed && Math.abs(headingAdjust.getAsDouble()) == 0)
       {
         // Get the curret Heading
         Rotation2d currentHeading = swerve.getHeading();
 
         // Set the Current Heading to the desired Heading
-        headingX = currentHeading.getSin();
-        headingY = currentHeading.getCos();
+        headingDegrees = currentHeading.getDegrees();
       }
       //Dont reset Heading Again
       resetHeading = false;
     }
 
-    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), headingX, headingY);
+    ChassisSpeeds desiredSpeeds = swerve.getTargetSpeeds(vX.getAsDouble(), vY.getAsDouble(), Rotation2d.fromDegrees(headingDegrees));
 
     // Limit velocity to prevent tippy
     Translation2d translation = SwerveController.getTranslation2d(desiredSpeeds);
@@ -129,7 +145,7 @@ public class AbsoluteDriveAdv extends Command
     SmartDashboard.putString("Translation", translation.toString());
 
     // Make the robot move
-    if (headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) > 0)
+    if (!headingButtonPressed && Math.abs(headingAdjust.getAsDouble()) > 0)
     {
       resetHeading = true;
       //swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
