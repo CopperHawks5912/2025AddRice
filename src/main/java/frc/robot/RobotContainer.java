@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.DIOConstants;
 import frc.robot.commands.LED.AllianceLEDCommand;
 import frc.robot.commands.LED.NoteLEDCommand;
 import frc.robot.commands.climber.ClimbCommand;
@@ -57,14 +59,13 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/5912"));
+  private DigitalInput m_intakeNoteBeamBreakSensor = new DigitalInput(DIOConstants.IntakeNoteBeamBreakSensorPort);
   private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-  private final IntakeArmSubsystem m_IntakeArmSubsystem = new IntakeArmSubsystem();
-  private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem = new IntakeGrabberSubsystem();
+  private final IntakeArmSubsystem m_IntakeArmSubsystem = new IntakeArmSubsystem( );
+  private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem = new IntakeGrabberSubsystem( m_intakeNoteBeamBreakSensor );
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  //private DigitalInput m_intakeLimitSwitch = new DigitalInput(DIOConstants.IntakeLimitSwitchPort);
   //private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
   
-  // CommandJoystick driverController   = new CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   XboxController m_driverXboxController = new XboxController(0);
   CommandGenericHID m_operatorController = new CommandGenericHID(1);
   
@@ -140,13 +141,11 @@ public class RobotContainer
   {
     Command retractArmCommand = new RetractArmCommand(m_IntakeArmSubsystem);
 
-    //Trigger intakeTrigger = new Trigger(m_intakeLimitSwitch::get );
+    Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
     
-    //intakeTrigger.onTrue( retractArmCommand );//.andThen( new NoteLEDCommand( m_addressableLEDSubsystem )));
-    //intakeTrigger.onFalse(new AllianceLEDCommand( m_addressableLEDSubsystem ));
+    intakeTrigger.onFalse( retractArmCommand );//.andThen( new NoteLEDCommand( m_addressableLEDSubsystem )));
+    //==intakeTrigger.onFalse(new AllianceLEDCommand( m_addressableLEDSubsystem ));
    
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    
     //climbCommand current uses ButtonRedUpper1, ButtonRedLower1, ButtonRedUpper2, ButtonRedLower2;
     //we're passing in the driver controller so we could potentially make it rumble.
     m_ClimberSubsystem.setDefaultCommand(new ClimbCommand(m_ClimberSubsystem, m_operatorController));

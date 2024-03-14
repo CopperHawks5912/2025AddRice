@@ -6,17 +6,22 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
+import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.IntakeArmConstants;
 
 public class IntakeArmSubsystem extends SubsystemBase {
   private WPI_TalonSRX m_armTalon = new WPI_TalonSRX( CANConstants.IntakeArmID );
+  private DigitalInput m_intakeArmLimitSwitch = new DigitalInput(DIOConstants.IntakeArmLimitSwitch);
+  
   private static final int kTimeoutMs = 30;
   private double m_ArbitraryFeedForward;
   private int m_currentTarget;
  
-  public IntakeArmSubsystem() {
+  public IntakeArmSubsystem( ) {
     m_armTalon.configFactoryDefault();   
     m_armTalon.stopMotor();
     m_armTalon.setNeutralMode( NeutralMode.Brake); 
@@ -74,7 +79,15 @@ public class IntakeArmSubsystem extends SubsystemBase {
   {
     m_currentTarget = position;    
     //double currentPos = m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex);    
-    m_armTalon.set( ControlMode.MotionMagic, m_currentTarget, DemandType.ArbitraryFeedForward, m_ArbitraryFeedForward );
+    if( m_currentTarget == 0 && m_intakeArmLimitSwitch.get() )
+    {
+      m_armTalon.set(0);
+      m_armTalon.setSelectedSensorPosition(0, IntakeArmConstants.PIDLoopIndex, kTimeoutMs);
+    }  
+    else  
+    {
+      m_armTalon.set( ControlMode.MotionMagic, m_currentTarget, DemandType.ArbitraryFeedForward, m_ArbitraryFeedForward );
+    }
   }  
 
   public boolean isDeployed()

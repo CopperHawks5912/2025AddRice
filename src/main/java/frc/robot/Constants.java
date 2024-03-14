@@ -31,7 +31,8 @@ public final class Constants
   }
   public static final class DIOConstants
   {
-    public static final int IntakeLimitSwitchPort = 9;
+    public static final int IntakeArmLimitSwitch = 0;
+    public static final int IntakeNoteBeamBreakSensorPort = 1;
 
   }
   public static class ControllerConstants
@@ -98,17 +99,17 @@ public final class Constants
     // public static final double ArmForwardPositionMultiplier = 30;
     // public static final double ArmReversePositionMultiplier = 30;
 
-    public static final double ArmMaxPeakOutputForward = 0.5;//0.7;
-    public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
+    public static final double ArmMaxPeakOutputForward = 0.4;//0.7;
+    public static final double ArmMaxPeakOutputReverse = -0.4;//-0.7;
     
-    public static final double ArmCruiseVelocity = 500;//700;
-    public static final double ArmAcceleration = 500;//500;
+    public static final double ArmCruiseVelocity = 400;//700;
+    public static final double ArmAcceleration = 400;//500;
 
     public static final int ArmHomePosition = 0;
     public static final int ArmDeployedPosition = 2300; //2410;
     public static final int ArmAmpPosition = 1280; //2440;
     
-    public static final double ArmMaxGravityFF = 0.08;  //power required to hold forearm horizontal.
+    public static final double ArmMaxGravityFF = 0.01;  //power required to hold forearm horizontal.
      
     /**
 	   * Gains used in Motion Magic, to be adjusted accordingly

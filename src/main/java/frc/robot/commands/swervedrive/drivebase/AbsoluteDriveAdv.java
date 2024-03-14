@@ -145,7 +145,7 @@ public class AbsoluteDriveAdv extends Command
     SmartDashboard.putString("Translation", translation.toString());
 
     // Make the robot move
-    if (!headingButtonPressed && Math.abs(headingAdjust.getAsDouble()) > 0)
+    if (!headingButtonPressed && Math.abs(headingAdjust.getAsDouble()) == 0)
     {
       resetHeading = true;
       //swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);

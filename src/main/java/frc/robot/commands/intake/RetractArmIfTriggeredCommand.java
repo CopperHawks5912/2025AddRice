@@ -13,7 +13,7 @@ import frc.robot.subsystems.intake.IntakeArmSubsystem;
 /** An example command that uses an example subsystem. */
 public class RetractArmIfTriggeredCommand extends Command {
   private final IntakeArmSubsystem m_IntakeArmSubsystem;
-  private DigitalInput m_intakeLimitSwitch = new DigitalInput(DIOConstants.IntakeLimitSwitchPort);
+  private DigitalInput m_intakeBeamBreakSwitch = new DigitalInput(DIOConstants.IntakeNoteBeamBreakSensorPort);
   private boolean m_intakeTriggered = false;
   /**
    * Creates a new ExampleCommand.
@@ -29,7 +29,7 @@ public class RetractArmIfTriggeredCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intakeTriggered = m_intakeLimitSwitch.get();
+    m_intakeTriggered = !m_intakeBeamBreakSwitch.get();
 
   }
 

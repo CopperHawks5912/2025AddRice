@@ -6,16 +6,16 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CANConstants;
-import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.IntakeGrabberConstants;
 
 public class IntakeGrabberSubsystem extends SubsystemBase {
   private WPI_VictorSPX m_grabberVictor = new WPI_VictorSPX(CANConstants.IntakeGrabberID);
   private int kTimeoutMs = 30;
-  private DigitalInput m_intakeLimitSwitch = new DigitalInput(DIOConstants.IntakeLimitSwitchPort);
+  private DigitalInput m_intakeBeamBreakSensor;
   private boolean m_gotNote;
 
-  public IntakeGrabberSubsystem() { 
+  public IntakeGrabberSubsystem( DigitalInput intakeNoteBeamBreakSensor ) { 
+    m_intakeBeamBreakSensor = intakeNoteBeamBreakSensor;
     m_grabberVictor.configFactoryDefault();
     m_grabberVictor.stopMotor();
     m_grabberVictor.setNeutralMode( NeutralMode.Brake);   
@@ -26,12 +26,12 @@ public class IntakeGrabberSubsystem extends SubsystemBase {
 
   public void intake()
   {
-    //if( m_intakeLimitSwitch.get()  ) 
-    //{
-    //  m_grabberVictor.set(0);
-    //  m_gotNote = true;
-   // }
-    //else
+    if( !m_intakeBeamBreakSensor.get()  ) 
+    {
+      m_grabberVictor.set(0);
+      m_gotNote = true;
+    }
+    else
     {      
       m_grabberVictor.set( IntakeGrabberConstants.InputSpeed );
       m_gotNote = false;
