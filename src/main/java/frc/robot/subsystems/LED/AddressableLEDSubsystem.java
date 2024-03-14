@@ -106,24 +106,32 @@ public class AddressableLEDSubsystem extends SubsystemBase {
     // For every pixel
     int index;
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      index = (i-m_ShootingStatus) % 7;
+      index = (i+m_ShootingStatus) % 10;
       switch( index )
       {
-        case 0:
-        case 1:
+        case 9:
+        case 8:
           m_ledBuffer.setRGB( i, 255, 0, 0);
           break;
-        case 2:
-        case 3:
+        case 7:
+        case 6:
+          m_ledBuffer.setRGB( i, 170, 0, 0);
+          break;
+        case 5:
         case 4:
-          m_ledBuffer.setRGB( i, 127, 0, 0);
+          m_ledBuffer.setRGB( i, 85, 0, 0);
+          break;
+        case 3:
+        case 2:
+          m_ledBuffer.setRGB( i, 42, 0, 0);
           break;
         default:
           m_ledBuffer.setRGB( i, 0, 0, 0);
       }
     }
-    m_ShootingStatus++;
-    if( m_ShootingStatus == 7)
-      m_ShootingStatus = 0;
+
+    m_ShootingStatus--;
+    if( m_ShootingStatus <= 0)
+      m_ShootingStatus = 10;
   }
 }

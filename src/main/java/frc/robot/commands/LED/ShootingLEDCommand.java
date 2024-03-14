@@ -31,7 +31,7 @@ public class ShootingLEDCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() { 
-      m_addressableLEDSubsystem.setLEDMode(LEDConstants.LEDModeNoteEaten);       
+      m_addressableLEDSubsystem.setLEDMode(LEDConstants.LEDModeShooting);       
   }
   // Called once the command ends or is interrupted.
   @Override

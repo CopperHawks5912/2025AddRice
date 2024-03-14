@@ -144,7 +144,7 @@ public final class Constants
   }
 
   public static class LEDConstants{
-    public static final int LEDStringLength = 140;
+    public static final int LEDStringLength = 30;
     public static final int LEDModeOff = -1;
     public static final int LEDModeAllianceBlue = 0;
     public static final int LEDModeAllianceRed = 1;  

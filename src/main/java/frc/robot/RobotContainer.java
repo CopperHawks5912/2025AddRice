@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -25,6 +27,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.commands.LED.AllianceLEDCommand;
 import frc.robot.commands.LED.NoteLEDCommand;
+import frc.robot.commands.LED.ShootingLEDCommand;
 import frc.robot.commands.climber.ClimbCommand;
 import frc.robot.commands.intake.ExtendArmCommand;
 import frc.robot.commands.intake.EatNoteCommand;
@@ -64,7 +67,7 @@ public class RobotContainer
   private final IntakeArmSubsystem m_IntakeArmSubsystem = new IntakeArmSubsystem( );
   private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem = new IntakeGrabberSubsystem( m_intakeNoteBeamBreakSensor );
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-  //private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
+  private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
   
   XboxController m_driverXboxController = new XboxController(0);
   CommandGenericHID m_operatorController = new CommandGenericHID(1);
@@ -143,15 +146,16 @@ public class RobotContainer
 
     Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
     
-    intakeTrigger.onFalse( retractArmCommand );//.andThen( new NoteLEDCommand( m_addressableLEDSubsystem )));
-    //==intakeTrigger.onFalse(new AllianceLEDCommand( m_addressableLEDSubsystem ));
-   
+    intakeTrigger.onFalse( new ParallelDeadlineGroup( retractArmCommand, new NoteLEDCommand( m_addressableLEDSubsystem )).andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
+    
     //climbCommand current uses ButtonRedUpper1, ButtonRedLower1, ButtonRedUpper2, ButtonRedLower2;
     //we're passing in the driver controller so we could potentially make it rumble.
     m_ClimberSubsystem.setDefaultCommand(new ClimbCommand(m_ClimberSubsystem, m_operatorController));
 
-    new JoystickButton(m_driverXboxController, 6).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(m_driverXboxController, 7).onTrue((new InstantCommand(drivebase::zeroGyro)));
     
+    //new JoystickButton(m_driverXboxController, 1).onTrue((new NoteLEDCommand(m_addressableLEDSubsystem)));
+    //new JoystickButton(m_driverXboxController, 2).onTrue((new ShootingLEDCommand(m_addressableLEDSubsystem)));
     //new JoystickButton(m_driverXboxController, 1).whileTrue(new TestRumbleCommand( m_driverXboxController ));
      
 
@@ -166,7 +170,8 @@ public class RobotContainer
     m_operatorController.button(ControllerConstants.ButtonBlack1)
         .whileTrue(new ShootToAmpCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
     m_operatorController.button(ControllerConstants.ButtonBlack2)
-        .whileTrue(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
+        .whileTrue(new ShootingLEDCommand(m_addressableLEDSubsystem).andThen(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem )))
+        .onFalse(new AllianceLEDCommand(m_addressableLEDSubsystem));
         
     
     // new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));

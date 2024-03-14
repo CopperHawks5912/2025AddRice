@@ -1,5 +1,13 @@
 {
   "HALProvider": {
+    "Addressable LEDs": {
+      "0": {
+        "columns": 30
+      },
+      "window": {
+        "visible": true
+      }
+    },
     "Other Devices": {
       "SPARK MAX [5]": {
         "header": {
@@ -37,16 +45,6 @@
         }
       },
       "Talon FX[8]/Integrated Sensor": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon SRX[30]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon SRX[30]/Analog In": {
         "header": {
           "open": true
         }
