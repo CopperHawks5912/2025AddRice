@@ -51,7 +51,7 @@ public class EatNoteWithDelayCommand extends Command {
   @Override
   public boolean isFinished() {
   
-    if (m_finishedEatingTimer.hasElapsed(m_delayAfterEating))
+    if (m_finishedEatingTimer.hasElapsed(m_delayAfterEating)  || m_IntakeGrabberSubsystem.getGotNote() )
       return true;
     else
       return false;

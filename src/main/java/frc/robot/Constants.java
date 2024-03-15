@@ -61,7 +61,7 @@ public final class Constants
 
   public static final class AutoConstants
   {
-    public static final double ShooterDelaySeconds = 0.5  ;
+    public static final double ShooterDelaySeconds = 0.5;
     public static final double IntakeDelaySeconds = 0.5;
   }
 
@@ -136,9 +136,9 @@ public final class Constants
 
   public static final class DrivebaseConstants
   {
-
-    // Hold time on motor brakes when disabled
     public static final double WheelLockTime = 10; // seconds
+    public static final double MaxSpeedNormal = 14.5; // seconds
+    public static final double MaxSpeedSlow = 9.0; // seconds    
   }
   public static class PWMConstants{
     public static final int LEDStringID = 0;

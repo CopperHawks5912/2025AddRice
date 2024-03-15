@@ -415,6 +415,11 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setMotorIdleMode(brake);
   }
 
+   public void setMaximumSpeed( float speed)
+  {
+    maximumSpeed = speed;
+  }
+
   /**
    * Gets the current yaw angle of the robot, as reported by the swerve pose estimator in the underlying drivebase.
    * Note, this is not the raw gyro reading, this may be corrected from calls to resetOdometry().

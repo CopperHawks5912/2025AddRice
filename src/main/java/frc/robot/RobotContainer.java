@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -34,7 +33,6 @@ import frc.robot.commands.intake.ExtendArmCommand;
 import frc.robot.commands.intake.EatNoteCommand;
 import frc.robot.commands.intake.EatNoteWithDelayCommand;
 import frc.robot.commands.intake.RetractArmCommand;
-import frc.robot.commands.intake.RetractArmIfTriggeredCommand;
 import frc.robot.commands.intake.SpitNoteCommand;
 import frc.robot.commands.intake.StopIntakeCommand;
 import frc.robot.subsystems.LED.AddressableLEDSubsystem;
@@ -129,14 +127,6 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
-    
-    intakeTrigger.onFalse( new ParallelDeadlineGroup( 
-                                    new RetractArmCommand(m_IntakeArmSubsystem), 
-                                    new NoteLEDCommand( m_addressableLEDSubsystem ), 
-                                    new TestRumbleCommand( m_driverXboxController ))
-                      .andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
-    
     //climbCommand current uses ButtonRedUpper1, ButtonRedLower1, ButtonRedUpper2, ButtonRedLower2;
     //we're passing in the driver controller so we could potentially make it rumble.
     m_ClimberSubsystem.setDefaultCommand(new ClimbCommand(m_ClimberSubsystem, m_operatorController));
@@ -146,7 +136,12 @@ public class RobotContainer
     new JoystickButton(m_driverXboxController, 1).onTrue((new NoteLEDCommand(m_addressableLEDSubsystem)));
     new JoystickButton(m_driverXboxController, 2).onTrue((new ShootingLEDCommand(m_addressableLEDSubsystem)));
     //new JoystickButton(m_driverXboxController, 1).whileTrue(new TestRumbleCommand( m_driverXboxController ));
-     
+    
+    
+    // new JoystickButton(m_driverXboxController, 7)
+    //    .onTrue( new InstantCommand( return run(() -> {} drivebase.setMaximumSpeed( 8.0) ) ) );
+
+    //    .onFalse( new InstantCommand(drivebase->setMaximumSpeed( 14.5) ) );
 
     m_operatorController.button(ControllerConstants.ButtonBlueUpper)
         .onTrue(new ExtendArmCommand(m_IntakeArmSubsystem));
@@ -228,6 +223,9 @@ public class RobotContainer
       case "5":
         delayCommand = new WaitCommand(5);
         break;   
+      case "10":
+        delayCommand = new WaitCommand(10);
+        break;   
       
     }
     switch( m_selectedPathAuto )
@@ -241,20 +239,8 @@ public class RobotContainer
       case "C-MA":
         pathCommand =  drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
         break;
-      case "C-A":
-        pathCommand = drivebase.getAutonomousCommand("Center-Note1");
-        break;
       case "A-A":
         pathCommand =  drivebase.getAutonomousCommand("Left-Note1");
-        break;
-      case "A-AM":
-        pathCommand =  drivebase.getAutonomousCommand("Left-Note1").andThen(drivebase.getAutonomousCommand("Left-Note1"));
-        break;
-      case "S-S":
-        pathCommand =  drivebase.getAutonomousCommand("Right-Note3");
-        break;
-      case "S-SM":
-        pathCommand =  drivebase.getAutonomousCommand("Right-Note3").andThen(drivebase.getAutonomousCommand("Left-Note1"));
         break;
     }
 
@@ -271,6 +257,16 @@ public class RobotContainer
     //return drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
   }
 
+  public void enableIntakeTrigger()
+  {
+    Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
+    
+    intakeTrigger.onFalse( new ParallelDeadlineGroup( 
+                                    new RetractArmCommand(m_IntakeArmSubsystem), 
+                                    new NoteLEDCommand( m_addressableLEDSubsystem ), 
+                                    new TestRumbleCommand( m_driverXboxController ))
+                      .andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
+  }
   public void setDriveMode()
   {
     Command driveCommand;
