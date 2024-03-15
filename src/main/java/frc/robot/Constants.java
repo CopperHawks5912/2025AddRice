@@ -62,7 +62,7 @@ public final class Constants
   public static final class AutoConstants
   {
     public static final double ShooterDelaySeconds = 0.5;
-    public static final double IntakeDelaySeconds = 0.5;
+    public static final double IntakeDelaySeconds = 3;
   }
 
   public static final class ShooterConstants
@@ -84,7 +84,7 @@ public final class Constants
   
   public static final class IntakeGrabberConstants
   {
-    public static final double InputSpeed = 0.9;  
+    public static final double InputSpeed = 0.8;  
     public static final double OutputSpeed = -0.8;  
   }
   

@@ -185,8 +185,10 @@ public class RobotContainer
     m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
     m_autoPathChooser.addOption( "Center M", "C-M");
     m_autoPathChooser.addOption( "Center M-A", "C-MA");
+    m_autoPathChooser.addOption( "Center A", "C-A");
     m_autoPathChooser.addOption( "AmpSide A", "A-A");
-    m_autoPathChooser.addOption( "None", "N");
+    m_autoPathChooser.addOption( "StageSide Move", "S-Mv");
+   m_autoPathChooser.addOption( "None", "N");
     
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
     SmartDashboard.putData("Auto-Drive:", m_autoPathChooser );
@@ -239,8 +241,14 @@ public class RobotContainer
       case "C-MA":
         pathCommand =  drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
         break;
+      case "C-A":
+        pathCommand =  drivebase.getAutonomousCommand("Center-Note1");
+        break;
       case "A-A":
         pathCommand =  drivebase.getAutonomousCommand("Left-Note1");
+        break;
+      case "S-Mv":
+        pathCommand =  drivebase.getAutonomousCommand("Right-Movement");
         break;
     }
 
