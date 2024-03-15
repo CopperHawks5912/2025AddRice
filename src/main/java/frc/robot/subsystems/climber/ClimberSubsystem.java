@@ -28,50 +28,50 @@ public class ClimberSubsystem extends SubsystemBase {
     m_rightClimber.stopMotor();
     m_rightClimber.setNeutralMode( NeutralMode.Brake);   
     
-    m_rightClimber.follow(m_leftClimber);
-    m_rightClimber.setInverted(InvertType.OpposeMaster);  
+   //  m_rightClimber.follow(m_leftClimber);
+     m_rightClimber.setInverted(InvertType.InvertMotorOutput);  
  }
 
   @Override
   public void periodic() {     
   }
 
-  public void extendClimbers()
-  {
-    if( m_leftClimber.getSelectedSensorPosition(0) <= ClimberConstants.ExtendedPosition )
-    {
-      extendClimber( m_leftClimber );
-    //extendClimber( m_rightClimber );
-    }
-    else
-    {
-      stopClimbers();
-    }
-  }  
-  public void retractClimbers()
-  {
-    if( m_leftClimber.getSelectedSensorPosition(0) >= ClimberConstants.HomePosition )
-    {
-      retractClimber( m_leftClimber );
-      //retractClimber( m_rightClimber );
-    }
-    else
-    {
-      stopClimbers();
-    }
-  }  
-  public void stopClimbers()
-  {
-    stopClimber( m_leftClimber );
-    //stopClimber( m_rightClimber );
-  }  
+//   public void extendClimbers()
+//   {
+//     if( m_leftClimber.getSelectedSensorPosition(0) <= ClimberConstants.ExtendedPosition )
+//     {
+//       extendClimber( m_leftClimber );
+//     extendClimber( m_rightClimber );
+//     }
+//     else
+//     {
+//       stopClimbers();
+//     }
+//   }  
+//   public void retractClimbers()
+//   {
+//     if( m_leftClimber.getSelectedSensorPosition(0) >= ClimberConstants.HomePosition )
+//     {
+//       retractClimber( m_leftClimber );
+//       //retractClimber( m_rightClimber );
+//     }
+//     else
+//     {
+//       stopClimbers();
+//     }
+//   }  
+//   public void stopClimbers()
+//   {
+//     stopClimber( m_leftClimber );
+//     //stopClimber( m_rightClimber );
+//   }  
 
   public void extendClimber( int climberID )
   {
       if( climberID == CANConstants.LeftClimberID )
          extendClimber( m_leftClimber );
       else if( climberID == CANConstants.RightClimberID )
-         extendClimber( m_leftClimber );
+         extendClimber( m_rightClimber );
   }  
   
   public void retractClimber( int climberID )
@@ -79,14 +79,19 @@ public class ClimberSubsystem extends SubsystemBase {
       if( climberID == CANConstants.LeftClimberID )
          retractClimber( m_leftClimber );
       else if( climberID == CANConstants.RightClimberID )
-         retractClimber( m_leftClimber );
+         retractClimber( m_rightClimber );
   }
   public void stopClimber( int climberID )
   {
       if( climberID == CANConstants.LeftClimberID )
          stopClimber( m_leftClimber );
       else if( climberID == CANConstants.RightClimberID )
-         stopClimber( m_leftClimber );
+         stopClimber( m_rightClimber );
+  }
+  public void holdClimbers( )
+  {
+    holdClimber( m_leftClimber );
+    holdClimber( m_rightClimber );
   }
   public void extendClimber( WPI_VictorSPX climber )
   {
@@ -100,7 +105,12 @@ public class ClimberSubsystem extends SubsystemBase {
   {
      climber.set( VictorSPXControlMode.PercentOutput, 0 );
   } 
-public void extendClimber( WPI_TalonSRX climber )
+  public void holdClimber( WPI_VictorSPX climber ) 
+  {
+     climber.set( VictorSPXControlMode.PercentOutput, ClimberConstants.HoldSpeed );
+  } 
+
+  public void extendClimber( WPI_TalonSRX climber )
   {
      climber.set( TalonSRXControlMode.PercentOutput, ClimberConstants.ExtendSpeed);
   }  
@@ -112,6 +122,10 @@ public void extendClimber( WPI_TalonSRX climber )
   {
      climber.set( TalonSRXControlMode.PercentOutput, 0 );
   } 
+  public void holdClimber( WPI_TalonSRX climber ) 
+  {
+     climber.set( TalonSRXControlMode.PercentOutput, ClimberConstants.HoldSpeed );
+  }
 
   public boolean areClimbersStalled()
   {

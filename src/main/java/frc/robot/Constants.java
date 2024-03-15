@@ -62,13 +62,13 @@ public final class Constants
   public static final class AutoConstants
   {
     public static final double ShooterDelaySeconds = 0.5;
-    public static final double IntakeDelaySeconds = 0.5;
+    public static final double IntakeDelaySeconds = 3;
   }
 
   public static final class ShooterConstants
   {
-    public static final double PrelaunchTargetSpeed = 50;
-    public static final double SpeakerShootTargetSpeed = 45.0;
+    public static final double PrelaunchTargetSpeed = 70;
+    public static final double SpeakerShootTargetSpeed = 67.0;
     public static final double SpeakerShootMinSpeed = 43.0;
     public static final double AmpShootTargetSpeed = 25.0;
     public static final double AmpShootMinSpeed = 25.0;
@@ -78,13 +78,15 @@ public final class Constants
   {
     public static final double ExtendSpeed = 0.8;  
     public static final double RetractSpeed = -0.8;  
+    public static final double HoldSpeed = -0.05;  
+    
     public static final double HomePosition = 0;
     public static final double ExtendedPosition = 30000;
   }
   
   public static final class IntakeGrabberConstants
   {
-    public static final double InputSpeed = 0.9;  
+    public static final double InputSpeed = 0.8;  
     public static final double OutputSpeed = -0.8;  
   }
   
@@ -150,6 +152,7 @@ public final class Constants
     public static final int LEDModeAllianceBlue = 0;
     public static final int LEDModeAllianceRed = 1;  
     public static final int LEDModeRainbow = 2;  
+    public static final int LEDModeCopperHawks = 3;  
     public static final int LEDModeNoteEaten = 10;
     public static final int LEDModeShooting = 11;
     

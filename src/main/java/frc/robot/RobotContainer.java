@@ -26,6 +26,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.commands.TestRumbleCommand;
 import frc.robot.commands.LED.AllianceLEDCommand;
+import frc.robot.commands.LED.CopperHawksLEDCommand;
 import frc.robot.commands.LED.NoteLEDCommand;
 import frc.robot.commands.LED.ShootingLEDCommand;
 import frc.robot.commands.climber.ClimbCommand;
@@ -67,7 +68,8 @@ public class RobotContainer
   private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem = new IntakeGrabberSubsystem( m_intakeNoteBeamBreakSensor );
   private final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
   private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
-  
+  Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
+    
   XboxController m_driverXboxController = new XboxController(0);
   CommandGenericHID m_operatorController = new CommandGenericHID(1);
   
@@ -82,6 +84,7 @@ public class RobotContainer
    */
   public RobotContainer()
   {
+    m_addressableLEDSubsystem.setDefaultCommand(new CopperHawksLEDCommand(m_addressableLEDSubsystem).ignoringDisable(true));
     configureAutos();
     configureBindings();
 
@@ -131,7 +134,7 @@ public class RobotContainer
     //we're passing in the driver controller so we could potentially make it rumble.
     m_ClimberSubsystem.setDefaultCommand(new ClimbCommand(m_ClimberSubsystem, m_operatorController));
 
-    new JoystickButton(m_driverXboxController, 7).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(m_driverXboxController, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));
     
     new JoystickButton(m_driverXboxController, 1).onTrue((new NoteLEDCommand(m_addressableLEDSubsystem)));
     new JoystickButton(m_driverXboxController, 2).onTrue((new ShootingLEDCommand(m_addressableLEDSubsystem)));
@@ -185,8 +188,10 @@ public class RobotContainer
     m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
     m_autoPathChooser.addOption( "Center M", "C-M");
     m_autoPathChooser.addOption( "Center M-A", "C-MA");
+    m_autoPathChooser.addOption( "Center A", "C-A");
     m_autoPathChooser.addOption( "AmpSide A", "A-A");
-    m_autoPathChooser.addOption( "None", "N");
+    m_autoPathChooser.addOption( "StageSide Move", "S-Mv");
+   m_autoPathChooser.addOption( "None", "N");
     
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
     SmartDashboard.putData("Auto-Drive:", m_autoPathChooser );
@@ -239,8 +244,14 @@ public class RobotContainer
       case "C-MA":
         pathCommand =  drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
         break;
+      case "C-A":
+        pathCommand =  drivebase.getAutonomousCommand("Center-Note1");
+        break;
       case "A-A":
         pathCommand =  drivebase.getAutonomousCommand("Left-Note1");
+        break;
+      case "S-Mv":
+        pathCommand =  drivebase.getAutonomousCommand("Right-Movement");
         break;
     }
 
@@ -258,17 +269,21 @@ public class RobotContainer
   }
 
   public void enableIntakeTrigger()
-  {
-    Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
-    
+  {    
     intakeTrigger.onFalse( new ParallelDeadlineGroup( 
                                     new RetractArmCommand(m_IntakeArmSubsystem), 
                                     new NoteLEDCommand( m_addressableLEDSubsystem ), 
                                     new TestRumbleCommand( m_driverXboxController ))
                       .andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
   }
+  public void disableIntakeTrigger()
+  {    
+    intakeTrigger.onFalse( null);
+  }
   public void setDriveMode()
   {
+    m_addressableLEDSubsystem.setDefaultCommand(new AllianceLEDCommand(m_addressableLEDSubsystem));
+    
     Command driveCommand;
     
     AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,

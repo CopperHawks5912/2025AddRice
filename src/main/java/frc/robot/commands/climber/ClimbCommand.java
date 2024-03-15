@@ -6,6 +6,7 @@ package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
+import frc.robot.Constants.CANConstants;
 //import frc.robot.Constants.CANConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.subsystems.climber.ClimberSubsystem;
@@ -35,50 +36,59 @@ public class ClimbCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedUpper1) ||
-        m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedUpper2))
-    {
-      m_ClimberSubsystem.extendClimbers();  
-    }
-    else if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedLower1) ||
-             m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedLower2))
-    {
-      m_ClimberSubsystem.retractClimbers();  
-    }
-    else 
-    {
-      m_ClimberSubsystem.stopClimbers();  
-    } 
-
-    // if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedUpper2) )
+    // if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedUpper1) ||
+    //     m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedUpper2))
     // {
-    //   m_ClimberSubsystem.extendClimber( CANConstants.RightClimberID);  
+    //   m_ClimberSubsystem.extendClimbers();  
     // }
-    // else if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedLower2) )
+    // else if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedLower1) ||
+    //          m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedLower2))
     // {
-    //   m_ClimberSubsystem.retractClimber( CANConstants.RightClimberID);  
+    //   m_ClimberSubsystem.retractClimbers();  
     // }
     // else 
     // {
-    //   m_ClimberSubsystem.stopClimber( CANConstants.RightClimberID);  
+    //   m_ClimberSubsystem.stopClimbers();  
     // } 
-
     
-    // if( m_ClimberSubsystem.areClimbersStalled() )
-    // {
-    //   m_driverXboxController.setRumble(RumbleType.kLeftRumble, 1);  
-    // }
-    // else
-    // {
-    //   m_driverXboxController.setRumble(RumbleType.kLeftRumble, 0);  
-    // }
+    if( m_operatorController.getHID().getRawAxis(1) <= -0.99)
+    {
+      m_ClimberSubsystem.holdClimbers();    
+    }
+    else 
+    {
+      if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedUpper1) )
+      {
+        m_ClimberSubsystem.extendClimber( CANConstants.LeftClimberID);  
+      }
+      else if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedLower1) )
+      {
+        m_ClimberSubsystem.retractClimber( CANConstants.LeftClimberID);  
+      }
+      else 
+      {
+        m_ClimberSubsystem.stopClimber( CANConstants.LeftClimberID);  
+      }
 
+      if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedUpper2) )
+      {
+        m_ClimberSubsystem.extendClimber( CANConstants.RightClimberID);  
+      }
+      else if( m_operatorController.getHID().getRawButton(ControllerConstants.ButtonRedLower2) )
+      {
+        m_ClimberSubsystem.retractClimber( CANConstants.RightClimberID);  
+      }
+      else 
+      {
+        m_ClimberSubsystem.stopClimber( CANConstants.RightClimberID);  
+      }
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_ClimberSubsystem.stopClimbers(); 
+    //m_ClimberSubsystem.stopClimbers(); 
   }
 
   // Returns true when the command should end.

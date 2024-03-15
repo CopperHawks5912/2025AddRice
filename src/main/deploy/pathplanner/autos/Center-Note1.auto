@@ -51,12 +51,6 @@
                       }
                     },
                     {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.33
-                      }
-                    },
-                    {
                       "type": "named",
                       "data": {
                         "name": "EatNote"

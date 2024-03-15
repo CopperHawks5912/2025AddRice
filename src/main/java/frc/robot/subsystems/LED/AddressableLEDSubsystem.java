@@ -18,6 +18,9 @@ public class AddressableLEDSubsystem extends SubsystemBase {
   private int m_ledMode;
   private int m_noteStatus = 0;
   private int m_ShootingStatus = 0;
+  private int m_CopperHawkStatus = 0;
+  private int m_CopperHawkDelay = 0;
+  
 
   public AddressableLEDSubsystem() {
     m_led = new AddressableLED(PWMConstants.LEDStringID);
@@ -39,6 +42,8 @@ public class AddressableLEDSubsystem extends SubsystemBase {
       blueMode();
     else if(m_ledMode == LEDConstants.LEDModeAllianceRed)
       redMode();
+    else if(m_ledMode == LEDConstants.LEDModeCopperHawks)
+      copperHawksMode();
     else if(m_ledMode == LEDConstants.LEDModeNoteEaten)
       noteMode();
     else if(m_ledMode == LEDConstants.LEDModeShooting)
@@ -65,6 +70,55 @@ public class AddressableLEDSubsystem extends SubsystemBase {
     // For every pixel
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       m_ledBuffer.setLED( i, Color.kRed);
+    }
+  }
+
+  private void copperHawksMode() {
+    // For every pixel
+    int index;
+
+    if( m_CopperHawkDelay == 0 )
+    {
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+        index = (i+m_CopperHawkStatus) % 14;
+        switch( index )
+        {
+          case 13:
+          case 12:
+          case 11:
+          case 10:
+          case 9:
+            m_ledBuffer.setRGB( i, 0, 255, 0);
+            break;
+          case 8:
+          case 7:
+          case 1:
+          case 0:
+            m_ledBuffer.setRGB( i, 0, 0, 0);
+            break;
+          case 6:
+          case 5:
+          case 4:
+          case 3:
+          case 2:
+          m_ledBuffer.setRGB( i, 255, 68, 0);      
+          break;
+
+        }
+      }
+    }
+    
+    // for (var i = 0; i < m_ledBuffer.getLength() /2; i++) {
+    //     m_ledBuffer.setRGB( i*2+1, 0, 0, 0);
+    // }
+    m_CopperHawkDelay++;
+    if( m_CopperHawkDelay >= 2)
+    {
+
+      m_CopperHawkDelay = 0;  
+      m_CopperHawkStatus--;
+      if( m_CopperHawkStatus <= 0)
+        m_CopperHawkStatus = 14;
     }
   }
 
