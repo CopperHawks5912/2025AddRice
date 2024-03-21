@@ -276,10 +276,10 @@ public class RobotContainer
                                     new TestRumbleCommand( m_driverXboxController ))
                       .andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
   }
-  public void disableIntakeTrigger()
-  {    
-    intakeTrigger.onFalse( null);
-  }
+  // public void disableIntakeTrigger()
+  // {    
+  //   intakeTrigger.onFalse( null);
+  // }
   public void setDriveMode()
   {
     m_addressableLEDSubsystem.setDefaultCommand(new AllianceLEDCommand(m_addressableLEDSubsystem));
@@ -299,20 +299,39 @@ public class RobotContainer
                                                                    m_driverXboxController::getBButtonPressed);
 
     Optional<Alliance>  alliance = DriverStation.getAlliance();
+    // if( alliance.get() == Alliance.Blue)
+    // {
+    //   driveCommand = drivebase.driveCommand(
+    //     () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() * 0.80, ControllerConstants.LeftYDeadband),
+    //     () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() * 0.80, ControllerConstants.LeftXDeadband),
+    //     () -> -m_driverXboxController.getRawAxis(4)* 0.8);
+    // }
+    // else
+    // {
+    //   driveCommand = drivebase.driveCommand(
+    //     () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY() * 0.80, ControllerConstants.LeftYDeadband),
+    //     () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX() * 0.80, ControllerConstants.LeftXDeadband),
+    //     () -> -m_driverXboxController.getRawAxis(4) * 0.8);
+    // }
+    
     if( alliance.get() == Alliance.Blue)
     {
       driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() * 0.65, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() * 0.65, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4)* 0.8);
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY(), ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX(), ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4),
+        () -> m_driverXboxController.getLeftBumper() );
     }
     else
     {
       driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY() * 0.65, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX() * 0.65, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4) * 0.8);
+        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY(), ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX(), ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4),
+        () -> m_driverXboxController.getLeftBumper() );
     }
+
+
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveCommand : driveCommand);
   }

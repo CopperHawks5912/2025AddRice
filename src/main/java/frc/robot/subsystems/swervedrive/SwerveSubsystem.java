@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants.YAGSLAutoConstants;
 
 import java.io.File;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
@@ -269,13 +270,40 @@ public class SwerveSubsystem extends SubsystemBase
    * @param angularRotationX Angular velocity of the robot to set. Cubed for smoother controls.
    * @return Drive command.
    */
-  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
+  // public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX)
+  // {
+  //   return run(() -> {
+  //     // Make the robot move
+  //     swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 1) * swerveDrive.getMaximumVelocity(),
+  //                                         Math.pow(translationY.getAsDouble(), 1) * swerveDrive.getMaximumVelocity()),
+  //                       Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
+  //                       true,
+  //                       false);
+  //   });
+  // }
+
+  public Command driveCommand(DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier angularRotationX, BooleanSupplier fastMode )
   {
     return run(() -> {
       // Make the robot move
-      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 1) * swerveDrive.getMaximumVelocity(),
-                                          Math.pow(translationY.getAsDouble(), 1) * swerveDrive.getMaximumVelocity()),
-                        Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
+
+      double xSpeed, ySpeed, rotSpeed;
+      if( fastMode.getAsBoolean() )
+      {
+         xSpeed = translationX.getAsDouble() * 0.9;
+         ySpeed = translationY.getAsDouble() * 0.9;
+         rotSpeed = Math.pow( angularRotationX.getAsDouble() * 0.8, 3 );
+      } 
+      else
+      {
+         xSpeed = Math.pow( translationX.getAsDouble() * 0.75, 3);
+         ySpeed = Math.pow( translationY.getAsDouble() * 0.75, 3);
+         rotSpeed = Math.pow( angularRotationX.getAsDouble() * 0.8, 3 ); //same for both right now.  
+      }
+
+      swerveDrive.drive(new Translation2d(xSpeed * swerveDrive.getMaximumVelocity(),
+                                          ySpeed * swerveDrive.getMaximumVelocity()),
+                        rotSpeed * swerveDrive.getMaximumAngularVelocity(),
                         true,
                         false);
     });
