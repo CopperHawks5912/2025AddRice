@@ -177,6 +177,7 @@ public class RobotContainer
     NamedCommands.registerCommand("EatNote", new EatNoteWithDelayCommand(m_IntakeGrabberSubsystem, AutoConstants.IntakeDelaySeconds));
     NamedCommands.registerCommand("StopIntake", new StopIntakeCommand(m_IntakeGrabberSubsystem));
     NamedCommands.registerCommand("ShootToSpeakerWithDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds ));
+    NamedCommands.registerCommand("ShootToSpeakerWithFastDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterFastDelaySeconds ));
    
 
     m_autoDelayChooser.setDefaultOption( "0 Sec Delay", "0");
@@ -188,10 +189,10 @@ public class RobotContainer
     m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
     m_autoPathChooser.addOption( "Center M", "C-M");
     m_autoPathChooser.addOption( "Center M-A", "C-MA");
-    m_autoPathChooser.addOption( "Center A", "C-A");
+    m_autoPathChooser.addOption( "Center M-S", "C-MS");
     m_autoPathChooser.addOption( "AmpSide A", "A-A");
     m_autoPathChooser.addOption( "StageSide Move", "S-Mv");
-   m_autoPathChooser.addOption( "None", "N");
+    m_autoPathChooser.addOption( "None", "N");
     
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
     SmartDashboard.putData("Auto-Drive:", m_autoPathChooser );
@@ -242,7 +243,12 @@ public class RobotContainer
         pathCommand =  drivebase.getAutonomousCommand("Center-Note2");
         break;
       case "C-MA":
-        pathCommand =  drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
+        pathCommand =  drivebase.getAutonomousCommand("Center-Note2")
+                                  .andThen(drivebase.getAutonomousCommand("Center-Note1"));
+        break;
+      case "C-MS":
+        pathCommand =  drivebase.getAutonomousCommand("Center-Note2")
+                                  .andThen(drivebase.getAutonomousCommand("Center-Note3"));
         break;
       case "C-A":
         pathCommand =  drivebase.getAutonomousCommand("Center-Note1");
@@ -276,10 +282,10 @@ public class RobotContainer
                                     new TestRumbleCommand( m_driverXboxController ))
                       .andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
   }
-  public void disableIntakeTrigger()
-  {    
-    intakeTrigger.onFalse( null);
-  }
+  // public void disableIntakeTrigger()
+  // {    
+  //   intakeTrigger.onFalse( null);
+  // }
   public void setDriveMode()
   {
     m_addressableLEDSubsystem.setDefaultCommand(new AllianceLEDCommand(m_addressableLEDSubsystem));
@@ -302,16 +308,16 @@ public class RobotContainer
     if( alliance.get() == Alliance.Blue)
     {
       driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() * 0.65, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() * 0.65, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4)* 0.8);
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() * 0.85, ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() * 0.85, ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4)* 0.85);
     }
     else
     {
       driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY() * 0.65, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX() * 0.65, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4) * 0.8);
+        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY() * 0.85, ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX() * 0.85, ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4) * 0.80);
     }
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveCommand : driveCommand);
