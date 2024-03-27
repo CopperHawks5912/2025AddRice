@@ -50,7 +50,7 @@ public class ShootToSpeakerWithDelayCommand extends Command {
     {
       if( !m_isAtShootSpeed )
       {
-        m_IntakeGrabberSubsystem.feedShooter();        
+        m_IntakeGrabberSubsystem.feedShooter( false );        
         m_finishedShootingTimer.start();
       }
       m_isAtShootSpeed = true;

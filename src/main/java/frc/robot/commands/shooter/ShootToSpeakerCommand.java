@@ -12,15 +12,16 @@ import frc.robot.subsystems.shooter.ShooterSubsystem;
 public class ShootToSpeakerCommand extends Command {
   private final ShooterSubsystem m_ShooterSubsystem;
   private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem;
-
+  private final boolean m_ReverseIntakeDirection;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ShootToSpeakerCommand(ShooterSubsystem shooterSubsystem, IntakeGrabberSubsystem intakeGrabberSubsystem) {
+  public ShootToSpeakerCommand(ShooterSubsystem shooterSubsystem, IntakeGrabberSubsystem intakeGrabberSubsystem, boolean reverseIntakeDirection ) {
     m_ShooterSubsystem = shooterSubsystem;
     m_IntakeGrabberSubsystem = intakeGrabberSubsystem;
+    m_ReverseIntakeDirection = reverseIntakeDirection;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem, intakeGrabberSubsystem);
   }
@@ -34,7 +35,7 @@ public class ShootToSpeakerCommand extends Command {
   public void execute() {
     m_ShooterSubsystem.speakerShoot();
     if( m_ShooterSubsystem.isAtSpeakerSpeed() )
-      m_IntakeGrabberSubsystem.feedShooter();
+      m_IntakeGrabberSubsystem.feedShooter( m_ReverseIntakeDirection );
   }
 
   // Called once the command ends or is interrupted.

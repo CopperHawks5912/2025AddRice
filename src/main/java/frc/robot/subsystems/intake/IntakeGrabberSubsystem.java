@@ -37,9 +37,12 @@ public class IntakeGrabberSubsystem extends SubsystemBase {
       m_gotNote = false;
     }
   }  
-  public void feedShooter()
+  public void feedShooter( boolean reverseIntakeDirection )
   {
-    m_grabberVictor.set( IntakeGrabberConstants.OutputSpeed );
+    if( reverseIntakeDirection )
+      m_grabberVictor.set( -IntakeGrabberConstants.OutputSpeed );
+    else  
+      m_grabberVictor.set( IntakeGrabberConstants.OutputSpeed );
   }  
   public void stop()
   {

@@ -21,12 +21,13 @@ public class IntakeArmSubsystem extends SubsystemBase {
   private static final int kTimeoutMs = 30;
   private double m_ArbitraryFeedForward;
   private int m_currentTarget;
+  private double m_currentPosition;
  
   public IntakeArmSubsystem( ) {
     m_armTalon.configFactoryDefault();   
     m_armTalon.stopMotor();
     m_armTalon.setNeutralMode( NeutralMode.Brake); 
- 
+    
     /* (sample code comment)
        set deadband to super small 0.001 (0.1 %).
 			 The default deadband is 0.04 (4 %) */
@@ -73,7 +74,19 @@ public class IntakeArmSubsystem extends SubsystemBase {
     // //SmartDashboard.putBoolean( "Shoulder Switch", m_shoulderLimitSwitch.get() );
 
      m_ArbitraryFeedForward = calculateArbitraryFeedForward();
-     SmartDashboard.putNumber( "Arm Arb FF", m_ArbitraryFeedForward );           
+     SmartDashboard.putNumber( "Arm Arb FF", m_ArbitraryFeedForward );  
+     
+     if( m_currentTarget == 0 && m_intakeArmLimitSwitch.get() )
+    {
+      m_armTalon.setSelectedSensorPosition(0, IntakeArmConstants.PIDLoopIndex, kTimeoutMs);
+    }  
+    m_currentPosition = m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex);
+     
+    SmartDashboard.putNumber( "Arm Position", m_currentPosition );    
+     SmartDashboard.putNumber( "Arm Target", m_currentTarget );      
+     SmartDashboard.putNumber( "Arm Output", m_armTalon.getMotorOutputPercent() );    
+     SmartDashboard.putBoolean( "Arm Limit Switch", m_intakeArmLimitSwitch.get() );  
+     
   }
 
   public void moveArmToPosition( int position )
@@ -91,16 +104,9 @@ public class IntakeArmSubsystem extends SubsystemBase {
     }
   }  
 
-  public boolean isDeployed()
+  public boolean isInPosition()
   {
-    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmDeployedPosition ) < 30 )
-      return true;
-    else 
-      return false;
-  }
-  public boolean isHome()
-  {
-    if( Math.abs( m_armTalon.getSelectedSensorPosition(IntakeArmConstants.PIDLoopIndex) - IntakeArmConstants.ArmHomePosition ) < 30 )
+    if( Math.abs( m_currentPosition - m_currentTarget ) < 25 )
       return true;
     else 
       return false;

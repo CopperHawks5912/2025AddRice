@@ -43,6 +43,6 @@ public class RetractArmCommand extends Command {
   @Override
   public boolean isFinished() {
   
-    return m_IntakeArmSubsystem.isHome();
+    return m_IntakeArmSubsystem.isInPosition();
   }
 }

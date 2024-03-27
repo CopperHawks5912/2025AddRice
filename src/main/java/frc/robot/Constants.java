@@ -102,7 +102,7 @@ public final class Constants
     // public static final double ArmForwardPositionMultiplier = 30;
     // public static final double ArmReversePositionMultiplier = 30;
 
-    public static final double ArmMaxPeakOutputForward = 0.5;//0.7;
+    public static final double ArmMaxPeakOutputForward = 0.6;//0.7;
     public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
     
     public static final double ArmCruiseVelocity = 300;//700;
@@ -112,6 +112,7 @@ public final class Constants
     public static final int ArmHorizontalPosition = 2050;
     public static final int ArmDeployedPosition = 2250; //2410;
     public static final int ArmAmpPosition = 1280; //;
+    public static final int ArmUnstuckPosition = 125; //;
     
     public static final double ArmMaxGravityFF = 0.2;  //power required to hold forearm horizontal.
      
@@ -119,7 +120,7 @@ public final class Constants
 	   * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    public static final Gains ArmGains = new Gains(3.0, 0.0, 2.0, 0.0, 0, 0);
+    public static final Gains ArmGains = new Gains(4, 0, 2, 0.0, 0, 0); 
     
     public static final int EncoderCountsPerRev = 4096;
     public static final double ArmGearRatio = 1.0;  //1:1 gearing (100:1 gearbox is in front of the encoder 
