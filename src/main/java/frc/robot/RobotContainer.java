@@ -320,9 +320,9 @@ public class RobotContainer
     if( alliance.get() == Alliance.Blue)
     {
       driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() * 0.85, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() * 0.85, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4)* 0.85);
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() * ControllerConstants.DriveSpeedPercent, ControllerConstants.LeftYDeadband),
+        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() * ControllerConstants.DriveSpeedPercent, ControllerConstants.LeftXDeadband),
+        () -> -m_driverXboxController.getRawAxis(4)* ControllerConstants.RotationSpeedPercent);
     }
     else
     {

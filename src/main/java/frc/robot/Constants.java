@@ -20,25 +20,10 @@ import swervelib.math.Matter;
  */
 public final class Constants
 {
-  public static final class CANConstants
-  {
-    public static final int LeftShooterID   = 11;
-    public static final int RightShooterID  = 10;
-    public static final int IntakeGrabberID = 20;
-    public static final int IntakeArmID     = 21;
-    public static final int LeftClimberID   = 30;
-    public static final int RightClimberID  = 31;
-  }
-  public static final class DIOConstants
-  {
-    public static final int IntakeArmLimitSwitch = 0;
-    public static final int IntakeNoteBeamBreakSensorPort = 1;
-
-  }
   public static class ControllerConstants
   {
-    public static final int kDriverControllerPort = 0;
-    public static final int kSecondControllerPort = 1;
+    public static final double DriveSpeedPercent = 0.93;  //Callum, you're allowed to touch this one, but only this one.
+    public static final double RotationSpeedPercent = 0.85;  //Ok, maybe this one too.
 
     public static final double LeftXDeadband  = 0.1;
     public static final double LeftYDeadband  = 0.1;
@@ -59,6 +44,22 @@ public final class Constants
     public static final int VerticalAxis    = 1;
   }
 
+  public static final class CANConstants
+  {
+    public static final int LeftShooterID   = 11;
+    public static final int RightShooterID  = 10;
+    public static final int IntakeGrabberID = 20;
+    public static final int IntakeArmID     = 21;
+    public static final int LeftClimberID   = 30;
+    public static final int RightClimberID  = 31;
+  }
+  public static final class DIOConstants
+  {
+    public static final int IntakeArmLimitSwitch = 0;
+    public static final int IntakeNoteBeamBreakSensorPort = 1;
+
+  }
+  
   public static final class AutoConstants
   {
     public static final double ShooterDelaySeconds = 0.5;
