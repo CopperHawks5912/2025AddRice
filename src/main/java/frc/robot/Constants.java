@@ -46,12 +46,13 @@ public final class Constants
 
   public static final class CANConstants
   {
-    public static final int LeftShooterID   = 11;
-    public static final int RightShooterID  = 10;
-    public static final int IntakeGrabberID = 20;
-    public static final int IntakeArmID     = 21;
-    public static final int LeftClimberID   = 30;
-    public static final int RightClimberID  = 31;
+    public static final int LeftShooterID    = 11;
+    public static final int RightShooterID   = 10;
+    public static final int IntakeGrabberID  = 20;
+    public static final int LeftIntakeArmID  = 21;
+    public static final int RightIntakeArmID = 22;
+    public static final int LeftClimberID    = 30;
+    public static final int RightClimberID   = 31;
   }
   public static final class DIOConstants
   {
@@ -72,8 +73,8 @@ public final class Constants
     public static final double PrelaunchTargetSpeed = 70;
     public static final double SpeakerShootTargetSpeed = 70.0;
     public static final double SpeakerShootMinSpeed = 67.0;
-    public static final double AmpShootTargetSpeed = 15.0;
-    public static final double AmpShootMinSpeed = 14.5;
+    public static final double AmpShootTargetSpeed = 25.0;
+    public static final double AmpShootMinSpeed = 24.5;
   }
   
   public static final class ClimberConstants
@@ -88,7 +89,7 @@ public final class Constants
   
   public static final class IntakeGrabberConstants
   {
-    public static final double InputSpeed = 0.8;  
+    public static final double InputSpeed = 1.0;  
     public static final double OutputSpeed = -0.8;  
   }
   
@@ -106,8 +107,8 @@ public final class Constants
     public static final double ArmMaxPeakOutputForward = 0.6;//0.7;
     public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
     
-    public static final double ArmCruiseVelocity = 300;//700;
-    public static final double ArmAcceleration = 250;//500;
+    public static final double ArmCruiseVelocity = 600;//700;
+    public static final double ArmAcceleration = 550;//500;
 
     public static final int ArmHomePosition = 0;
     public static final int ArmHorizontalPosition = 2050;
@@ -121,7 +122,7 @@ public final class Constants
 	   * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    public static final Gains ArmGains = new Gains(4, 0, 2, 0.0, 0, 0); 
+    public static final Gains ArmGains = new Gains(4, 0, 90, 0.0, 0, 0); 
     
     public static final int EncoderCountsPerRev = 4096;
     public static final double ArmGearRatio = 1.0;  //1:1 gearing (100:1 gearbox is in front of the encoder 

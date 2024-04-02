@@ -52,9 +52,7 @@ public class ShooterSubsystem extends SubsystemBase{
        m_left.setControl(m_velocityVoltage.withVelocity(ShooterConstants.SpeakerShootTargetSpeed));
       } 
   public void ampShoot() {
-       
         m_left.setControl(m_velocityVoltage.withVelocity(ShooterConstants.AmpShootTargetSpeed));
-          //m_left.setVoltage(4);
       } 
   public void stopShooter() {
         m_left.setVoltage(0);
