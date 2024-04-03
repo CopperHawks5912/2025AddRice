@@ -138,16 +138,6 @@ public class RobotContainer
 
     new JoystickButton(m_driverXboxController, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));
     
-    new JoystickButton(m_driverXboxController, 1).onTrue((new NoteLEDCommand(m_addressableLEDSubsystem)));
-    new JoystickButton(m_driverXboxController, 2).onTrue((new ShootingLEDCommand(m_addressableLEDSubsystem)));
-    //new JoystickButton(m_driverXboxController, 1).whileTrue(new TestRumbleCommand( m_driverXboxController ));
-    
-    
-    // new JoystickButton(m_driverXboxController, 7)
-    //    .onTrue( new InstantCommand( return run(() -> {} drivebase.setMaximumSpeed( 8.0) ) ) );
-
-    //    .onFalse( new InstantCommand(drivebase->setMaximumSpeed( 14.5) ) );
-
     m_operatorController.button(ControllerConstants.ButtonBlueUpper)
         .onTrue(new ExtendArmCommand(m_IntakeArmSubsystem));
     m_operatorController.button(ControllerConstants.ButtonBlueLower)
@@ -161,7 +151,13 @@ public class RobotContainer
     m_operatorController.button(ControllerConstants.ButtonBlack1)
         .whileTrue(new ShootToAmpCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem ));
     
-    m_operatorController.button(ControllerConstants.ButtonBlack2)
+    //Uncomment this if you want the Black 2 button to be the speaker shooter. THen comment out the 3 lines below
+     m_operatorController.button(ControllerConstants.ButtonBlack2)
+         .whileTrue(new ShootingLEDCommand(m_addressableLEDSubsystem)
+             .andThen(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, false )));
+    
+    //Comment this out if you want to disable the Driver right trigger as the speaker shooter.
+    new JoystickButton(m_driverXboxController, 6)
         .whileTrue(new ShootingLEDCommand(m_addressableLEDSubsystem)
             .andThen(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, false )));
        

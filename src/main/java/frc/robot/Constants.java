@@ -73,8 +73,8 @@ public final class Constants
     public static final double PrelaunchTargetSpeed = 70;
     public static final double SpeakerShootTargetSpeed = 70.0;
     public static final double SpeakerShootMinSpeed = 67.0;
-    public static final double AmpShootTargetSpeed = 25.0;
-    public static final double AmpShootMinSpeed = 24.5;
+    public static final double AmpShootTargetSpeed = 17.0;
+    public static final double AmpShootMinSpeed = 16.0;
   }
   
   public static final class ClimberConstants
