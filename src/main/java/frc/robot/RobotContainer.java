@@ -80,6 +80,7 @@ public class RobotContainer
   private final SendableChooser<String> m_autoPathChooser = new SendableChooser<>();
   private String m_selectedDelayAuto;
   private String m_selectedPathAuto;
+  private double m_invertedDriverControls;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -137,6 +138,7 @@ public class RobotContainer
     m_ClimberSubsystem.setDefaultCommand(new ClimbCommand(m_ClimberSubsystem, m_operatorController));
 
     new JoystickButton(m_driverXboxController, 8).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    new JoystickButton(m_driverXboxController, 7).onTrue((new InstantCommand(this::invertDriveMode)));
     
     m_operatorController.button(ControllerConstants.ButtonBlueUpper)
         .onTrue(new ExtendArmCommand(m_IntakeArmSubsystem));
@@ -157,15 +159,15 @@ public class RobotContainer
              .andThen(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, false )));
     
     //Comment this out if you want to disable the Driver right trigger as the speaker shooter.
-    new JoystickButton(m_driverXboxController, 6)
-        .whileTrue(new ShootingLEDCommand(m_addressableLEDSubsystem)
-            .andThen(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, false )));
+    // new JoystickButton(m_driverXboxController, 6)
+    //     .whileTrue(new ShootingLEDCommand(m_addressableLEDSubsystem)
+    //         .andThen(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, false )));
        
-    m_operatorController.axisGreaterThan(1, 0.99)
-        .whileTrue( new ShootingLEDCommand(m_addressableLEDSubsystem)
-            .andThen( new SequentialCommandGroup( 
-                        //new ArmToPositionCommand(m_IntakeArmSubsystem, IntakeArmConstants.ArmUnstuckPosition),
-                        new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, true ))));
+    // m_operatorController.axisGreaterThan(1, 0.99)
+    //     .whileTrue( new ShootingLEDCommand(m_addressableLEDSubsystem)
+    //         .andThen( new SequentialCommandGroup( 
+    //                     //new ArmToPositionCommand(m_IntakeArmSubsystem, IntakeArmConstants.ArmUnstuckPosition),
+    //                     new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, true ))));
 
     
     
@@ -200,6 +202,7 @@ public class RobotContainer
     m_autoPathChooser.addOption( "Center M-S", "C-MS");
     m_autoPathChooser.addOption( "AmpSide A", "A-A");
     m_autoPathChooser.addOption( "StageSide Move", "S-Mv");
+    m_autoPathChooser.addOption( "StageSide Disruptor", "S-Ds");
     m_autoPathChooser.addOption( "None", "N");
     
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
@@ -267,6 +270,9 @@ public class RobotContainer
       case "S-Mv":
         pathCommand =  drivebase.getAutonomousCommand("Right-Movement");
         break;
+      case "S-Ds":
+        pathCommand =  drivebase.getAutonomousCommand("Right-Disruptor");
+        break;
     }
 
     if( delayCommand != null && pathCommand != null)
@@ -315,21 +321,29 @@ public class RobotContainer
     Optional<Alliance>  alliance = DriverStation.getAlliance();
     if( alliance.get() == Alliance.Blue)
     {
-      driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftY() * ControllerConstants.DriveSpeedPercent, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(-m_driverXboxController.getLeftX() * ControllerConstants.DriveSpeedPercent, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4)* ControllerConstants.RotationSpeedPercent);
+      m_invertedDriverControls = -1.0;
     }
     else
     {
-      driveCommand = drivebase.driveCommand(
-        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftY() * 0.85, ControllerConstants.LeftYDeadband),
-        () -> MathUtil.applyDeadband(m_driverXboxController.getLeftX() * 0.85, ControllerConstants.LeftXDeadband),
-        () -> -m_driverXboxController.getRawAxis(4) * 0.80);
+      m_invertedDriverControls = 1.0;
     }
+    driveCommand = drivebase.driveCommand(
+    () -> MathUtil.applyDeadband(m_invertedDriverControls * m_driverXboxController.getLeftY() * ControllerConstants.DriveSpeedPercent, ControllerConstants.LeftYDeadband),
+    () -> MathUtil.applyDeadband(m_invertedDriverControls * m_driverXboxController.getLeftX() * ControllerConstants.DriveSpeedPercent, ControllerConstants.LeftXDeadband),
+    () -> -m_driverXboxController.getRawAxis(4)* ControllerConstants.RotationSpeedPercent);  
+
     drivebase.setDefaultCommand(
         !RobotBase.isSimulation() ? driveCommand : driveCommand);
   }
+
+  public void invertDriveMode()
+  {
+     if( m_invertedDriverControls < 0 ) 
+       m_invertedDriverControls = 1;
+     else 
+       m_invertedDriverControls = -1;
+  }
+
 
   public void setMotorBrake(boolean brake)
   {

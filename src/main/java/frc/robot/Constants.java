@@ -22,7 +22,7 @@ public final class Constants
 {
   public static class ControllerConstants
   {
-    public static final double DriveSpeedPercent = 0.93;  //Callum, you're allowed to touch this one, but only this one.
+    public static final double DriveSpeedPercent = 0.99;  //Callum, you're allowed to touch this one, but only this one.
     public static final double RotationSpeedPercent = 0.85;  //Ok, maybe this one too.
 
     public static final double LeftXDeadband  = 0.1;
@@ -112,7 +112,7 @@ public final class Constants
 
     public static final int ArmHomePosition = 0;
     public static final int ArmHorizontalPosition = 2050;
-    public static final int ArmDeployedPosition = 2250; //2410;
+    public static final int ArmDeployedPosition = 2300;//2250; //2410;
     public static final int ArmAmpPosition = 1280; //;
     public static final int ArmUnstuckPosition = 125; //;
     

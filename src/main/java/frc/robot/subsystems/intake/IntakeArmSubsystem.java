@@ -118,10 +118,30 @@ public class IntakeArmSubsystem extends SubsystemBase {
 
   public boolean isInPosition()
   {
-    if( Math.abs( m_currentPosition - m_currentTarget ) < 25 )
+    if(  m_currentPosition > m_currentTarget - 25 )
+    {
+      SmartDashboard.putBoolean( "armIsInPosition", true );  
       return true;
-    else 
+    }
+    else
+    { 
+      SmartDashboard.putBoolean( "armIsInPosition", false );  
       return false;
+    }
+  }
+
+  public boolean isHome()
+  {
+    if( m_currentPosition <= 20 )
+    {
+      SmartDashboard.putBoolean( "armIsHome", true );  
+      return true;
+    }
+    else
+    { 
+      SmartDashboard.putBoolean( "armIsHome", false );  
+      return false;
+    }
   }
 
   private double calculateArbitraryFeedForward( )
