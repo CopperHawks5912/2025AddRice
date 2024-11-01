@@ -68,10 +68,10 @@ public final class Constants
   public static final class ShooterConstants
   {
     public static final double PrelaunchTargetSpeed = 70;
-    public static final double SpeakerShootTargetSpeed = 70.0;
-    public static final double SpeakerShootMinSpeed = 67.0;
+    public static final double SpeakerShootTargetSpeed = 67.0;
+    public static final double SpeakerShootMinSpeed = 43.0;
     public static final double AmpShootTargetSpeed = 25.0;
-    public static final double AmpShootMinSpeed = 23.0;
+    public static final double AmpShootMinSpeed = 25.0;
   }
   
   public static final class ClimberConstants
@@ -104,8 +104,8 @@ public final class Constants
     public static final double ArmMaxPeakOutputForward = 0.5;//0.7;
     public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
     
-    public static final double ArmCruiseVelocity = 200;//700;
-    public static final double ArmAcceleration = 200;//500;
+    public static final double ArmCruiseVelocity = 300;//700;
+    public static final double ArmAcceleration = 300;//500;
 
     public static final int ArmHomePosition = 0;
     public static final int ArmHorizontalPosition = 2050;
