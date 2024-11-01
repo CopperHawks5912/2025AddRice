@@ -34,7 +34,7 @@ public class ShootToAmpCommand extends Command {
   public void execute() {
     m_ShooterSubsystem.ampShoot();
     if( m_ShooterSubsystem.isAtAmpSpeed() )
-      m_IntakeGrabberSubsystem.feedShooter();
+      m_IntakeGrabberSubsystem.feedShooter( false );
   }
 
   // Called once the command ends or is interrupted.

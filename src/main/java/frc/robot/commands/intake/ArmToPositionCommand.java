@@ -5,20 +5,20 @@
 package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.IntakeArmConstants;
 import frc.robot.subsystems.intake.IntakeArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class AmpArmCommand extends Command {
+public class ArmToPositionCommand extends Command {
   private final IntakeArmSubsystem m_IntakeArmSubsystem;
-
+  private final int m_ArmPosition;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public AmpArmCommand(IntakeArmSubsystem intakeArmSubsystem) {
+  public ArmToPositionCommand(IntakeArmSubsystem intakeArmSubsystem, int armPosition ) {
     m_IntakeArmSubsystem = intakeArmSubsystem;
+    m_ArmPosition = armPosition;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(intakeArmSubsystem);
   }
@@ -30,7 +30,7 @@ public class AmpArmCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_IntakeArmSubsystem.moveArmToPosition(IntakeArmConstants.ArmAmpPosition);
+    m_IntakeArmSubsystem.moveArmToPosition(m_ArmPosition);
   }
 
   // Called once the command ends or is interrupted.

@@ -13,7 +13,7 @@ import frc.robot.Constants.ClimberConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
   private WPI_TalonSRX m_leftClimber = new WPI_TalonSRX( CANConstants.LeftClimberID );
-  private WPI_VictorSPX m_rightClimber = new WPI_VictorSPX( CANConstants.RightClimberID );
+  private WPI_TalonSRX m_rightClimber = new WPI_TalonSRX( CANConstants.RightClimberID );
   
   private int m_timeoutMs = 30;
 

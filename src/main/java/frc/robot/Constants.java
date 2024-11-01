@@ -20,25 +20,10 @@ import swervelib.math.Matter;
  */
 public final class Constants
 {
-  public static final class CANConstants
-  {
-    public static final int LeftShooterID   = 11;
-    public static final int RightShooterID  = 10;
-    public static final int IntakeGrabberID = 20;
-    public static final int IntakeArmID     = 21;
-    public static final int LeftClimberID   = 30;
-    public static final int RightClimberID  = 31;
-  }
-  public static final class DIOConstants
-  {
-    public static final int IntakeArmLimitSwitch = 0;
-    public static final int IntakeNoteBeamBreakSensorPort = 1;
-
-  }
   public static class ControllerConstants
   {
-    public static final int kDriverControllerPort = 0;
-    public static final int kSecondControllerPort = 1;
+    public static final double DriveSpeedPercent = 0.985;//0.99;  //Callum, you're allowed to touch this one, but only this one.
+    public static final double RotationSpeedPercent = 0.85;//0.85;  //Ok, maybe this one too.
 
     public static final double LeftXDeadband  = 0.1;
     public static final double LeftYDeadband  = 0.1;
@@ -59,19 +44,37 @@ public final class Constants
     public static final int VerticalAxis    = 1;
   }
 
+  public static final class CANConstants
+  {
+    public static final int LeftShooterID    = 11;
+    public static final int RightShooterID   = 10;
+    public static final int IntakeGrabberID  = 20;
+    public static final int LeftIntakeArmID  = 21;
+    public static final int RightIntakeArmID = 22;
+    public static final int LeftClimberID    = 30;
+    public static final int RightClimberID   = 31;
+  }
+  public static final class DIOConstants
+  {
+    public static final int IntakeArmLimitSwitch = 0;
+    public static final int IntakeNoteBeamBreakSensorPort = 1;
+
+  }
+  
   public static final class AutoConstants
   {
     public static final double ShooterDelaySeconds = 0.5;
+    public static final double ShooterFastDelaySeconds = 0.20;
     public static final double IntakeDelaySeconds = 3;
   }
 
   public static final class ShooterConstants
   {
     public static final double PrelaunchTargetSpeed = 70;
-    public static final double SpeakerShootTargetSpeed = 67.0;
-    public static final double SpeakerShootMinSpeed = 43.0;
-    public static final double AmpShootTargetSpeed = 25.0;
-    public static final double AmpShootMinSpeed = 25.0;
+    public static final double SpeakerShootTargetSpeed = 70.0;
+    public static final double SpeakerShootMinSpeed = 67.0;
+    public static final double AmpShootTargetSpeed = 17.0;
+    public static final double AmpShootMinSpeed = 16.0;
   }
   
   public static final class ClimberConstants
@@ -86,7 +89,7 @@ public final class Constants
   
   public static final class IntakeGrabberConstants
   {
-    public static final double InputSpeed = 0.8;  
+    public static final double InputSpeed = 1.0;  
     public static final double OutputSpeed = -0.8;  
   }
   
@@ -101,16 +104,17 @@ public final class Constants
     // public static final double ArmForwardPositionMultiplier = 30;
     // public static final double ArmReversePositionMultiplier = 30;
 
-    public static final double ArmMaxPeakOutputForward = 0.5;//0.7;
+    public static final double ArmMaxPeakOutputForward = 0.6;//0.7;
     public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
     
-    public static final double ArmCruiseVelocity = 300;//700;
-    public static final double ArmAcceleration = 300;//500;
+    public static final double ArmCruiseVelocity = 600;//700;
+    public static final double ArmAcceleration = 550;//500;
 
     public static final int ArmHomePosition = 0;
     public static final int ArmHorizontalPosition = 2050;
     public static final int ArmDeployedPosition = 2250; //2410;
     public static final int ArmAmpPosition = 1280; //;
+    public static final int ArmUnstuckPosition = 125; //;
     
     public static final double ArmMaxGravityFF = 0.2;  //power required to hold forearm horizontal.
      
@@ -118,7 +122,7 @@ public final class Constants
 	   * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    public static final Gains ArmGains = new Gains(3.0, 0.0, 2.0, 0.0, 0, 0);
+    public static final Gains ArmGains = new Gains(4.0, 0, 90, 0.0, 0, 0); 
     
     public static final int EncoderCountsPerRev = 4096;
     public static final double ArmGearRatio = 1.0;  //1:1 gearing (100:1 gearbox is in front of the encoder 

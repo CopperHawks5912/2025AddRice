@@ -28,13 +28,13 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 0.75
+                        "waitTime": 0.88
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "CenterShootToNote1"
+                        "pathName": "CenterToNote3Fast"
                       }
                     }
                   ]
@@ -69,7 +69,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note1ToCenterShoot"
+                  "pathName": "Note3ToCenterFast"
                 }
               },
               {
@@ -84,7 +84,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootToSpeakerWithDelay"
+            "name": "ShootToSpeakerWithFastDelay"
           }
         }
       ]

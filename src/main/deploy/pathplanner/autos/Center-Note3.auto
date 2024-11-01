@@ -22,9 +22,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "CenterShootToNote2"
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.75
+                      }
+                    },
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "CenterToNote3"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -50,82 +63,13 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "StopIntake"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Note2ToCenterShoot"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "HomeArm"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ShootToSpeakerWithDelay"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "CenterShootToNote1"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "DeployArm"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "EatNote"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StopIntake"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Note1ToCenterShoot"
+                  "pathName": "Note3ToCenter"
                 }
               },
               {

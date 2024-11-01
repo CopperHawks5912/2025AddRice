@@ -43,6 +43,6 @@ public class ExtendArmCommand extends Command {
   @Override
   public boolean isFinished() {
   
-    return m_IntakeArmSubsystem.isDeployed();
+    return m_IntakeArmSubsystem.isInPosition();
   }
 }
