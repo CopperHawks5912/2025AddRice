@@ -22,8 +22,8 @@ public final class Constants
 {
   public static class ControllerConstants
   {
-    public static final double DriveSpeedPercent = 0.99;  //Callum, you're allowed to touch this one, but only this one.
-    public static final double RotationSpeedPercent = 0.85;  //Ok, maybe this one too.
+    public static final double DriveSpeedPercent = 0.985;//0.99;  //Callum, you're allowed to touch this one, but only this one.
+    public static final double RotationSpeedPercent = 0.85;//0.85;  //Ok, maybe this one too.
 
     public static final double LeftXDeadband  = 0.1;
     public static final double LeftYDeadband  = 0.1;
@@ -112,7 +112,7 @@ public final class Constants
 
     public static final int ArmHomePosition = 0;
     public static final int ArmHorizontalPosition = 2050;
-    public static final int ArmDeployedPosition = 2300;//2250; //2410;
+    public static final int ArmDeployedPosition = 2250; //2410;
     public static final int ArmAmpPosition = 1280; //;
     public static final int ArmUnstuckPosition = 125; //;
     
@@ -122,7 +122,7 @@ public final class Constants
 	   * Gains used in Motion Magic, to be adjusted accordingly
      * Gains(kp, ki, kd, kf, izone, peak output);
      */
-    public static final Gains ArmGains = new Gains(4, 0, 90, 0.0, 0, 0); 
+    public static final Gains ArmGains = new Gains(4.0, 0, 90, 0.0, 0, 0); 
     
     public static final int EncoderCountsPerRev = 4096;
     public static final double ArmGearRatio = 1.0;  //1:1 gearing (100:1 gearbox is in front of the encoder 

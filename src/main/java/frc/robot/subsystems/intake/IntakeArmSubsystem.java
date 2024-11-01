@@ -30,16 +30,16 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_leftArmTalon.stopMotor();
     m_leftArmTalon.setNeutralMode( NeutralMode.Brake); 
     
-    m_rightArmVictor.configFactoryDefault();   
-    m_rightArmVictor.stopMotor();
-    m_rightArmVictor.setNeutralMode( NeutralMode.Brake); 
-    m_rightArmVictor.follow(m_leftArmTalon);
+     m_rightArmVictor.configFactoryDefault();   
+     m_rightArmVictor.stopMotor();
+     m_rightArmVictor.setNeutralMode( NeutralMode.Brake); 
+     m_rightArmVictor.follow(m_leftArmTalon);
     
     /* (sample code comment)
        set deadband to super small 0.001 (0.1 %).
 			 The default deadband is 0.04 (4 %) */
     m_leftArmTalon.configNeutralDeadband(0.001, kTimeoutMs);
-    m_rightArmVictor.configNeutralDeadband(0.001, kTimeoutMs);
+    // m_rightArmVictor.configNeutralDeadband(0.001, kTimeoutMs);
     
     /* Set relevant frame periods to be at least as fast as periodic rate */
     m_leftArmTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, kTimeoutMs);
@@ -69,7 +69,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
     m_leftArmTalon.setSensorPhase(false);   
     m_leftArmTalon.setInverted(InvertType.None);  
     
-    m_rightArmVictor.setInverted(InvertType.FollowMaster);  
+     m_rightArmVictor.setInverted(InvertType.FollowMaster);  
       
  }
 
