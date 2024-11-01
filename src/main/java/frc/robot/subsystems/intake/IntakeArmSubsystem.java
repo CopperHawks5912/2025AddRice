@@ -39,7 +39,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
        set deadband to super small 0.001 (0.1 %).
 			 The default deadband is 0.04 (4 %) */
     m_leftArmTalon.configNeutralDeadband(0.001, kTimeoutMs);
-    // m_rightArmVictor.configNeutralDeadband(0.001, kTimeoutMs);
+     m_rightArmVictor.configNeutralDeadband(0.001, kTimeoutMs);
     
     /* Set relevant frame periods to be at least as fast as periodic rate */
     m_leftArmTalon.setStatusFramePeriod(StatusFrameEnhanced.Status_13_Base_PIDF0, 10, kTimeoutMs);
