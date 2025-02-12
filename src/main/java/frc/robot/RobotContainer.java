@@ -30,29 +30,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DIOConstants;
-import frc.robot.Constants.IntakeArmConstants;
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.TestRumbleCommand;
 import frc.robot.commands.LED.AllianceLEDCommand;
 import frc.robot.commands.LED.CopperHawksLEDCommand;
-import frc.robot.commands.LED.NoteLEDCommand;
-import frc.robot.commands.LED.ShootingLEDCommand;
-import frc.robot.commands.climber.ClimbCommand;
-import frc.robot.commands.intake.ExtendArmCommand;
-import frc.robot.commands.intake.ArmToPositionCommand;
-import frc.robot.commands.intake.EatNoteCommand;
-import frc.robot.commands.intake.EatNoteWithDelayCommand;
-import frc.robot.commands.intake.RetractArmCommand;
-import frc.robot.commands.intake.SpitNoteCommand;
-import frc.robot.commands.intake.StopIntakeCommand;
 import frc.robot.subsystems.LED.AddressableLEDSubsystem;
-import frc.robot.commands.shooter.ShootToAmpCommand;
-import frc.robot.commands.shooter.ShootToSpeakerCommand;
-import frc.robot.commands.shooter.ShootToSpeakerWithDelayCommand;
-import frc.robot.subsystems.climber.ClimberSubsystem;
-import frc.robot.subsystems.intake.IntakeArmSubsystem;
-import frc.robot.subsystems.intake.IntakeGrabberSubsystem;
-import frc.robot.subsystems.shooter.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -78,10 +60,7 @@ public class RobotContainer
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/5912_2025"));
-  private DigitalInput m_intakeNoteBeamBreakSensor = new DigitalInput(DIOConstants.IntakeNoteBeamBreakSensorPort);
-  private final ShooterSubsystem m_shooterSubsystem = new ShooterSubsystem();
-  private final IntakeArmSubsystem m_IntakeArmSubsystem = new IntakeArmSubsystem( );
-  private final IntakeGrabberSubsystem m_IntakeGrabberSubsystem = new IntakeGrabberSubsystem( m_intakeNoteBeamBreakSensor );
+  private DigitalInput m_intakeNoteBeamBreakSensor = new DigitalInput(DIOConstants.BeamBreakSensorPort);
   private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
   Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
     
@@ -98,7 +77,7 @@ public class RobotContainer
                                                                 () -> driverXbox.getLeftY() * -1,
                                                                 () -> driverXbox.getLeftX() * -1)
                                                             .withControllerRotationAxis(driverXbox::getRightX)
-                                                            .deadband(OperatorConstants.DEADBAND)
+                                                            .deadband(SwerveConstants.Deadband)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
 
@@ -120,7 +99,7 @@ public class RobotContainer
                                                                         () -> -driverXbox.getLeftX())
                                                                     .withControllerRotationAxis(() -> driverXbox.getRawAxis(
                                                                         2))
-                                                                    .deadband(OperatorConstants.DEADBAND)
+                                                                    .deadband(SwerveConstants.Deadband)
                                                                     .scaleTranslation(0.8)
                                                                     .allianceRelativeControl(true);
   // Derive the heading axis with math!
@@ -217,28 +196,22 @@ public class RobotContainer
 
   private void configureAutos()
   {
-    NamedCommands.registerCommand ("DeployArm", new ExtendArmCommand(m_IntakeArmSubsystem));
-    NamedCommands.registerCommand("HomeArm", new RetractArmCommand(m_IntakeArmSubsystem));
-    NamedCommands.registerCommand("EatNote", new EatNoteWithDelayCommand(m_IntakeGrabberSubsystem, AutoConstants.IntakeDelaySeconds));
-    NamedCommands.registerCommand("StopIntake", new StopIntakeCommand(m_IntakeGrabberSubsystem));
-    NamedCommands.registerCommand("ShootToSpeakerWithDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds ));
-    NamedCommands.registerCommand("ShootToSpeakerWithFastDelay", new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterFastDelaySeconds ));
-   
+    //NamedCommands.registerCommand ("DeployArm", new ExtendArmCommand(m_IntakeArmSubsystem));
 
-    m_autoDelayChooser.setDefaultOption( "0 Sec Delay", "0");
-    m_autoDelayChooser.addOption( "1 Sec Delay", "1");
-    m_autoDelayChooser.addOption( "2 Sec Delay", "2");
-    m_autoDelayChooser.addOption( "3 Sec Delay", "3");
-    m_autoDelayChooser.addOption( "5 Sec Delay", "5");
+    // m_autoDelayChooser.setDefaultOption( "0 Sec Delay", "0");
+    // m_autoDelayChooser.addOption( "1 Sec Delay", "1");
+    // m_autoDelayChooser.addOption( "2 Sec Delay", "2");
+    // m_autoDelayChooser.addOption( "3 Sec Delay", "3");
+    // m_autoDelayChooser.addOption( "5 Sec Delay", "5");
     
-    m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
-    m_autoPathChooser.addOption( "Center M", "C-M");
-    m_autoPathChooser.addOption( "Center M-A", "C-MA");
-    m_autoPathChooser.addOption( "Center M-S", "C-MS");
-    m_autoPathChooser.addOption( "AmpSide A", "A-A");
-    m_autoPathChooser.addOption( "StageSide Move", "S-Mv");
-    m_autoPathChooser.addOption( "StageSide Disruptor", "S-Ds");
-    m_autoPathChooser.addOption( "None", "N");
+    // m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
+    // m_autoPathChooser.addOption( "Center M", "C-M");
+    // m_autoPathChooser.addOption( "Center M-A", "C-MA");
+    // m_autoPathChooser.addOption( "Center M-S", "C-MS");
+    // m_autoPathChooser.addOption( "AmpSide A", "A-A");
+    // m_autoPathChooser.addOption( "StageSide Move", "S-Mv");
+    // m_autoPathChooser.addOption( "StageSide Disruptor", "S-Ds");
+    // m_autoPathChooser.addOption( "None", "N");
     
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
     SmartDashboard.putData("Auto-Drive:", m_autoPathChooser );
@@ -285,88 +258,70 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
-    Command delayCommand = null;
-    Command pathCommand = null;
-    m_selectedDelayAuto = m_autoDelayChooser.getSelected();
-    m_selectedPathAuto = m_autoPathChooser.getSelected();
+    // Command delayCommand = null;
+    // Command pathCommand = null;
+    // m_selectedDelayAuto = m_autoDelayChooser.getSelected();
+    // m_selectedPathAuto = m_autoPathChooser.getSelected();
 
-    switch( m_selectedDelayAuto )
-    {
-      case "1":
-        delayCommand = new WaitCommand(1);
-        break;
-      case "2":
-        delayCommand = new WaitCommand(2);
-        break;
-      case "3":
-        delayCommand = new WaitCommand(3);
-        break; 
-      case "4":
-        delayCommand = new WaitCommand(4);
-        break;   
-      case "5":
-        delayCommand = new WaitCommand(5);
-        break;   
-      case "10":
-        delayCommand = new WaitCommand(10);
-        break;   
+    // switch( m_selectedDelayAuto )
+    // {
+      // case "1":
+      //   delayCommand = new WaitCommand(1);
+      //   break;
+      // case "2":
+      //   delayCommand = new WaitCommand(2);
+      //   break;
+      // case "3":
+      //   delayCommand = new WaitCommand(3);
+      //   break; 
+      // case "4":
+      //   delayCommand = new WaitCommand(4);
+      //   break;   
+      // case "5":
+      //   delayCommand = new WaitCommand(5);
+      //   break;   
+      // case "10":
+      //   delayCommand = new WaitCommand(10);
+      //   break;   
       
-    }
-    switch( m_selectedPathAuto )
-    {  
-      case "P":
-        pathCommand = new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds );
-        break;
-      case "C-M":
-        pathCommand =  drivebase.getAutonomousCommand("Center-Note2");
-        break;
-      case "C-MA":
-        pathCommand =  drivebase.getAutonomousCommand("Center-Note2")
-                                  .andThen(drivebase.getAutonomousCommand("Center-Note1"));
-        break;
-      case "C-MS":
-        pathCommand =  drivebase.getAutonomousCommand("Center-Note2")
-                                  .andThen(drivebase.getAutonomousCommand("Center-Note3"));
-        break;
-      case "C-A":
-        pathCommand =  drivebase.getAutonomousCommand("Center-Note1");
-        break;
-      case "A-A":
-        pathCommand =  drivebase.getAutonomousCommand("Left-Note1");
-        break;
-      case "S-Mv":
-        pathCommand =  drivebase.getAutonomousCommand("Right-Movement");
-        break;
-      case "S-Ds":
-        pathCommand =  drivebase.getAutonomousCommand("Right-Disruptor");
-        break;
-    }
+    // }
+    // switch( m_selectedPathAuto )
+    // {  
+      // case "P":
+      //   pathCommand = new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds );
+      //   break;
+      // case "C-M":
+      //   pathCommand =  drivebase.getAutonomousCommand("Center-Note2");
+      //   break;
+      // case "C-MA":
+      //   pathCommand =  drivebase.getAutonomousCommand("Center-Note2")
+      //                             .andThen(drivebase.getAutonomousCommand("Center-Note1"));
+      //   break;
+      // case "C-MS":
+      //   pathCommand =  drivebase.getAutonomousCommand("Center-Note2")
+      //                             .andThen(drivebase.getAutonomousCommand("Center-Note3"));
+      //   break;
+      // case "C-A":
+      //   pathCommand =  drivebase.getAutonomousCommand("Center-Note1");
+      //   break;
+      // case "A-A":
+      //   pathCommand =  drivebase.getAutonomousCommand("Left-Note1");
+      //   break;
+      // case "S-Mv":
+      //   pathCommand =  drivebase.getAutonomousCommand("Right-Movement");
+      //   break;
+      // case "S-Ds":
+      //   pathCommand =  drivebase.getAutonomousCommand("Right-Disruptor");
+      //   break;
+    //}
 
-    if( delayCommand != null && pathCommand != null)
-      return delayCommand.andThen(pathCommand);
-    else if( pathCommand != null )
-      return pathCommand;
-    else
-      return null;
-  
-
-    // An example command will be run in autonomous
-    //return drivebase.getAutonomousCommand("CenterTest");
-    //return drivebase.getAutonomousCommand("Center-Note2").andThen(drivebase.getAutonomousCommand("Center-Note1"));
+    // if( delayCommand != null && pathCommand != null)
+    //   return delayCommand.andThen(pathCommand);
+    // else if( pathCommand != null )
+    //   return pathCommand;
+    // else
+       return null;
   }
-
-  public void enableIntakeTrigger()
-  {    
-    intakeTrigger.onFalse( new ParallelDeadlineGroup( 
-                                    new RetractArmCommand(m_IntakeArmSubsystem), 
-                                    new NoteLEDCommand( m_addressableLEDSubsystem ), 
-                                    new TestRumbleCommand( driverXbox.getHID() ))
-                      .andThen( new AllianceLEDCommand( m_addressableLEDSubsystem )));
-  }
-  // public void disableIntakeTrigger()
-  // {    
-  //   intakeTrigger.onFalse( null);
-  // }
   public void setDriveMode()
   {
     m_addressableLEDSubsystem.setDefaultCommand(new AllianceLEDCommand(m_addressableLEDSubsystem));

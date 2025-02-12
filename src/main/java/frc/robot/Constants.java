@@ -20,12 +20,26 @@ import swervelib.math.Matter;
  */
 public final class Constants
 {
-  public static class ControllerConstants
+  public static class SwerveConstants
   {
     public static final double DriveSpeedPercent = 0.60;//0.99;  //Callum, you're allowed to touch this one, but only this one.
     public static final double RotationSpeedPercent = 0.85;//0.85;  //Ok, maybe this one too.
     
-    public static final int ButtonBlueUpper = 1;
+    public static final double MaxSpeed  = Units.feetToMeters(14.5);
+    public static final double WheelLockTime = 10; // seconds
+    public static final double RobotMass = (100) * 0.453592; // 32lbs * kg per pound
+    public static final Matter Chassis    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), RobotMass);
+    public static final double LoopTime  = 0.13; //s, 20ms + 110ms sprk max velocity lag 
+    
+    public static final double Deadband       = 0.1;
+    public static final double LeftYDeadbad   = 0.1;
+    public static final double RightXDeadband = 0.1;
+    public static final double TurnConstant   = 6;
+  }
+
+  public static class ControllerConstants
+  { 
+    public static final int ButtonBlueUpper =  1;
     public static final int ButtonBlueLower =  5;
     public static final int ButtonRedUpper1 =  2;
     public static final int ButtonRedUpper2 =  3;
@@ -35,123 +49,38 @@ public final class Constants
     public static final int ButtonRedLower3 =  8;
     public static final int ButtonBlack1    = 10;
     public static final int ButtonBlack2    =  9;
-    public static final int HorizontalAxis  = 0;
-    public static final int VerticalAxis    = 1;
+    public static final int HorizontalAxis  =  0;
+    public static final int VerticalAxis    =  1;    
   }
 
   public static final class CANConstants
   {
-    public static final int LeftShooterID    = 11;
-    public static final int RightShooterID   = 10;
-    public static final int IntakeGrabberID  = 20;
-    // public static final int LeftIntakeArmID  = 21;
-    // public static final int RightIntakeArmID = 22;
-    public static final int LeftClimberID    = 30;
-    public static final int RightClimberID   = 31;
+    public static final int LeftElevatorID   = 11;
+    public static final int RightElevatorID  = 12;
   }
+  
   public static final class DIOConstants
   {
-    public static final int IntakeArmLimitSwitch = 0;
-    public static final int IntakeNoteBeamBreakSensorPort = 1;
-
+    // public static final int IntakeArmLimitSwitch = 0;
+    public static final int BeamBreakSensorPort = 1;
   }
   
   public static final class AutoConstants
   {
-    public static final double ShooterDelaySeconds = 0.5;
-    public static final double ShooterFastDelaySeconds = 0.20;
-    public static final double IntakeDelaySeconds = 3;
+    // public static final double ShooterDelaySeconds = 0.5;
+    // public static final double ShooterFastDelaySeconds = 0.20;
+    // public static final double IntakeDelaySeconds = 3;
   }
 
-  public static final class ShooterConstants
+  public static final class ElevatorConstants  //positions in millimeters
   {
-    public static final double PrelaunchTargetSpeed = 70;
-    public static final double SpeakerShootTargetSpeed = 70.0;
-    public static final double SpeakerShootMinSpeed = 67.0;
-    public static final double AmpShootTargetSpeed = 17.0;
-    public static final double AmpShootMinSpeed = 16.0;
-  }
-  
-  public static final class ClimberConstants
-  {
-    public static final double ExtendSpeed = 0.8;  
-    public static final double RetractSpeed = -0.8;  
-    public static final double HoldSpeed = -0.05;  
-    
-    public static final double HomePosition = 0;
-    public static final double ExtendedPosition = 30000;
-  }
-  
-  public static final class IntakeGrabberConstants
-  {
-    public static final double InputSpeed = 1.0;  
-    public static final double OutputSpeed = -0.8;  
-  }
-  
-  public static final class IntakeArmConstants
-  {
-    public static final int PIDProfileSlotIndex = 0;
-    public static final int PIDLoopIndex = 0;
-
-    // public static final double ArmMaxForwardSpeed = 0.05;
-    // public static final double ArmMaxReverseSpeed = 0.12;
-    
-    // public static final double ArmForwardPositionMultiplier = 30;
-    // public static final double ArmReversePositionMultiplier = 30;
-
-    public static final double ArmMaxPeakOutputForward = 0.6;//0.7;
-    public static final double ArmMaxPeakOutputReverse = -0.5;//-0.7;
-    
-    public static final double ArmCruiseVelocity = 600;//700;
-    public static final double ArmAcceleration = 550;//500;
-
-    public static final int ArmHomePosition = 0;
-    public static final int ArmHorizontalPosition = 2050;
-    public static final int ArmDeployedPosition = 2250; //2410;
-    public static final int ArmAmpPosition = 1280; //;
-    public static final int ArmUnstuckPosition = 125; //;
-    
-    public static final double ArmMaxGravityFF = 0.2;  //power required to hold forearm horizontal.
-     
-    /**
-	   * Gains used in Motion Magic, to be adjusted accordingly
-     * Gains(kp, ki, kd, kf, izone, peak output);
-     */
-    public static final Gains ArmGains = new Gains(4.0, 0, 90, 0.0, 0, 0); 
-    
-    public static final int EncoderCountsPerRev = 4096;
-    public static final double ArmGearRatio = 1.0;  //1:1 gearing (100:1 gearbox is in front of the encoder 
+    public static double Home = 250.0;
+    public static double Level1 = 457.2;
+    public static double Level2 = 809.6;
+    public static double Level3 = 1209.7;
+    public static double Level4 = 1828.8;
   }
 
-
-  public static final double ROBOT_MASS = (100) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-  public static final double MAX_SPEED  = Units.feetToMeters(14.5);
-  // Maximum speed of the robot in meters per second, used to limit acceleration.
-
-//  public static final class YAGSLAutoConstants
-//  {
-//
-//    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-//    public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
-//  }
-
-  public static final class DrivebaseConstants
-  {
-    public static final double WheelLockTime = 10; // seconds
-    public static final double MaxSpeedNormal = 14.5; // seconds
-    public static final double MaxSpeedSlow = 9.0; // seconds    
-  }
-  public static class OperatorConstants
-  {
-
-    // Joystick Deadband
-    public static final double DEADBAND        = 0.1;
-    public static final double LEFT_Y_DEADBAND = 0.1;
-    public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double TURN_CONSTANT    = 6;
-  }
   public static class PWMConstants{
     public static final int LEDStringID = 0;
   }
