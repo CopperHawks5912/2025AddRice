@@ -14,8 +14,6 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-
-
 import swervelib.SwerveController;
 import swervelib.math.SwerveMath;
 
@@ -29,7 +27,7 @@ public class AbsoluteDriveAdv extends Command
   private final DoubleSupplier  vX, vY;
   private final DoubleSupplier  headingAdjust;
   private final BooleanSupplier lookAway, lookTowards, lookLeft, lookRight;
-  private       boolean         resetHeading = false;
+  private boolean resetHeading = false;
 
   /**
    * Used to drive a swerve robot in full field-centric mode.  vX and vY supply translation inputs, where x is
@@ -84,22 +82,22 @@ public class AbsoluteDriveAdv extends Command
     // Face Away from Drivers
     if (lookAway.getAsBoolean())
     {
-      headingY = 1;
+      headingY = -1;
     }
     // Face Right
     if (lookRight.getAsBoolean())
     {
-      headingX = -1;
+      headingX = 1;
     }
     // Face Left
     if (lookLeft.getAsBoolean())
     {
-      headingX = 1;
+      headingX = -1;
     }
     // Face Towards the Drivers
     if (lookTowards.getAsBoolean())
     {
-      headingY = -1;
+      headingY = 1;
     }
 
     // Prevent Movement After Auto
@@ -132,9 +130,7 @@ public class AbsoluteDriveAdv extends Command
     if (headingX == 0 && headingY == 0 && Math.abs(headingAdjust.getAsDouble()) > 0)
     {
       resetHeading = true;
-      //swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
-      swerve.drive(translation, Math.pow(headingAdjust.getAsDouble(), 1) * swerve.getMaximumAngularVelocity(), true);
-      
+      swerve.drive(translation, (Constants.OperatorConstants.TURN_CONSTANT * -headingAdjust.getAsDouble()), true);
     } else
     {
       swerve.drive(translation, desiredSpeeds.omegaRadiansPerSecond, true);

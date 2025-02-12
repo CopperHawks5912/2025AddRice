@@ -4,7 +4,7 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.config.PIDConstants;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
@@ -22,13 +22,8 @@ public final class Constants
 {
   public static class ControllerConstants
   {
-    public static final double DriveSpeedPercent = 0.985;//0.99;  //Callum, you're allowed to touch this one, but only this one.
+    public static final double DriveSpeedPercent = 0.60;//0.99;  //Callum, you're allowed to touch this one, but only this one.
     public static final double RotationSpeedPercent = 0.85;//0.85;  //Ok, maybe this one too.
-
-    public static final double LeftXDeadband  = 0.1;
-    public static final double LeftYDeadband  = 0.1;
-    public static final double RightXDeadband = 0.1;
-    public static final double TurnConstant    = 6;
     
     public static final int ButtonBlueUpper = 1;
     public static final int ButtonBlueLower =  5;
@@ -49,8 +44,8 @@ public final class Constants
     public static final int LeftShooterID    = 11;
     public static final int RightShooterID   = 10;
     public static final int IntakeGrabberID  = 20;
-    public static final int LeftIntakeArmID  = 21;
-    public static final int RightIntakeArmID = 22;
+    // public static final int LeftIntakeArmID  = 21;
+    // public static final int RightIntakeArmID = 22;
     public static final int LeftClimberID    = 30;
     public static final int RightClimberID   = 31;
   }
@@ -132,19 +127,30 @@ public final class Constants
   public static final double ROBOT_MASS = (100) * 0.453592; // 32lbs * kg per pound
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
+  public static final double MAX_SPEED  = Units.feetToMeters(14.5);
+  // Maximum speed of the robot in meters per second, used to limit acceleration.
 
-  public static final class YAGSLAutoConstants
-  {
-
-    public static final PIDConstants TranslatonPID = new PIDConstants(0.7, 0, 0);
-    public static final PIDConstants AnglePID   = new PIDConstants(0.4, 0, 0.01);
-  }
+//  public static final class YAGSLAutoConstants
+//  {
+//
+//    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+//    public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
+//  }
 
   public static final class DrivebaseConstants
   {
     public static final double WheelLockTime = 10; // seconds
     public static final double MaxSpeedNormal = 14.5; // seconds
     public static final double MaxSpeedSlow = 9.0; // seconds    
+  }
+  public static class OperatorConstants
+  {
+
+    // Joystick Deadband
+    public static final double DEADBAND        = 0.1;
+    public static final double LEFT_Y_DEADBAND = 0.1;
+    public static final double RIGHT_X_DEADBAND = 0.1;
+    public static final double TURN_CONSTANT    = 6;
   }
   public static class PWMConstants{
     public static final int LEDStringID = 0;

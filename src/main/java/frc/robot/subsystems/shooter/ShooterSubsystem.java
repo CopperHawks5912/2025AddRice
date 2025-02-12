@@ -6,6 +6,7 @@ import com.ctre.phoenix6.controls.StrictFollower;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.*;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase{
     
   public ShooterSubsystem() {    
     configuration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    
+    configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
      m_left.getConfigurator().apply(configuration);
     m_right.getConfigurator().apply(configuration);
     
@@ -33,7 +34,7 @@ public class ShooterSubsystem extends SubsystemBase{
         m_velocityVoltage.Slot = 0;
 
     m_right.setControl(new StrictFollower(m_left.getDeviceID()) );
-    m_right.setInverted(true);
+    //m_right.setInverted(true);  //replaced with "configuration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;" call above
 
     
   }
@@ -41,7 +42,7 @@ public class ShooterSubsystem extends SubsystemBase{
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber( "Shooter Speed", m_left.getVelocity().getValue() );
+    SmartDashboard.putNumber( "Shooter Speed", m_left.getVelocity().getValueAsDouble() );
     //SmartDashboard.putNumber( "Arm Target", m_currentTarget.getShoulderPosition() );
     //SmartDashboard.putBoolean( "Shoulder Switch", m_shoulderLimitSwitch.get() );
   }
@@ -59,10 +60,10 @@ public class ShooterSubsystem extends SubsystemBase{
       } 
   public boolean isAtSpeakerSpeed() {
     var velocity = m_left.getVelocity();    
-    return ( velocity.getValue() >= ShooterConstants.SpeakerShootMinSpeed );
+    return ( velocity.getValueAsDouble() >= ShooterConstants.SpeakerShootMinSpeed );
   }
   public boolean isAtAmpSpeed() {
     var velocity = m_left.getVelocity();    
-    return ( velocity.getValue() >= ShooterConstants.AmpShootMinSpeed );
+    return ( velocity.getValueAsDouble() >= ShooterConstants.AmpShootMinSpeed );
   }
 }
