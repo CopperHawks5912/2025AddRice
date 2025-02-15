@@ -74,11 +74,14 @@ public final class Constants
 
   public static final class ElevatorConstants  //positions in millimeters
   {
-    public static double Home = 250.0;
-    public static double Level1 = 457.2;
-    public static double Level2 = 809.6;
-    public static double Level3 = 1209.7;
-    public static double Level4 = 1828.8;
+    public static double HomePosition = 250.0;
+    public static double Lvl1Position = 457.2;
+    public static double Lvl2Position = 809.6;
+    public static double Lvl3Position = 1209.7;
+    public static double Lvl4Position = 1828.8;
+
+    public static double MillimetersToRotations = 10;
+    public static double ErrorThreshold = 10.0;
   }
 
   public static class PWMConstants{
