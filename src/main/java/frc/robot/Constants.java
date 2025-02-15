@@ -57,6 +57,8 @@ public final class Constants
   {
     public static final int LeftElevatorID   = 11;
     public static final int RightElevatorID  = 12;
+
+    public static final int ArmID  = 13;
   }
   
   public static final class DIOConstants
@@ -74,7 +76,7 @@ public final class Constants
 
   public static final class ElevatorConstants  //positions in millimeters
   {
-    public static double HomePosition = 250.0;
+    public static double HomePosition = 0.0;
     public static double Lvl1Position = 457.2;
     public static double Lvl2Position = 809.6;
     public static double Lvl3Position = 1209.7;
@@ -82,6 +84,19 @@ public final class Constants
 
     public static double MillimetersToRotations = 10;
     public static double ErrorThreshold = 10.0;
+  }
+
+  public static final class ArmConstants
+  {
+    public static double ErrorThreshold = 10.0; 
+    
+    public static double HomePosition = 0.0;
+    public static double Lvl1Position = 457.2;
+    public static double Lvl2Position = 809.6;
+    public static double Lvl3Position = 1209.7;
+    public static double Lvl4Position = 1828.8;
+    public static double FloorAlgaePosition = 1828.8;
+    public static double ScoreAlgaePosition = 1828.8;
   }
 
   public static class PWMConstants{

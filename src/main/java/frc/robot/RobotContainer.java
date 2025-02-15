@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DIOConstants;
@@ -36,6 +37,7 @@ import frc.robot.commands.TestRumbleCommand;
 import frc.robot.commands.LED.AllianceLEDCommand;
 import frc.robot.commands.LED.CopperHawksLEDCommand;
 import frc.robot.subsystems.LED.AddressableLEDSubsystem;
+import frc.robot.subsystems.mechanisms.ArmSubsystem;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
@@ -48,6 +50,8 @@ import swervelib.SwerveInputStream;
 import swervelib.simulation.SwerveModuleSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
+
+import frc.robot.commands.mechanisms.MoveArmCommand;
 import frc.robot.commands.mechanisms.MoveElevatorCommand;
 
 /**
@@ -63,6 +67,7 @@ public class RobotContainer
   final CommandGenericHID operatorController = new CommandGenericHID(1);
   
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
   
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -144,6 +149,7 @@ public class RobotContainer
   public RobotContainer()
   {
     elevatorSubsystem.setDefaultCommand ( new MoveElevatorCommand( elevatorSubsystem, ElevatorConstants.HomePosition ) );
+    armSubsystem.setDefaultCommand ( new MoveArmCommand( armSubsystem, ArmConstants.HomePosition ) );
 
     m_addressableLEDSubsystem.setDefaultCommand(new CopperHawksLEDCommand(m_addressableLEDSubsystem).ignoringDisable(true));
     configureAutos();
@@ -178,13 +184,17 @@ public class RobotContainer
     
     //Uncomment this if you want the Black 2 button to be the speaker shooter. THen comment out the 3 lines below
     operatorController.button(ControllerConstants.ButtonBlueUpper)
-         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position) );
+         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position) 
+         .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl1Position) ) );
     operatorController.button(ControllerConstants.ButtonRedUpper1)
-         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl2Position) );
+         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl2Position) 
+         .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl2Position) ) );
     operatorController.button(ControllerConstants.ButtonRedUpper2)
-         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl3Position) );
+         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl3Position) 
+         .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl3Position) ) );
     operatorController.button(ControllerConstants.ButtonRedUpper3)
-         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl4Position) );
+         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl4Position) 
+         .alongWith( new WaitCommand(.5).andThen ( new MoveArmCommand(armSubsystem, ArmConstants.Lvl4Position) )  ) );
     
     //Comment this out if you want to disable the Driver right trigger as the speaker shooter.
     //  new JoystickButton(m_driverXboxController, 6)
