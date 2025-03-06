@@ -9,6 +9,9 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -66,15 +69,15 @@ public class RobotContainer
   final CommandXboxController driverXbox = new CommandXboxController(0);
   final CommandGenericHID operatorController = new CommandGenericHID(1);
   
-  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
+//  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+//  private final ArmSubsystem armSubsystem = new ArmSubsystem();
   
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/5912_2025"));
-  private DigitalInput m_intakeNoteBeamBreakSensor = new DigitalInput(DIOConstants.BeamBreakSensorPort);
-  private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
-  Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
+//  private DigitalInput m_intakeNoteBeamBreakSensor = new DigitalInput(DIOConstants.BeamBreakSensorPort);
+//  private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
+//  Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
     
   private final SendableChooser<String> m_autoDelayChooser = new SendableChooser<>();
   private final SendableChooser<String> m_autoPathChooser = new SendableChooser<>();
@@ -130,7 +133,10 @@ public class RobotContainer
                                                                                                                   Math.PI) *
                                                                                                               (Math.PI *
                                                                                                                2))
-                                                                               .headingWhile(true);
+                                                                               .headingWhile(true)
+                                                                               .translationHeadingOffset(true)
+                                                                               .translationHeadingOffset(Rotation2d.fromDegrees(
+                                                                                   0));
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -148,10 +154,10 @@ public class RobotContainer
 
   public RobotContainer()
   {
-    elevatorSubsystem.setDefaultCommand ( new MoveElevatorCommand( elevatorSubsystem, ElevatorConstants.HomePosition ) );
-    armSubsystem.setDefaultCommand ( new MoveArmCommand( armSubsystem, ArmConstants.HomePosition ) );
+//    elevatorSubsystem.setDefaultCommand ( new MoveElevatorCommand( elevatorSubsystem, ElevatorConstants.HomePosition ) );
+//    armSubsystem.setDefaultCommand ( new MoveArmCommand( armSubsystem, ArmConstants.HomePosition ) );
 
-    m_addressableLEDSubsystem.setDefaultCommand(new CopperHawksLEDCommand(m_addressableLEDSubsystem).ignoringDisable(true));
+//    m_addressableLEDSubsystem.setDefaultCommand(new CopperHawksLEDCommand(m_addressableLEDSubsystem).ignoringDisable(true));
     configureAutos();
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
@@ -174,48 +180,20 @@ public class RobotContainer
     {
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     }
-
-
-    //climbCommand current uses ButtonRedUpper1, ButtonRedLower1, ButtonRedUpper2, ButtonRedLower2;
-    //we're passing in the driver controller so we could potentially make it rumble.
-
-    // new JoystickButton(driverXbox.getHID(), 8).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    // new JoystickButton(driverXbox.getHID(), 7).onTrue((new InstantCommand(this::invertDriveMode)));
     
-    //Uncomment this if you want the Black 2 button to be the speaker shooter. THen comment out the 3 lines below
-    operatorController.button(ControllerConstants.ButtonBlueUpper)
-         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position) 
-         .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl1Position) ) );
-    operatorController.button(ControllerConstants.ButtonRedUpper1)
-         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl2Position) 
-         .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl2Position) ) );
-    operatorController.button(ControllerConstants.ButtonRedUpper2)
-         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl3Position) 
-         .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl3Position) ) );
-    operatorController.button(ControllerConstants.ButtonRedUpper3)
-         .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl4Position) 
-         .alongWith( new WaitCommand(.5).andThen ( new MoveArmCommand(armSubsystem, ArmConstants.Lvl4Position) )  ) );
+    // operatorController.button(ControllerConstants.ButtonBlueUpper)
+    //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position) 
+    //      .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl1Position) ) );
+    // operatorController.button(ControllerConstants.ButtonRedUpper1)
+    //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl2Position) 
+    //      .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl2Position) ) );
+    // operatorController.button(ControllerConstants.ButtonRedUpper2)
+    //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl3Position) 
+    //      .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl3Position) ) );
+    // operatorController.button(ControllerConstants.ButtonRedUpper3)
+    //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl4Position) 
+    //      .alongWith( new WaitCommand(.5).andThen ( new MoveArmCommand(armSubsystem, ArmConstants.Lvl4Position) )  ) );
     
-    //Comment this out if you want to disable the Driver right trigger as the speaker shooter.
-    //  new JoystickButton(m_driverXboxController, 6)
-    //      .whileTrue(new ShootingLEDCommand(m_addressableLEDSubsystem)
-    //          .andThen(new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, false )));
-       
-    // m_operatorController.axisGreaterThan(1, 0.99)
-    //     .whileTrue( new ShootingLEDCommand(m_addressableLEDSubsystem)
-    //         .andThen( new SequentialCommandGroup( 
-    //                     //new ArmToPositionCommand(m_IntakeArmSubsystem, IntakeArmConstants.ArmUnstuckPosition),
-    //                     new ShootToSpeakerCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, true ))));
-
-    
-    
-    // new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-     //new JoystickButton(driverXbox,
-     //                   2).whileTrue(
-     //    Commands.deferredProxy(() -> drivebase.driveToPose(
-     //                               new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-     //                          ));
-//    new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
 
   private void configureAutos()
@@ -245,8 +223,24 @@ public class RobotContainer
 
     if (Robot.isSimulation())
     {
+      Pose2d target = new Pose2d(new Translation2d(1, 4),
+                                 Rotation2d.fromDegrees(90));
+      //drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
+      driveDirectAngleKeyboard.driveToPose(() -> target,
+                                           new ProfiledPIDController(5,
+                                                                     0,
+                                                                     0,
+                                                                     new Constraints(5, 2)),
+                                           new ProfiledPIDController(5,
+                                                                     0,
+                                                                     0,
+                                                                     new Constraints(Units.degreesToRadians(360),
+                                                                                     Units.degreesToRadians(180))
+                                           ));
       driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
       driverXbox.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
+      driverXbox.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
+                                                     () -> driveDirectAngleKeyboard.driveToPoseEnabled(false))); 
 
     }
     if (DriverStation.isTest())
@@ -263,10 +257,6 @@ public class RobotContainer
     {
       driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.b().whileTrue(
-          drivebase.driveToPose(
-              new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-                              );
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
@@ -282,6 +272,8 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
+     
+    
     // Command delayCommand = null;
     // Command pathCommand = null;
     // m_selectedDelayAuto = m_autoDelayChooser.getSelected();
@@ -344,11 +336,11 @@ public class RobotContainer
     // else if( pathCommand != null )
     //   return pathCommand;
     // else
-       return null;
+       return drivebase.getAutonomousCommand("Test");
   }
   public void setDriveMode()
   {
-    m_addressableLEDSubsystem.setDefaultCommand(new AllianceLEDCommand(m_addressableLEDSubsystem));
+    //m_addressableLEDSubsystem.setDefaultCommand(new AllianceLEDCommand(m_addressableLEDSubsystem));
     
     configureBindings();
   }
