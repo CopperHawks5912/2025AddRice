@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.pathplanner.lib.config.PIDConstants;
@@ -40,57 +41,86 @@ public final class Constants
   
   public static class ReefPoseConstants
   {
-    public static final Pose2d[] leftAprilTagPoses = new Pose2d[]
-    { null, //0
-      null, 
-      null, 
-      null,
-      null, 
-      null, 
-      null, //6
-      null, //7 
-      null, //8
-      null, //9 
-      new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0) ), //10
-      null, //11 
-      null, 
-      null,
-      null, 
-      null,       
-      null, 
-      null, //17
-      null, //18
-      null, //19
-      null, //20
-      null, //21
-      null, //22
-      };
+    private static final HashMap<Integer, Pose2d> leftScoringPoses = getLeftScoringPoses();
+    private static final HashMap<Integer, Pose2d> rightScoringPoses = getRightScoringPoses();
 
-      public static final Pose2d[] rightAprilTagPoses = new Pose2d[]
-      { null, //0
-        null, 
-        null, 
-        null,
-        null, 
-        null, 
-        null, //6
-        null, //7 
-        null, //8
-        null, //9 
-        new Pose2d( 12.665, 4.45897, Rotation2d.fromDegrees(0) ), //10
-        null, //11 
-        null, 
-        null,
-        null, 
-        null,       
-        null, 
-        null, //17
-        null, //18
-        null, //19
-        null, //20
-        null, //21
-        null, //22
-        };
+    /**
+     * Get a left/right scoring position based off of a given AprilTag ID
+     * @param tagId
+     * @param offset
+     * @return Pose2d
+     */
+    public static Pose2d getScoringPose(int tagId, boolean isLeft) {
+      if (isLeft) {
+        return leftScoringPoses.get(tagId);
+      }
+      return rightScoringPoses.get(tagId);
+    }
+    
+    /**
+     * Define a hashmap of AprilTag poses that represent our 
+     * left side scoring poses for each reef AprilTag
+     * @return hashmap 
+     */
+    private static HashMap<Integer, Pose2d> getLeftScoringPoses() {
+      HashMap<Integer, Pose2d> map = new HashMap<>();
+      map.put(1, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(2, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(3, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(4, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(5, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(6, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(7, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(8, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(9, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(10, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(11, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(12, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(13, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(14, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(15, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(16, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(17, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(18, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(19, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(20, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(21, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(22, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      return map;
+    }
+  
+    
+    /**
+     * Define a hashmap of AprilTag poses that represent our 
+     * right side scoring poses for each reef AprilTag
+     * @return hashmap 
+     */
+    private static HashMap<Integer, Pose2d> getRightScoringPoses() {
+      HashMap<Integer, Pose2d> map = new HashMap<>();
+      map.put(1, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(2, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(3, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(4, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(5, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(6, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(7, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(8, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(9, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(10, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(11, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(12, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(13, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(14, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(15, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(16, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(17, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(18, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(19, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(20, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(21, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(22, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      return map;
+    }
   
   }  
 
