@@ -110,7 +110,7 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
-    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyro));
+    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::oneEightyGyro));
   }
 
   /**
@@ -127,7 +127,7 @@ public class SwerveSubsystem extends SubsystemBase
                                   new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
                                              Rotation2d.fromDegrees(0)));
 
-    swerveDrive.getGyro().setOffset(new Rotation3d( 0, 0, 90));
+    //swerveDrive.setGyroOffset(new Rotation3d( 0, 0, 1.57));
   }
 
   /**
@@ -244,6 +244,26 @@ public class SwerveSubsystem extends SubsystemBase
                                 0,
                                 Rotation2d.fromDegrees(result.getBestTarget()
                                                              .getYaw()))); // Not sure if this will work, more math may be required.
+        }
+      }
+    });
+  }
+
+  public Command driveToReefPosition(Cameras camera, boolean leftButton)
+  {
+
+    return run(() -> {
+      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
+      if (resultO.isPresent())
+      {
+        var result = resultO.get();
+        if (result.hasTargets())
+        {
+          int aprilTagId = result.getBestTarget().getFiducialId();
+          if( leftButton )
+            driveToPose( ReefPoseConstants.leftAprilTagPoses[aprilTagId]);
+          else
+            driveToPose( ReefPoseConstants.leftAprilTagPoses[aprilTagId]);
         }
       }
     });
@@ -565,6 +585,11 @@ public class SwerveSubsystem extends SubsystemBase
   public void zeroGyro()
   {
     swerveDrive.zeroGyro();
+  }
+  public void oneEightyGyro()
+  {
+    swerveDrive.zeroGyro();
+    resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
   }
 
   /**

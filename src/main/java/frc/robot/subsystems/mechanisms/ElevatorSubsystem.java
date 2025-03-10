@@ -30,7 +30,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         .withKA(0)
         .withKV(0))
       .withCurrentLimits(new CurrentLimitsConfigs()
-        .withSupplyCurrentLimit(100)
+        .withSupplyCurrentLimit(70)
         .withSupplyCurrentLimitEnable(true));
       //We are not yet sure on whether or not we are using MotionMagic.
         //.withMotionMagic(new MotionMagicConfigs()
@@ -40,7 +40,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftElevatorMotor.getConfigurator().apply(eleMotorConfig);
     rightElevatorMotor.getConfigurator().apply(eleMotorConfig);
     
-    rightElevatorMotor.setControl(new Follower(CANConstants.LeftElevatorID, true));
+    //rightElevatorMotor.setControl(new Follower(CANConstants.LeftElevatorID, true));
   }
   private void logMotors(){
 //     motorLogger1.log(elevatorMotor1);

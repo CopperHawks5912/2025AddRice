@@ -4,8 +4,12 @@
 
 package frc.robot;
 
+import java.util.Map;
+
 import com.pathplanner.lib.config.PIDConstants;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -22,10 +26,7 @@ public final class Constants
 {
   public static class SwerveConstants
   {
-    public static final double DriveSpeedPercent = 0.60;//0.99;  //Callum, you're allowed to touch this one, but only this one.
-    public static final double RotationSpeedPercent = 0.85;//0.85;  //Ok, maybe this one too.
-    
-    public static final double MaxSpeed  = Units.feetToMeters(14.5);
+    public static final double MaxSpeed  = Units.feetToMeters( 3 ); //14.5);
     public static final double WheelLockTime = 10; // seconds
     public static final double RobotMass = (100) * 0.453592; // 32lbs * kg per pound
     public static final Matter Chassis    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), RobotMass);
@@ -36,6 +37,62 @@ public final class Constants
     public static final double RightXDeadband = 0.1;
     public static final double TurnConstant   = 6;
   }
+  
+  public static class ReefPoseConstants
+  {
+    public static final Pose2d[] leftAprilTagPoses = new Pose2d[]
+    { null, //0
+      null, 
+      null, 
+      null,
+      null, 
+      null, 
+      null, //6
+      null, //7 
+      null, //8
+      null, //9 
+      new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0) ), //10
+      null, //11 
+      null, 
+      null,
+      null, 
+      null,       
+      null, 
+      null, //17
+      null, //18
+      null, //19
+      null, //20
+      null, //21
+      null, //22
+      };
+
+      public static final Pose2d[] rightAprilTagPoses = new Pose2d[]
+      { null, //0
+        null, 
+        null, 
+        null,
+        null, 
+        null, 
+        null, //6
+        null, //7 
+        null, //8
+        null, //9 
+        new Pose2d( 12.665, 4.45897, Rotation2d.fromDegrees(0) ), //10
+        null, //11 
+        null, 
+        null,
+        null, 
+        null,       
+        null, 
+        null, //17
+        null, //18
+        null, //19
+        null, //20
+        null, //21
+        null, //22
+        };
+  
+  }  
 
   public static class ControllerConstants
   { 
