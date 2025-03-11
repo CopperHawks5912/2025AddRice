@@ -249,7 +249,13 @@ public class SwerveSubsystem extends SubsystemBase
     });
   }
 
-  public Command driveToReefPosition(ReefPoseConstants.ScoringAlignment alignment)
+  /**
+   * Drive to a pre-defined scoring position near the reef based on
+   * the best AprilTag image as seen by the robot's front camera
+   * @param align The left/center/right scoring alignment relative to the center of the AprilTag
+   * @return A {@link Command} which will run the alignment.
+   */
+  public Command driveToReefPosition(ReefPoseConstants.ScoringAlignment align)
   {
     return run(() -> {
       // get the best result from the FRONT camera
@@ -261,15 +267,15 @@ public class SwerveSubsystem extends SubsystemBase
 
         // check for AprilTag targets
         if (result.hasTargets()) {
-          // get the ID of best matching AprilTag
+          // get the ID of the best matching AprilTag
           int aprilTagId = result.getBestTarget().getFiducialId();
 
           // get the scoring pose
-          Pose2d scoringPose = ReefPoseConstants.getScoringPose(aprilTagId, alignment);
+          Pose2d scoringPose = ReefPoseConstants.getScoringPose(aprilTagId, align);
 
           // drive to the scoring pose if a mapping exists
           if (scoringPose != null) {
-            driveToPose( ReefPoseConstants.getScoringPose(aprilTagId, alignment));
+            driveToPose(scoringPose);
           }
         }
       }

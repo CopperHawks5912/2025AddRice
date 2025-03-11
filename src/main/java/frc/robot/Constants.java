@@ -47,6 +47,7 @@ public final class Constants
       RIGHT
     }
 
+    // mapped reef scoring positions
     private static final HashMap<Integer, Pose2d> leftScoringPoses = getLeftScoringPoses();
     private static final HashMap<Integer, Pose2d> centerScoringPoses = getCenterScoringPoses();
     private static final HashMap<Integer, Pose2d> rightScoringPoses = getRightScoringPoses();
@@ -54,17 +55,17 @@ public final class Constants
     /**
      * Get a left/center/right scoring position based off of a given AprilTag ID
      * @param tagId The fiducial ID of the reef AprilTag to align with
-     * @param isLeft Should move to the left side scoring position
+     * @param align Which scoring alignment to move to relative to the center of the AprilTag
      * @return Pose2d
      */
-    public static Pose2d getScoringPose(int tagId, ScoringAlignment alignment) {
+    public static Pose2d getScoringPose(int tagId, ScoringAlignment align) {
       // get the left scoring pose
-      if (alignment == ScoringAlignment.LEFT) {
+      if (align == ScoringAlignment.LEFT) {
         return leftScoringPoses.get(tagId);
       }
 
       // get the right scoring pose
-      if (alignment == ScoringAlignment.RIGHT) {
+      if (align == ScoringAlignment.RIGHT) {
         return rightScoringPoses.get(tagId);
       }
 
