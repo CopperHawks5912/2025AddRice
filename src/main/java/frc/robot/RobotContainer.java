@@ -252,9 +252,9 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.x().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.LEFT));
-      driverXbox.y().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.CENTER));
-      driverXbox.b().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.RIGHT));
+      driverXbox.x().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.LEFT));
+      driverXbox.y().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.CENTER));
+      driverXbox.b().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.RIGHT));
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
@@ -262,9 +262,9 @@ public class RobotContainer
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
-      driverXbox.x().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.LEFT));
-      driverXbox.y().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.CENTER));
-      driverXbox.b().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.RIGHT));
+      driverXbox.x().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.LEFT));
+      driverXbox.y().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.CENTER));
+      driverXbox.b().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.RIGHT));
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
     }
