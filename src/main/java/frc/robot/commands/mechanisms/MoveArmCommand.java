@@ -43,6 +43,6 @@ public class MoveArmCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {  
-    return false; //m_elevatorSubsystem.isElevatorAtPose();
+    return m_armSubsystem.isArmAtPose();
   }
 }

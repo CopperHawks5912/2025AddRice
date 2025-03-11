@@ -1,4 +1,6 @@
 package frc.robot.subsystems.mechanisms;
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
@@ -96,5 +98,12 @@ public class ArmSubsystem extends SubsystemBase {
   }
   public boolean isArmAtPose() {
     return Math.abs( encoder.getPosition() - targetPos ) < ArmConstants.ErrorThreshold;
+  }
+
+  public Supplier<Boolean> isArmInAlgaeMode() {
+    Supplier<Boolean> retVal;
+    retVal.
+
+    return retVal;
   }
 }

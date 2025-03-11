@@ -167,8 +167,8 @@ public final class Constants
   {
     public static final int LeftElevatorID   = 11;
     public static final int RightElevatorID  = 12;
-
-    public static final int ArmID  = 13;
+    public static final int ArmID            = 13;
+    public static final int RollerID         = 14;
   }
   
   public static final class DIOConstants
@@ -200,6 +200,7 @@ public final class Constants
   {
     public static double ErrorThreshold = 10.0; 
     
+    public static double MovingPosition = 200.0;
     public static double HomePosition = 0.0;
     public static double Lvl1Position = 457.2;
     public static double Lvl2Position = 809.6;
@@ -207,6 +208,13 @@ public final class Constants
     public static double Lvl4Position = 1828.8;
     public static double FloorAlgaePosition = 1828.8;
     public static double ScoreAlgaePosition = 1828.8;
+  }
+
+  public static final class RollerConstants
+  {
+    //motor speeds from -0.1 to 1.0
+    public static double IntakeSpeed = 0.5; 
+    public static double OutputSpeed = -0.5; 
   }
 
   public static class PWMConstants{

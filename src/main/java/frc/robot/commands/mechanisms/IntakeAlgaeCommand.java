@@ -5,33 +5,33 @@
 package frc.robot.commands.mechanisms;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
+import frc.robot.subsystems.mechanisms.RollerSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class MoveElevatorCommand extends Command {
-  private final ElevatorSubsystem m_elevatorSubsystem;
-  private final double m_ElevatorPosition;
+public class IntakeAlgaeCommand extends Command {
+  private final RollerSubsystem m_rollerSubsystem;
+
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveElevatorCommand(ElevatorSubsystem elevatorSubsystem, double elevatorPosition ) {
-    m_elevatorSubsystem = elevatorSubsystem;
-    m_ElevatorPosition = elevatorPosition;
+  public IntakeAlgaeCommand(RollerSubsystem rollerSubsystem) {
+    m_rollerSubsystem = rollerSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevatorSubsystem);
+    addRequirements(rollerSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_elevatorSubsystem.setElevatorPosition(m_ElevatorPosition);
+    m_rollerSubsystem.intakeGamePiece();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+      
   }    
 
   // Called once the command ends or is interrupted.
@@ -43,6 +43,6 @@ public class MoveElevatorCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {  
-    return m_elevatorSubsystem.isElevatorAtPose();
+    return false;
   }
 }

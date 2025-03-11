@@ -36,6 +36,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ReefPoseConstants;
+import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.TestRumbleCommand;
 import frc.robot.commands.LED.AllianceLEDCommand;
@@ -43,6 +44,7 @@ import frc.robot.commands.LED.CopperHawksLEDCommand;
 import frc.robot.subsystems.LED.AddressableLEDSubsystem;
 import frc.robot.subsystems.mechanisms.ArmSubsystem;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
+import frc.robot.subsystems.mechanisms.RollerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 
@@ -55,6 +57,7 @@ import swervelib.simulation.SwerveModuleSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 
+import frc.robot.commands.mechanisms.IntakeCoralCommand;
 import frc.robot.commands.mechanisms.MoveArmCommand;
 import frc.robot.commands.mechanisms.MoveElevatorCommand;
 
@@ -70,9 +73,10 @@ public class RobotContainer
   final CommandXboxController driverXbox = new CommandXboxController(0);
   final CommandGenericHID operatorController = new CommandGenericHID(1);
   
-//  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
-//  private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  
+  private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  private final RollerSubsystem rollerSubsystem = new RollerSubsystem();
+   
   // The robot's subsystems and commands are defined here...
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve/5912_2025"));
@@ -155,8 +159,8 @@ public class RobotContainer
 
   public RobotContainer()
   {
-//    elevatorSubsystem.setDefaultCommand ( new MoveElevatorCommand( elevatorSubsystem, ElevatorConstants.HomePosition ) );
-//    armSubsystem.setDefaultCommand ( new MoveArmCommand( armSubsystem, ArmConstants.HomePosition ) );
+//don't add this back in.    elevatorSubsystem.setDefaultCommand ( new MoveElevatorCommand( elevatorSubsystem, ElevatorConstants.HomePosition ) );
+//don't add this back in.    armSubsystem.setDefaultCommand ( new MoveArmCommand( armSubsystem, ArmConstants.HomePosition ) );
 
 //    m_addressableLEDSubsystem.setDefaultCommand(new CopperHawksLEDCommand(m_addressableLEDSubsystem).ignoringDisable(true));
     configureAutos();
@@ -182,9 +186,17 @@ public class RobotContainer
       drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     }
     
-    // operatorController.button(ControllerConstants.ButtonBlueUpper)
-    //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position) 
-    //      .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl1Position) ) );
+    operatorController.button(ControllerConstants.ButtonBlueUpper)
+          .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.MovingPosition ) );
+    operatorController.button(ControllerConstants.ButtonBlueLower)
+          .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.HomePosition ) );
+    operatorController.button(ControllerConstants.ButtonRedUpper3)
+          .whileTrue( new IntakeCoralCommand(rollerSubsystem,  ) );
+    
+          //operatorController.button(ControllerConstants.ButtonBlueUpper)
+    //      .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.MovingPosition )
+    //        .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position) 
+   //         .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl1Position) ) ) );
     // operatorController.button(ControllerConstants.ButtonRedUpper1)
     //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl2Position) 
     //      .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl2Position) ) );
