@@ -260,10 +260,7 @@ public class SwerveSubsystem extends SubsystemBase
         if (result.hasTargets())
         {
           int aprilTagId = result.getBestTarget().getFiducialId();
-          if( leftButton )
-            driveToPose( ReefPoseConstants.leftAprilTagPoses[aprilTagId]);
-          else
-            driveToPose( ReefPoseConstants.leftAprilTagPoses[aprilTagId]);
+          driveToPose( ReefPoseConstants.getScoringPose(aprilTagId, leftButton));
         }
       }
     });
