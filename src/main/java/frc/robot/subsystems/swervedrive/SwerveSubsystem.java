@@ -274,7 +274,7 @@ public class SwerveSubsystem extends SubsystemBase
           Pose2d scoringPose = ReefPoseConstants.getScoringPose(aprilTagId, align);
 
           // drive to the scoring pose if a mapping exists
-          if (scoringPose != null) {
+          if (!scoringPose.equals(null)) {
             driveToPose(scoringPose);
           }
         }
