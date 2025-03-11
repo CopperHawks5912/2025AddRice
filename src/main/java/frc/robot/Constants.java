@@ -46,8 +46,8 @@ public final class Constants
 
     /**
      * Get a left/right scoring position based off of a given AprilTag ID
-     * @param tagId
-     * @param offset
+     * @param tagId The fiduciary ID of the reef AprilTag to align with
+     * @param isLeft Should move to the left side scoring position
      * @return Pose2d
      */
     public static Pose2d getScoringPose(int tagId, boolean isLeft) {
@@ -64,22 +64,12 @@ public final class Constants
      */
     private static HashMap<Integer, Pose2d> getLeftScoringPoses() {
       HashMap<Integer, Pose2d> map = new HashMap<>();
-      map.put(1, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(2, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(3, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(4, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(5, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(6, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(7, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(8, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(9, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(10, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(11, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(12, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(13, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(14, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(15, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(16, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(17, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(18, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(19, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
@@ -97,22 +87,12 @@ public final class Constants
      */
     private static HashMap<Integer, Pose2d> getRightScoringPoses() {
       HashMap<Integer, Pose2d> map = new HashMap<>();
-      map.put(1, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(2, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(3, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(4, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(5, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(6, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(7, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(8, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(9, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(10, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(11, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(12, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(13, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(14, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(15, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
-      map.put(16, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(17, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(18, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(19, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
