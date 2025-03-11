@@ -100,10 +100,10 @@ public class ArmSubsystem extends SubsystemBase {
     return Math.abs( encoder.getPosition() - targetPos ) < ArmConstants.ErrorThreshold;
   }
 
-  public Supplier<Boolean> isArmInAlgaeMode() {
-    Supplier<Boolean> retVal;
-    retVal.
+  // public Supplier<Boolean> isArmInAlgaeMode() {
+  //   Supplier<Boolean> retVal;
+  //   retVal.
 
-    return retVal;
-  }
+  //   return retVal;
+  // }
 }
