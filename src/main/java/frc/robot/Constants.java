@@ -47,11 +47,107 @@ public final class Constants
       RIGHT
     }
 
+    // setup blue side start scoring poses
+    private static Pose2d aprilTag18 = new Pose2d();    
+    private static Pose2d blueLeft = aprilTag18.transformBy(Units.inchesToMeters(-3), Units.inchesToMeters(6.47), 180);
+    private static Pose2d blueCenter = aprilTag18.transformBy(Units.inchesToMeters(-3), Units.inchesToMeters(0), 180);
+    private static Pose2d blueRight = aprilTag18.transformBy(Units.inchesToMeters(-3), Units.inchesToMeters(-6.47), 180);
+
+    // setup red side start scoring poses
+    private static Pose2d aprilTag10 = new Pose2d();
+    private static Pose2d redLeft = aprilTag10.transformBy(Units.inchesToMeters(-3), Units.inchesToMeters(6.47), 180);
+    private static Pose2d redCenter = aprilTag10.transformBy(Units.inchesToMeters(-3), Units.inchesToMeters(0), 180);
+    private static Pose2d redRight = aprilTag10.transformBy(Units.inchesToMeters(-3), Units.inchesToMeters(-6.47), 180);
+
     // mapped reef scoring positions
     private static final HashMap<Integer, Pose2d> leftScoringPoses = getLeftScoringPoses();
     private static final HashMap<Integer, Pose2d> centerScoringPoses = getCenterScoringPoses();
     private static final HashMap<Integer, Pose2d> rightScoringPoses = getRightScoringPoses();
+    
+    /**
+     * Define a hashmap of AprilTag poses that represent our 
+     * left side scoring poses for each reef AprilTag
+     * @return hashmap 
+     */
+    private static HashMap<Integer, Pose2d> getLeftScoringPoses() {      
+      HashMap<Integer, Pose2d> map = new HashMap<>();
 
+      // left scoring positions surrounding the blue reef
+      map.put(18, blueLeft);
+      map.put(17, blueLeft.rotateBy(60));
+      map.put(22, blueLeft.rotateBy(120));
+      map.put(21, blueLeft.rotateBy(180));
+      map.put(20, blueLeft.rotateBy(240));
+      map.put(19, blueLeft.rotateBy(300));
+
+      // left scoring positions surrounding the red reef
+      map.put(10, redLeft);
+      map.put(11, redLeft.rotateBy(60));
+      map.put(6, redLeft.rotateBy(120));
+      map.put(7, redLeft.rotateBy(180));
+      map.put(8, redLeft.rotateBy(240));
+      map.put(9, redLeft.rotateBy(300));
+
+      // return the map
+      return map;
+    }
+  
+    /**
+     * Define a hashmap of AprilTag poses that represent
+     * our center scoring poses for each reef AprilTag
+     * @return hashmap 
+     */
+    private static HashMap<Integer, Pose2d> getCenterScoringPoses() {
+      HashMap<Integer, Pose2d> map = new HashMap<>();
+
+      // center scoring positions surrounding the blue reef
+      map.put(18, blueCenter);
+      map.put(17, blueCenter.rotateBy(60));
+      map.put(22, blueCenter.rotateBy(120));
+      map.put(21, blueCenter.rotateBy(180));
+      map.put(20, blueCenter.rotateBy(240));
+      map.put(19, blueCenter.rotateBy(300));
+
+      // center scoring positions surrounding the red reef
+      map.put(10, redCenter);
+      map.put(11, redCenter.rotateBy(60));
+      map.put(6, redCenter.rotateBy(120));
+      map.put(7, redCenter.rotateBy(180));
+      map.put(8, redCenter.rotateBy(240));
+      map.put(9, redCenter.rotateBy(300));
+
+      // return the map
+      return map;
+    }
+      
+    /**
+     * Define a hashmap of AprilTag poses that represent our 
+     * right side scoring poses for each reef AprilTag
+     * @return hashmap 
+     */
+    private static HashMap<Integer, Pose2d> getRightScoringPoses() {
+      HashMap<Integer, Pose2d> map = new HashMap<>();
+
+      // right scoring positions surrounding the blue reef
+      map.put(18, blueRight);
+      map.put(17, blueRight.rotateBy(60));
+      map.put(22, blueRight.rotateBy(120));
+      map.put(21, blueRight.rotateBy(180));
+      map.put(20, blueRight.rotateBy(240));
+      map.put(19, blueRight.rotateBy(300));
+
+      // right scoring positions surrounding the red reef
+      map.put(10, redRight);
+      map.put(11, redRight.rotateBy(60));
+      map.put(6, redRight.rotateBy(120));
+      map.put(7, redRight.rotateBy(180));
+      map.put(8, redRight.rotateBy(240));
+      map.put(9, redRight.rotateBy(300));
+
+      // return the map
+      return map;
+    }
+  
     /**
      * Get a left/center/right scoring position based off of a given AprilTag ID
      * @param tagId The fiducial ID of the reef AprilTag to align with
@@ -72,103 +168,7 @@ public final class Constants
       // default -> get the center scoring pose
       return centerScoringPoses.get(tagId);
     }
-    
-    /**
-     * Define a hashmap of AprilTag poses that represent our 
-     * left side scoring poses for each reef AprilTag
-     * @return hashmap 
-     */
-    private static HashMap<Integer, Pose2d> getLeftScoringPoses() {      
-      HashMap<Integer, Pose2d> map = new HashMap<>();
 
-      // left scoring positions surrounding the blue reef
-      Pose2d aprilTag18 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d blue = aprilTag18.transformBy(-3, 6.47, 180); // TO DO - x & y need to be in inches
-      map.put(18, blue);
-      map.put(17, blue.rotateBy(60));
-      map.put(22, blue.rotateBy(120));
-      map.put(21, blue.rotateBy(180));
-      map.put(20, blue.rotateBy(240));
-      map.put(19, blue.rotateBy(300));
-
-      // left scoring positions surrounding the red reef
-      Pose2d aprilTag10 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d red = aprilTag10.transformBy(-3, 6.47, 180); // TO DO - x & y need to be in inches
-      map.put(10, red);
-      map.put(11, red.rotateBy(60));
-      map.put(6, red.rotateBy(120));
-      map.put(7, red.rotateBy(180));
-      map.put(8, red.rotateBy(240));
-      map.put(9, red.rotateBy(300));      
-
-      // return the map
-      return map;
-    }
-      
-    /**
-     * Define a hashmap of AprilTag poses that represent our 
-     * right side scoring poses for each reef AprilTag
-     * @return hashmap 
-     */
-    private static HashMap<Integer, Pose2d> getRightScoringPoses() {
-      HashMap<Integer, Pose2d> map = new HashMap<>();
-
-      // right scoring positions surrounding the blue reef
-      Pose2d aprilTag18 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d blue = aprilTag18.transformBy(-3, -6.47, 180); // TO DO - x & y need to be in inches
-      map.put(18, blue);
-      map.put(17, blue.rotateBy(60));
-      map.put(22, blue.rotateBy(120));
-      map.put(21, blue.rotateBy(180));
-      map.put(20, blue.rotateBy(240));
-      map.put(19, blue.rotateBy(300));
-
-      // right scoring positions surrounding the red reef
-      Pose2d aprilTag10 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d red = aprilTag10.transformBy(-3, -6.47, 180); // TO DO - x & y need to be in inches
-      map.put(10, red);
-      map.put(11, red.rotateBy(60));
-      map.put(6, red.rotateBy(120));
-      map.put(7, red.rotateBy(180));
-      map.put(8, red.rotateBy(240));
-      map.put(9, red.rotateBy(300));      
-
-      // return the map
-      return map;
-    }
-  
-    /**
-     * Define a hashmap of AprilTag poses that represent
-     * our center scoring poses for each reef AprilTag
-     * @return hashmap 
-     */
-    private static HashMap<Integer, Pose2d> getCenterScoringPoses() {
-      HashMap<Integer, Pose2d> map = new HashMap<>();
-
-      // center scoring positions surrounding the blue reef
-      Pose2d aprilTag18 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d blue = aprilTag18.transformBy(-3, 0, 180); // TO DO - x & y need to be in inches
-      map.put(18, blue);
-      map.put(17, blue.rotateBy(60));
-      map.put(22, blue.rotateBy(120));
-      map.put(21, blue.rotateBy(180));
-      map.put(20, blue.rotateBy(240));
-      map.put(19, blue.rotateBy(300));
-
-      // center scoring positions surrounding the red reef
-      Pose2d aprilTag10 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d red = aprilTag10.transformBy(-3, 0, 180); // TO DO - x & y need to be in inches
-      map.put(10, red);
-      map.put(11, red.rotateBy(60));
-      map.put(6, red.rotateBy(120));
-      map.put(7, red.rotateBy(180));
-      map.put(8, red.rotateBy(240));
-      map.put(9, red.rotateBy(300));      
-
-      // return the map
-      return map;
-    }
-  
   }  
 
   public static class ControllerConstants
