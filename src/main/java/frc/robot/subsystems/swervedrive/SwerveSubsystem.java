@@ -249,21 +249,34 @@ public class SwerveSubsystem extends SubsystemBase
     });
   }
 
-  public Command driveToReefPosition(Cameras camera, boolean leftButton)
+  /**
+   * Drive to a pre-defined scoring position near the reef based on
+   * the best AprilTag image as seen by the robot's front camera
+   * @param align The left/center/right scoring alignment relative to the center of the AprilTag
+   * @return A {@link Command} which will run the alignment.
+   */
+  public Command driveToReefPosition(ReefPoseConstants.ScoringAlignment align)
   {
-
     return run(() -> {
-      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
-      if (resultO.isPresent())
-      {
+      // get the best result from the FRONT camera
+      Optional<PhotonPipelineResult> resultO = Vision.Cameras.FRONT_CAM.getBestResult();
+
+      // check if a camera result is present
+      if (resultO.isPresent()) {
         var result = resultO.get();
-        if (result.hasTargets())
-        {
+
+        // check for AprilTag targets
+        if (result.hasTargets()) {
+          // get the ID of the best matching AprilTag
           int aprilTagId = result.getBestTarget().getFiducialId();
-          if( leftButton )
-            driveToPose( ReefPoseConstants.leftAprilTagPoses[aprilTagId]);
-          else
-            driveToPose( ReefPoseConstants.leftAprilTagPoses[aprilTagId]);
+
+          // get the scoring pose
+          Pose2d scoringPose = ReefPoseConstants.getScoringPose(aprilTagId, align);
+
+          // drive to the scoring pose if a mapping exists
+          if (!scoringPose.equals(null)) {
+            driveToPose(scoringPose);
+          }
         }
       }
     });
