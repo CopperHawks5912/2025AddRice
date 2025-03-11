@@ -80,26 +80,18 @@ public final class Constants
      */
     private static HashMap<Integer, Pose2d> getLeftScoringPoses() {      
       HashMap<Integer, Pose2d> map = new HashMap<>();
-
-      // left scoring positions surrounding the blue reef
-      Pose2d aprilTag18 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d blue = aprilTag18.transformBy(-3, 6.47, 180); // TO DO - x & y need to be in inches
-      map.put(18, blue);
-      map.put(17, blue.rotateBy(60));
-      map.put(22, blue.rotateBy(120));
-      map.put(21, blue.rotateBy(180));
-      map.put(20, blue.rotateBy(240));
-      map.put(19, blue.rotateBy(300));
-
-      // left scoring positions surrounding the red reef
-      Pose2d aprilTag10 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d red = aprilTag10.transformBy(-3, 6.47, 180); // TO DO - x & y need to be in inches
-      map.put(10, red);
-      map.put(11, red.rotateBy(60));
-      map.put(6, red.rotateBy(120));
-      map.put(7, red.rotateBy(180));
-      map.put(8, red.rotateBy(240));
-      map.put(9, red.rotateBy(300));      
+      map.put( 6, new Pose2d(13.533212698834394, 2.845061489129294, Rotation2d.fromDegrees(300)) );
+      map.put( 7, new Pose2d(14.3193412054922, 3.8461651986517804, Rotation2d.fromDegrees(0)) );   
+      map.put( 8, new Pose2d(13.844522506657809, 5.027003709522487, Rotation2d.fromDegrees(60)) );
+      map.put( 9, new Pose2d(12.584591301165608, 5.206738510870706, Rotation2d.fromDegrees(120)) );
+      map.put( 10, new Pose2d(11.798462794507797, 4.20563480134822, Rotation2d.fromDegrees(180)) );
+      map.put( 11, new Pose2d(12.273281493342191, 3.0247962904775134, Rotation2d.fromDegrees(240)) );
+      map.put( 17, new Pose2d(3.7038294933421905, 3.0247962904775134, Rotation2d.fromDegrees(240)) );
+      map.put( 18, new Pose2d(3.2287567945077993, 4.20563480134822, Rotation2d.fromDegrees(180)) );
+      map.put( 19, new Pose2d(4.015139301165607, 5.206738510870706, Rotation2d.fromDegrees(120)) );
+      map.put( 20, new Pose2d(5.274816506657808, 5.027003709522487, Rotation2d.fromDegrees(60)) );
+      map.put( 21, new Pose2d(5.749889205492201, 3.8461651986517804, Rotation2d.fromDegrees(0)) );
+      map.put( 22, new Pose2d(4.963506698834392, 2.845061489129294, Rotation2d.fromDegrees(300)) );
 
       // return the map
       return map;
@@ -112,26 +104,18 @@ public final class Constants
      */
     private static HashMap<Integer, Pose2d> getRightScoringPoses() {
       HashMap<Integer, Pose2d> map = new HashMap<>();
-
-      // right scoring positions surrounding the blue reef
-      Pose2d aprilTag18 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d blue = aprilTag18.transformBy(-3, -6.47, 180); // TO DO - x & y need to be in inches
-      map.put(18, blue);
-      map.put(17, blue.rotateBy(60));
-      map.put(22, blue.rotateBy(120));
-      map.put(21, blue.rotateBy(180));
-      map.put(20, blue.rotateBy(240));
-      map.put(19, blue.rotateBy(300));
-
-      // right scoring positions surrounding the red reef
-      Pose2d aprilTag10 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d red = aprilTag10.transformBy(-3, -6.47, 180); // TO DO - x & y need to be in inches
-      map.put(10, red);
-      map.put(11, red.rotateBy(60));
-      map.put(6, red.rotateBy(120));
-      map.put(7, red.rotateBy(180));
-      map.put(8, red.rotateBy(240));
-      map.put(9, red.rotateBy(300));      
+      map.put( 6, new Pose2d(13.844522506657809, 3.0247962904775134, Rotation2d.fromDegrees(300)) );
+      map.put( 7, new Pose2d(14.3193412054922, 4.20563480134822, Rotation2d.fromDegrees(0)) );
+      map.put( 8, new Pose2d(13.533212698834394, 5.206738510870706, Rotation2d.fromDegrees(60)) );
+      map.put( 9, new Pose2d(12.273281493342191, 5.027003709522487, Rotation2d.fromDegrees(120)) );
+      map.put( 10, new Pose2d(11.798462794507797, 3.8461651986517804, Rotation2d.fromDegrees(180)) );
+      map.put( 11, new Pose2d(12.584591301165606, 2.845061489129294, Rotation2d.fromDegrees(240)) );
+      map.put( 17, new Pose2d(4.015139301165607, 2.845061489129294, Rotation2d.fromDegrees(240)) );
+      map.put( 18, new Pose2d(3.2287567945077993, 3.8461651986517804, Rotation2d.fromDegrees(180)) );
+      map.put( 19, new Pose2d(3.703829493342191, 5.027003709522487, Rotation2d.fromDegrees(120)) );
+      map.put( 20, new Pose2d(4.963506698834392, 5.206738510870706, Rotation2d.fromDegrees(60)) );
+      map.put( 21, new Pose2d(5.749889205492201, 4.20563480134822, Rotation2d.fromDegrees(0)) );
+      map.put( 22, new Pose2d(5.274816506657808, 3.0247962904775134, Rotation2d.fromDegrees(300)) );
 
       // return the map
       return map;
@@ -144,26 +128,18 @@ public final class Constants
      */
     private static HashMap<Integer, Pose2d> getCenterScoringPoses() {
       HashMap<Integer, Pose2d> map = new HashMap<>();
-
-      // center scoring positions surrounding the blue reef
-      Pose2d aprilTag18 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d blue = aprilTag18.transformBy(-3, 0, 180); // TO DO - x & y need to be in inches
-      map.put(18, blue);
-      map.put(17, blue.rotateBy(60));
-      map.put(22, blue.rotateBy(120));
-      map.put(21, blue.rotateBy(180));
-      map.put(20, blue.rotateBy(240));
-      map.put(19, blue.rotateBy(300));
-
-      // center scoring positions surrounding the red reef
-      Pose2d aprilTag10 = new Pose2d(); // TO DO - need to set actual location of tag here
-      Pose2d red = aprilTag10.transformBy(-3, 0, 180); // TO DO - x & y need to be in inches
-      map.put(10, red);
-      map.put(11, red.rotateBy(60));
-      map.put(6, red.rotateBy(120));
-      map.put(7, red.rotateBy(180));
-      map.put(8, red.rotateBy(240));
-      map.put(9, red.rotateBy(300));      
+      map.put( 6, new Pose2d(13.69193393497587, 2.9296178465885565, Rotation2d.fromDegrees(300)) );
+      map.put( 7, new Pose2d(14.32547386995174, 4.0259, Rotation2d.fromDegrees(0)) );
+      map.put( 8, new Pose2d(13.69193393497587, 5.122182153411443, Rotation2d.fromDegrees(60)) );
+      map.put( 9, new Pose2d(12.42587006502413, 5.122182153411443, Rotation2d.fromDegrees(120)) );
+      map.put( 10, new Pose2d(11.792330130048258, 4.0259, Rotation2d.fromDegrees(180)) );
+      map.put( 11, new Pose2d(12.42587006502413, 2.9296178465885565, Rotation2d.fromDegrees(240)) );
+      map.put( 17, new Pose2d(3.856418065024129, 2.9296178465885565, Rotation2d.fromDegrees(240)) );
+      map.put( 18, new Pose2d(3.22262413004826, 4.0259, Rotation2d.fromDegrees(180)) );
+      map.put( 19, new Pose2d(3.8564180650241293, 5.122182153411443, Rotation2d.fromDegrees(120)) );
+      map.put( 20, new Pose2d(5.12222793497587, 5.122182153411443, Rotation2d.fromDegrees(60)) );
+      map.put( 21, new Pose2d(5.75602186995174, 4.0259, Rotation2d.fromDegrees(0)) );
+      map.put( 22, new Pose2d(5.12222793497587, 2.9296178465885565, Rotation2d.fromDegrees(300)) );
 
       // return the map
       return map;
