@@ -41,20 +41,35 @@ public final class Constants
   
   public static class ReefPoseConstants
   {
+    public static enum ScoringAlignment {
+      LEFT,
+      CENTER,
+      RIGHT
+    }
+
     private static final HashMap<Integer, Pose2d> leftScoringPoses = getLeftScoringPoses();
+    private static final HashMap<Integer, Pose2d> centerScoringPoses = getCenterScoringPoses();
     private static final HashMap<Integer, Pose2d> rightScoringPoses = getRightScoringPoses();
 
     /**
-     * Get a left/right scoring position based off of a given AprilTag ID
-     * @param tagId The fiduciary ID of the reef AprilTag to align with
+     * Get a left/center/right scoring position based off of a given AprilTag ID
+     * @param tagId The fiducial ID of the reef AprilTag to align with
      * @param isLeft Should move to the left side scoring position
      * @return Pose2d
      */
-    public static Pose2d getScoringPose(int tagId, boolean isLeft) {
-      if (isLeft) {
+    public static Pose2d getScoringPose(int tagId, ScoringAlignment alignment) {
+      // get the left scoring pose
+      if (alignment == ScoringAlignment.LEFT) {
         return leftScoringPoses.get(tagId);
       }
-      return rightScoringPoses.get(tagId);
+
+      // get the right scoring pose
+      if (alignment == ScoringAlignment.RIGHT) {
+        return rightScoringPoses.get(tagId);
+      }
+
+      // default -> get the center scoring pose
+      return centerScoringPoses.get(tagId);
     }
     
     /**
@@ -78,14 +93,35 @@ public final class Constants
       map.put(22, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       return map;
     }
-  
-    
+      
     /**
      * Define a hashmap of AprilTag poses that represent our 
      * right side scoring poses for each reef AprilTag
      * @return hashmap 
      */
     private static HashMap<Integer, Pose2d> getRightScoringPoses() {
+      HashMap<Integer, Pose2d> map = new HashMap<>();
+      map.put(6, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(7, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(8, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(9, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(10, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(11, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(17, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(18, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(19, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(20, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(21, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      map.put(22, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
+      return map;
+    }
+  
+    /**
+     * Define a hashmap of AprilTag poses that represent our 
+     * right side scoring poses for each reef AprilTag
+     * @return hashmap 
+     */
+    private static HashMap<Integer, Pose2d> getCenterScoringPoses() {
       HashMap<Integer, Pose2d> map = new HashMap<>();
       map.put(6, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));
       map.put(7, new Pose2d( 12.665, 3.582, Rotation2d.fromDegrees(0)));

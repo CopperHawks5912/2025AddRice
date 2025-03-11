@@ -35,6 +35,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.ReefPoseConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.TestRumbleCommand;
 import frc.robot.commands.LED.AllianceLEDCommand;
@@ -251,7 +252,9 @@ public class RobotContainer
       driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
       driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
       driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      //driverXbox.leftBumper().onTrue(drivebase.driveToReefPosition());
+      driverXbox.x().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.LEFT));
+      driverXbox.y().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.CENTER));
+      driverXbox.b().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.RIGHT));
       driverXbox.rightBumper().onTrue(Commands.none());
     } else
     {
@@ -259,6 +262,9 @@ public class RobotContainer
       driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
       driverXbox.start().whileTrue(Commands.none());
       driverXbox.back().whileTrue(Commands.none());
+      driverXbox.x().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.LEFT));
+      driverXbox.y().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.CENTER));
+      driverXbox.b().onTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.RIGHT));
       driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
       driverXbox.rightBumper().onTrue(Commands.none());
     }

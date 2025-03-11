@@ -249,18 +249,28 @@ public class SwerveSubsystem extends SubsystemBase
     });
   }
 
-  public Command driveToReefPosition(Cameras camera, boolean leftButton)
+  public Command driveToReefPosition(ReefPoseConstants.ScoringAlignment alignment)
   {
-
     return run(() -> {
-      Optional<PhotonPipelineResult> resultO = camera.getBestResult();
-      if (resultO.isPresent())
-      {
+      // get the best result from the FRONT camera
+      Optional<PhotonPipelineResult> resultO = Vision.Cameras.FRONT_CAM.getBestResult();
+
+      // check if a camera result is present
+      if (resultO.isPresent()) {
         var result = resultO.get();
-        if (result.hasTargets())
-        {
+
+        // check for AprilTag targets
+        if (result.hasTargets()) {
+          // get the ID of best matching AprilTag
           int aprilTagId = result.getBestTarget().getFiducialId();
-          driveToPose( ReefPoseConstants.getScoringPose(aprilTagId, leftButton));
+
+          // get the scoring pose
+          Pose2d scoringPose = ReefPoseConstants.getScoringPose(aprilTagId, alignment);
+
+          // drive to the scoring pose if a mapping exists
+          if (scoringPose != null) {
+            driveToPose( ReefPoseConstants.getScoringPose(aprilTagId, alignment));
+          }
         }
       }
     });
