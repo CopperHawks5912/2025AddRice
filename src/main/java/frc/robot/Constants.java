@@ -5,10 +5,6 @@
 package frc.robot;
 
 import java.util.HashMap;
-import java.util.Map;
-
-import com.pathplanner.lib.config.PIDConstants;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -242,16 +238,16 @@ public final class Constants
     public static final int LEDStringID = 0;
   }
 
-  public static class LEDConstants{
-    public static final int LEDStringLength = 66;
-    public static final int LEDModeOff = -1;
-    public static final int LEDModeAllianceBlue = 0;
-    public static final int LEDModeAllianceRed = 1;  
-    public static final int LEDModeRainbow = 2;  
-    public static final int LEDModeCopperHawks = 3;  
-    public static final int LEDModeNoteEaten = 10;
-    public static final int LEDModeShooting = 11;
+  // public static class LEDConstants{
+  //   public static final int LEDStringLength = 66;
+  //   public static final int LEDModeOff = -1;
+  //   public static final int LEDModeAllianceBlue = 0;
+  //   public static final int LEDModeAllianceRed = 1;  
+  //   public static final int LEDModeRainbow = 2;  
+  //   public static final int LEDModeCopperHawks = 3;  
+  //   public static final int LEDModeNoteEaten = 10;
+  //   public static final int LEDModeShooting = 11;
     
-  }
+  // }
 
 }
