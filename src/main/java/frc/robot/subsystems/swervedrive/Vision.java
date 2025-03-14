@@ -338,11 +338,11 @@ public class Vision
     /**
      * Left Camera
      */
-    FRONT_CAM("front",
+    FRONT_CAM("OV9281_Camera1",
              new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
-             new Translation3d(Units.inchesToMeters(-4.25),
+             new Translation3d(Units.inchesToMeters(-4.5),
                                Units.inchesToMeters(0),
-                               Units.inchesToMeters(15.875)),
+                               Units.inchesToMeters(6.75)),
              VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1))
     //,
     // /**

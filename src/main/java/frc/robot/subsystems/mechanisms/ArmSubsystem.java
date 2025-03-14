@@ -2,108 +2,77 @@ package frc.robot.subsystems.mechanisms;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.controls.PositionVoltage;
-import com.revrobotics.RelativeEncoder;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitSourceValue;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
-import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.*;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.*;
 
 public class ArmSubsystem extends SubsystemBase {
-  private SparkFlex motor;
-  private SparkFlexConfig motorConfig;
-  private SparkClosedLoopController closedLoopController;
-  private RelativeEncoder encoder;
+  private TalonFX armMotor;
+  private TalonFXConfiguration armMotorConfig;
   private double targetPos;
+  private double zeroPoint;
+
+  public ArmSubsystem() {
+    armMotor = new TalonFX(CANConstants.ArmID);
     
-  public ArmSubsystem() 
-  {
-    motor = new SparkFlex(CANConstants.ArmID, MotorType.kBrushless);
-    closedLoopController = motor.getClosedLoopController();
-    encoder = motor.getEncoder();
-
-     motorConfig = new SparkFlexConfig();
-
-    /*
-     * Configure the encoder. For this specific example, we are using the
-     * integrated encoder of the NEO, and we don't need to configure it. If
-     * needed, we can adjust values like the position or velocity conversion
-     * factors
-     */
-    motorConfig.encoder
-        .positionConversionFactor(1)
-        .velocityConversionFactor(1);
-
-    /*
-     * Configure the closed loop controller. We want to make sure we set the
-     * feedback sensor as the primary encoder.
-     */
-    motorConfig.closedLoop
-        .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        // Set PID values for position control. We don't need to pass a closed
-        // loop slot, as it will default to slot 0.
-        .p(0.4)
-        .i(0)
-        .d(0)
-        .outputRange(-1, 1)
-        // Set PID values for velocity control in slot 1
-        .p(0.0001, ClosedLoopSlot.kSlot1)
-        .i(0, ClosedLoopSlot.kSlot1)
-        .d(0, ClosedLoopSlot.kSlot1)
-        .velocityFF(1.0 / 5767, ClosedLoopSlot.kSlot1)
-        .outputRange(-1, 1, ClosedLoopSlot.kSlot1);
-
-    motorConfig.closedLoop.maxMotion
-        // Set MAXMotion parameters for position control. We don't need to pass
-        // a closed loop slot, as it will default to slot 0.
-        .maxVelocity(1000)
-        .maxAcceleration(1000)
-        .allowedClosedLoopError(1)
-        // Set MAXMotion parameters for velocity control in slot 1
-        .maxAcceleration(500, ClosedLoopSlot.kSlot1)
-        .maxVelocity(6000, ClosedLoopSlot.kSlot1)
-        .allowedClosedLoopError(1, ClosedLoopSlot.kSlot1);
-
-    /*
-     * Apply the configuration to the SPARK MAX.
-     *
-     * kResetSafeParameters is used to get the SPARK MAX to a known state. This
-     * is useful in case the SPARK MAX is replaced.
-     *
-     * kPersistParameters is used to ensure the configuration is not lost when
-     * the SPARK MAX loses power. This is useful for power cycles that may occur
-     * mid-operation.
-     */
-    motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
-
+    armMotorConfig = new TalonFXConfiguration()
+      .withSlot0(new Slot0Configs()
+        .withKP(1)
+        .withKS(0)
+        .withKA(0)
+        .withKV(0))
+        .withCurrentLimits(new CurrentLimitsConfigs()
+        .withSupplyCurrentLimit(30)
+        .withSupplyCurrentLimitEnable(true));
+    armMotor.getConfigurator().apply(armMotorConfig);  
+    
     // Initialize dashboard values
     SmartDashboard.setDefaultNumber("Target Position", 0);
     SmartDashboard.setDefaultNumber("Target Velocity", 0);
     SmartDashboard.setDefaultBoolean("Control Mode", false);
     SmartDashboard.setDefaultBoolean("Reset Encoder", false);
+
+    zeroPoint = armMotor.getPosition().getValueAsDouble();
   }
 
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Arm Pos", armMotor.getPosition().getValueAsDouble() );
+    SmartDashboard.putNumber("Arm Target",targetPos );
+    isArmAtPose();
+  }
   public void setArmPosition(double position){
-    targetPos = position;  
-    closedLoopController.setReference(position, ControlType.kMAXMotionPositionControl,
-          ClosedLoopSlot.kSlot0);
+    targetPos = position + zeroPoint;  
+    PositionVoltage voltReq = new PositionVoltage(0);
+    voltReq.Position = targetPos;
+    voltReq.Velocity = 0.1;    
+    armMotor.setControl(voltReq);
+    SmartDashboard.putNumber("Target Position", position);    
   }
   public boolean isArmAtPose() {
-    return Math.abs( encoder.getPosition() - targetPos ) < ArmConstants.ErrorThreshold;
+    boolean atPose = Math.abs( armMotor.getPosition().getValueAsDouble() - targetPos ) < ElevatorConstants.ErrorThreshold; 
+    SmartDashboard.putNumber("Arm Error",  armMotor.getClosedLoopError().getValueAsDouble() );
+    SmartDashboard.putBoolean("Arm At Pose", atPose );
+    return atPose;
   }
 
-  // public Supplier<Boolean> isArmInAlgaeMode() {
-  //   Supplier<Boolean> retVal;
-  //   retVal.
-
-  //   return retVal;
-  // }
+   public boolean isArmInAlgaeMode() {
+     if( targetPos == ArmConstants.ProcessorAlgaePosition ||
+         targetPos == ArmConstants.LowerAlgaePosition ||
+         targetPos == ArmConstants.UpperAlgaePosition ||
+         targetPos == ArmConstants.NetAlgaePosition )
+        return true;
+      else 
+        return false;
+   }
 }

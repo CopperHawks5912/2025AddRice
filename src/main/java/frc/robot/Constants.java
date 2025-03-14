@@ -147,34 +147,40 @@ public final class Constants
   
   }  
 
-  public static class ControllerConstants
+  public static class Controller2Constants
   { 
-    public static final int ButtonBlueUpper =  1;
-    public static final int ButtonBlueLower =  5;
-    public static final int ButtonRedUpper1 =  2;
-    public static final int ButtonRedUpper2 =  3;
-    public static final int ButtonRedUpper3 =  4;
-    public static final int ButtonRedLower1 =  6;
-    public static final int ButtonRedLower2 =  7;
-    public static final int ButtonRedLower3 =  8;
-    public static final int ButtonBlack1    = 10;
-    public static final int ButtonBlack2    =  9;
-    public static final int HorizontalAxis  =  0;
-    public static final int VerticalAxis    =  1;    
+    public static final int ButtonRed1    =  5; //Controller2
+    public static final int ButtonRed2    =  4; //Controller2
+    public static final int ButtonRed3    =  3; //Controller2
+    public static final int ButtonRed4    =  2; //Controller2
+    public static final int ButtonRed5    =  1; //Controller2
+    public static final int ButtonBlue2   =  8; //Controller2
+    public static final int ButtonBlue3   =  7; //Controller2
+    public static final int ButtonBlue4   =  6; //Controller2
   }
+  public static class Controller1Constants
+  {  
+    public static final int ButtonBlue1   =  3; //Controller1
+    public static final int ButtonBlack1  =  5; //Controller1
+    public static final int ButtonBlack2  =  6; //Controller1
+    public static final int ButtonGreen   =  1; //Controller1   
+    public static final int ButtonYellow  =  7; //Controller1  
+    public static final int ButtonPlayer1 =  8; //Controller1   
+    public static final int ButtonPlayer2 =  2; //Controller1 
+  } 
 
   public static final class CANConstants
   {
-    public static final int LeftElevatorID   = 11;
-    public static final int RightElevatorID  = 12;
-    public static final int ArmID            = 13;
-    public static final int RollerID         = 14;
+    public static final int RightElevatorID  = 1;
+    public static final int LeftElevatorID   = 2;
+    public static final int ArmID            = 3;
+    public static final int RollerID         = 4;
   }
   
   public static final class DIOConstants
   {
     // public static final int IntakeArmLimitSwitch = 0;
-    public static final int BeamBreakSensorPort = 1;
+    public static final int BeamBreakSensorPort = 0;
   }
   
   public static final class AutoConstants
@@ -187,34 +193,49 @@ public final class Constants
   public static final class ElevatorConstants  //positions in millimeters
   {
     public static double HomePosition = 0.0;
-    public static double Lvl1Position = 457.2;
-    public static double Lvl2Position = 809.6;
-    public static double Lvl3Position = 1209.7;
-    public static double Lvl4Position = 1828.8;
+    public static double Lvl1Position = 50.0;
+    public static double Lvl2Position = 255.0;
+    public static double Lvl3Position = 605.0;
+    public static double Lvl4Position = 1120.0;
+    public static double MaxHeightPosition = 1120.0;
+    
+    public static double LowerAlgaePosition = 330.0;
+    public static double UpperAlgaePosition = 635.0;
+    public static double NetAlgaePosition = 1120.0;
+    
 
-    public static double MillimetersToRotations = 10;
-    public static double ErrorThreshold = 10.0;
+    public static double ErrorThreshold = 5.0;
+
+    public static double MMVelocity = 1200;
+    public static double MMAcceleration = 3000;
+    public static double MMJerk = 0;    
   }
 
   public static final class ArmConstants
   {
-    public static double ErrorThreshold = 10.0; 
+    public static double ErrorThreshold = 0.3; 
     
-    public static double MovingPosition = 200.0;
+    public static double CoralMovingPosition = 3.0;
+    public static double AlgaeMovingPosition = 18.001465;
+    
     public static double HomePosition = 0.0;
-    public static double Lvl1Position = 457.2;
-    public static double Lvl2Position = 809.6;
-    public static double Lvl3Position = 1209.7;
-    public static double Lvl4Position = 1828.8;
-    public static double FloorAlgaePosition = 1828.8;
-    public static double ScoreAlgaePosition = 1828.8;
+    public static double Lvl1Position = 0.0;
+    public static double Lvl2Position = 3.0;
+    public static double Lvl3Position = 3.0;
+    public static double Lvl4Position = 5.0;
+    public static double ProcessorAlgaePosition = 19.001465;
+    public static double LowerAlgaePosition = 18.001465;
+    public static double UpperAlgaePosition = 18.001465;
+    public static double NetAlgaePosition = 19.001465;
   }
 
   public static final class RollerConstants
   {
     //motor speeds from -0.1 to 1.0
-    public static double IntakeSpeed = 0.5; 
-    public static double OutputSpeed = -0.5; 
+    public static double IntakeCoralSpeed = -0.5; 
+    public static double OutputCoralSpeed = -0.8; 
+    public static double IntakeAlgaeSpeed = 0.8; 
+    public static double OutputAlgaeSpeed = -0.5; 
   }
 
   public static class PWMConstants{

@@ -64,7 +64,7 @@ public class SwerveSubsystem extends SubsystemBase
   /**
    * Enable vision odometry updates while driving.
    */
-  private final boolean     visionDriveTest = false;
+  private final boolean     visionEnabled = false;
   /**
    * PhotonVision class to keep an accurate odometry.
    */
@@ -103,7 +103,7 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
 //    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
-    if (visionDriveTest)
+    if (visionEnabled)
     {
       setupPhotonVision();
       // Stop the odometry thread if we are using vision that way we can synchronize updates better.
@@ -142,7 +142,7 @@ public class SwerveSubsystem extends SubsystemBase
   public void periodic()
   {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest)
+    if (visionEnabled)
     {
       swerveDrive.updateOdometry();
       vision.updatePoseEstimation(swerveDrive);
@@ -257,29 +257,27 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public Command driveToReefPosition(ReefPoseConstants.ScoringAlignment align)
   {
-    return run(() -> {
-      // get the best result from the FRONT camera
-      Optional<PhotonPipelineResult> resultO = Vision.Cameras.FRONT_CAM.getBestResult();
+    Optional<PhotonPipelineResult> resultO = Vision.Cameras.FRONT_CAM.getBestResult();
 
-      // check if a camera result is present
-      if (resultO.isPresent()) {
-        var result = resultO.get();
+    // check if a camera result is present
+    if (resultO.isPresent()) {
+      var result = resultO.get();
 
-        // check for AprilTag targets
-        if (result.hasTargets()) {
-          // get the ID of the best matching AprilTag
-          int aprilTagId = result.getBestTarget().getFiducialId();
+      // check for AprilTag targets
+      if (result.hasTargets()) {
+        // get the ID of the best matching AprilTag
+        int aprilTagId = result.getBestTarget().getFiducialId();
 
-          // get the scoring pose
-          Pose2d scoringPose = ReefPoseConstants.getScoringPose(aprilTagId, align);
+        // get the scoring pose
+        Pose2d scoringPose = ReefPoseConstants.getScoringPose(aprilTagId, align);
 
-          // drive to the scoring pose if a mapping exists
-          if (!scoringPose.equals(null)) {
-            driveToPose(scoringPose);
-          }
+        // drive to the scoring pose if a mapping exists
+        if (!scoringPose.equals(null)) {
+            return defer(() -> driveToPose(scoringPose));
         }
       }
-    });
+    }
+    return Commands.none();
   }
 
   /**

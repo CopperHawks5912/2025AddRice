@@ -32,7 +32,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.Controller1Constants;
+import frc.robot.Constants.Controller2Constants;
 import frc.robot.Constants.DIOConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ReefPoseConstants;
@@ -57,9 +58,12 @@ import swervelib.simulation.SwerveModuleSimulation;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.simulation.drivesims.SwerveDriveSimulation;
 
+import frc.robot.commands.mechanisms.IntakeAlgaeCommand;
 import frc.robot.commands.mechanisms.IntakeCoralCommand;
 import frc.robot.commands.mechanisms.MoveArmCommand;
 import frc.robot.commands.mechanisms.MoveElevatorCommand;
+import frc.robot.commands.mechanisms.OutputAlgaeCommand;
+import frc.robot.commands.mechanisms.OutputCoralCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -71,7 +75,8 @@ public class RobotContainer
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   final CommandXboxController driverXbox = new CommandXboxController(0);
-  final CommandGenericHID operatorController = new CommandGenericHID(1);
+  final CommandGenericHID operatorController1 = new CommandGenericHID(1);
+  final CommandGenericHID operatorController2 = new CommandGenericHID(2);
   
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final ArmSubsystem armSubsystem = new ArmSubsystem();
@@ -96,7 +101,7 @@ public class RobotContainer
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                                 () -> driverXbox.getLeftY() * -1,
                                                                 () -> driverXbox.getLeftX() * -1)
-                                                            .withControllerRotationAxis(driverXbox::getRightX)
+                                                            .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
                                                             .deadband(SwerveConstants.Deadband)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
@@ -178,35 +183,67 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    if (RobotBase.isSimulation())
-    {
-      drivebase.setDefaultCommand(driveFieldOrientedDirectAngleKeyboard);
-    } else
-    {
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-    }
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
+
+    //red buttons
+    operatorController2.button(Controller2Constants.ButtonRed1)
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.HomePosition ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.HomePosition) ) );
+    operatorController2.button(Controller2Constants.ButtonRed2)
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl1Position) ) );
+    operatorController2.button(Controller2Constants.ButtonRed3)
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl2Position ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl2Position) ) );
+    operatorController2.button(Controller2Constants.ButtonRed4)
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl3Position ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl3Position) ) );
+    operatorController2.button(Controller2Constants.ButtonRed5)
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl4Position ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl4Position) ) );
     
-    operatorController.button(ControllerConstants.ButtonBlueUpper)
-          .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.MovingPosition ) );
-    operatorController.button(ControllerConstants.ButtonBlueLower)
-          .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.HomePosition ) );
-    operatorController.button(ControllerConstants.ButtonRedUpper3)
-          .whileTrue( new IntakeCoralCommand(rollerSubsystem  ) );
+    //blue buttons
+   operatorController1.button(Controller1Constants.ButtonBlue1)
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.AlgaeMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.HomePosition ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.ProcessorAlgaePosition) ) );
+    operatorController2.button(Controller2Constants.ButtonBlue2 )
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.AlgaeMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.LowerAlgaePosition ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.LowerAlgaePosition) ) );
+    operatorController2.button(Controller2Constants.ButtonBlue3 )
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.AlgaeMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.UpperAlgaePosition ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.UpperAlgaePosition) ) );
+    operatorController2.button(Controller2Constants.ButtonBlue4 )
+           .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.AlgaeMovingPosition )
+           .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.NetAlgaePosition ) )
+           .andThen( new MoveArmCommand(armSubsystem, ArmConstants.NetAlgaePosition) ) );
     
-          //operatorController.button(ControllerConstants.ButtonBlueUpper)
-    //      .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.MovingPosition )
-    //        .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position) 
-   //         .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl1Position) ) ) );
-    // operatorController.button(ControllerConstants.ButtonRedUpper1)
-    //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl2Position) 
-    //      .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl2Position) ) );
-    // operatorController.button(ControllerConstants.ButtonRedUpper2)
-    //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl3Position) 
-    //      .alongWith( new MoveArmCommand(armSubsystem, ArmConstants.Lvl3Position) ) );
-    // operatorController.button(ControllerConstants.ButtonRedUpper3)
-    //      .whileTrue(new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl4Position) 
-    //      .alongWith( new WaitCommand(.5).andThen ( new MoveArmCommand(armSubsystem, ArmConstants.Lvl4Position) )  ) );
+    //other buttons
+    operatorController1.button(Controller1Constants.ButtonYellow)
+           .whileTrue( new IntakeCoralCommand(rollerSubsystem ) );
+    operatorController1.button(Controller1Constants.ButtonGreen)
+           .whileTrue( new OutputCoralCommand(rollerSubsystem ) );
+    operatorController1.button(Controller1Constants.ButtonPlayer1)
+           .whileTrue( new IntakeAlgaeCommand(rollerSubsystem ) );
+    operatorController1.button(Controller1Constants.ButtonPlayer2)
+           .whileTrue( new OutputAlgaeCommand(rollerSubsystem ) );
     
+    driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+    driverXbox.back().onTrue(Commands.none());
+    driverXbox.a().onTrue( new MoveArmCommand(armSubsystem, ArmConstants.HomePosition ) );
+    driverXbox.b().onTrue(Commands.none());
+    driverXbox.x().onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition ) );
+    driverXbox.y().onTrue(Commands.none());
+    
+    driverXbox.rightBumper().onTrue(Commands.none());
+    driverXbox.leftBumper().onTrue(Commands.none());
   }
 
   private void configureAutos()
@@ -229,58 +266,7 @@ public class RobotContainer
     // m_autoPathChooser.addOption( "None", "N");
     
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
-    SmartDashboard.putData("Auto-Drive:", m_autoPathChooser );
-
- 
-
-
-    if (Robot.isSimulation())
-    {
-      Pose2d target = new Pose2d(new Translation2d(1, 4),
-                                 Rotation2d.fromDegrees(90));
-      //drivebase.getSwerveDrive().field.getObject("targetPose").setPose(target);
-      driveDirectAngleKeyboard.driveToPose(() -> target,
-                                           new ProfiledPIDController(5,
-                                                                     0,
-                                                                     0,
-                                                                     new Constraints(5, 2)),
-                                           new ProfiledPIDController(5,
-                                                                     0,
-                                                                     0,
-                                                                     new Constraints(Units.degreesToRadians(360),
-                                                                                     Units.degreesToRadians(180))
-                                           ));
-      driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-      driverXbox.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
-      driverXbox.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
-                                                     () -> driveDirectAngleKeyboard.driveToPoseEnabled(false))); 
-
-    }
-    if (DriverStation.isTest())
-    {
-      drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
-
-      driverXbox.x().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.y().whileTrue(drivebase.driveToDistanceCommand(1.0, 0.2));
-      driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.back().whileTrue(drivebase.centerModulesCommand());
-      driverXbox.x().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.LEFT));
-      driverXbox.y().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.CENTER));
-      driverXbox.b().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.RIGHT));
-      driverXbox.rightBumper().onTrue(Commands.none());
-    } else
-    {
-      driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-      driverXbox.x().onTrue(Commands.runOnce(drivebase::addFakeVisionReading));
-      driverXbox.start().whileTrue(Commands.none());
-      driverXbox.back().whileTrue(Commands.none());
-      driverXbox.x().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.LEFT));
-      driverXbox.y().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.CENTER));
-      driverXbox.b().whileTrue(drivebase.driveToReefPosition(ReefPoseConstants.ScoringAlignment.RIGHT));
-      driverXbox.leftBumper().whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-      driverXbox.rightBumper().onTrue(Commands.none());
-    }
-
+    SmartDashboard.putData("Auto-Drive:", m_autoPathChooser ); 
   }
 
   /**
