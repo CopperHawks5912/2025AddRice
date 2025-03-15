@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.mechanisms;
+package frc.robot.commands.roller;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.mechanisms.RollerSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class IntakeCoralCommand extends Command {
+public class OutputCoralCommand extends Command {
   private final RollerSubsystem m_rollerSubsystem;
 
   /**
@@ -16,7 +16,7 @@ public class IntakeCoralCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeCoralCommand(RollerSubsystem rollerSubsystem) {
+  public OutputCoralCommand(RollerSubsystem rollerSubsystem) {
     m_rollerSubsystem = rollerSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(rollerSubsystem);
@@ -25,8 +25,7 @@ public class IntakeCoralCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if( !m_rollerSubsystem.isBeamBreakBroke() )
-      m_rollerSubsystem.intakeCoral();
+    m_rollerSubsystem.outputCoral();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,6 +43,6 @@ public class IntakeCoralCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {  
-    return m_rollerSubsystem.isBeamBreakBroke();
+    return false;
   }
 }

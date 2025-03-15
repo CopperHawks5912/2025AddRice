@@ -58,6 +58,9 @@ public class RollerSubsystem extends SubsystemBase {
   public void outputAlgae(){
     rollerMotor.set(RollerConstants.OutputAlgaeSpeed);
   } 
+  public void holdAlgae(){
+    rollerMotor.set(RollerConstants.HoldAlgaeSpeed);
+  } 
   public void stopRoller(){
     rollerMotor.set(0);
   }

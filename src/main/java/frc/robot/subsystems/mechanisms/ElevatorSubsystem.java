@@ -110,4 +110,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftElevatorMotor.set(0);
   }
 
+  public void setZeroPoint( ){
+    zeroPoint = leftElevatorMotor.getPosition().getValueAsDouble();;
+  }
+
 }

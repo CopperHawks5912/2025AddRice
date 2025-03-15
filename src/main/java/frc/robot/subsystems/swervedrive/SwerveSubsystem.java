@@ -46,6 +46,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
+import swervelib.SwerveInputStream;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -55,7 +56,8 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase
 {
-
+  private double CurrentScaleTranslation = SwerveConstants.DefaultScaleTranslation;
+  private double CurrentScaleRotation = SwerveConstants.DefaultScaleRotation;
   /**
    * Swerve drive object.
    */
@@ -767,5 +769,21 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveDrive getSwerveDrive()
   {
     return swerveDrive;
+  }
+
+  public void setRobotSpeed( SwerveInputStream inputStream, double translationScale, double rotationScale )
+  {
+    CurrentScaleTranslation = translationScale;
+    CurrentScaleRotation = rotationScale;
+    inputStream.scaleTranslation( translationScale );
+    inputStream.scaleRotation( rotationScale ); 
+  }
+  public double GetCurrentScaleTranslation()
+  {
+    return CurrentScaleTranslation;
+  }
+  public double GetCurrentScaleRotation()
+  {
+    return CurrentScaleRotation;
   }
 }

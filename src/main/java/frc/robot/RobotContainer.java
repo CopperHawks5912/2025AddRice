@@ -20,21 +20,23 @@ import frc.robot.Constants.Controller2Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.commands.RumbleCommand;
+import frc.robot.commands.arm.MoveArmCommand;
+import frc.robot.commands.elevator.MoveElevatorCommand;
+import frc.robot.commands.roller.HoldAlgaeCommand;
+import frc.robot.commands.roller.IntakeAlgaeCommand;
+import frc.robot.commands.roller.IntakeCoralCommand;
+import frc.robot.commands.roller.OutputAlgaeCommand;
+import frc.robot.commands.roller.OutputCoralCommand;
 import frc.robot.subsystems.mechanisms.ArmSubsystem;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 import frc.robot.subsystems.mechanisms.RollerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
-
 import com.pathplanner.lib.auto.NamedCommands;
 import java.io.File;
 
-import frc.robot.commands.mechanisms.IntakeAlgaeCommand;
-import frc.robot.commands.mechanisms.IntakeCoralCommand;
-import frc.robot.commands.mechanisms.MoveArmCommand;
-import frc.robot.commands.mechanisms.MoveElevatorCommand;
-import frc.robot.commands.mechanisms.OutputAlgaeCommand;
-import frc.robot.commands.mechanisms.OutputCoralCommand;
+import frc.robot.commands.swerve.ReduceSwerveTranslationCommand;
+import frc.robot.commands.swerve.SetRobotSpeedCommand;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -74,7 +76,7 @@ public class RobotContainer
                                                                 () -> driverXbox.getLeftX() * -1)
                                                             .withControllerRotationAxis(() -> driverXbox.getRightX() * -1)
                                                             .deadband(SwerveConstants.Deadband)
-                                                            .scaleTranslation(0.8)
+                                                            .scaleTranslation(SwerveConstants.DefaultScaleTranslation)
                                                             .allianceRelativeControl(true);
 
 
@@ -108,42 +110,52 @@ public class RobotContainer
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity); // Overrides drive command above!
 
     //red buttons
+    
     operatorController2.button(Controller2Constants.ButtonRed1)
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.DefaultScaleTranslation, SwerveConstants.DefaultScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.HomePosition ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.HomePosition) ) );
     operatorController2.button(Controller2Constants.ButtonRed2)
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.L1ScaleTranslation, SwerveConstants.L1ScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl1Position ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl1Position) ) );
     operatorController2.button(Controller2Constants.ButtonRed3)
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.L2ScaleTranslation, SwerveConstants.L2ScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl2Position ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl2Position) ) );
     operatorController2.button(Controller2Constants.ButtonRed4)
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.L3ScaleTranslation, SwerveConstants.L3ScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl3Position ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl3Position) ) );
     operatorController2.button(Controller2Constants.ButtonRed5)
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.L4ScaleTranslation, SwerveConstants.L4ScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl4Position ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl4Position) ) );
     
     //blue buttons
    operatorController1.button(Controller1Constants.ButtonBlue1)
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.AlgaeMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.DefaultScaleTranslation, SwerveConstants.DefaultScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.HomePosition ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.ProcessorAlgaePosition) ) );
     operatorController2.button(Controller2Constants.ButtonBlue2 )
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.AlgaeMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.L2ScaleTranslation, SwerveConstants.L2ScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.LowerAlgaePosition ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.LowerAlgaePosition) ) );
     operatorController2.button(Controller2Constants.ButtonBlue3 )
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.AlgaeMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.L3ScaleTranslation, SwerveConstants.L3ScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.UpperAlgaePosition ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.UpperAlgaePosition) ) );
     operatorController2.button(Controller2Constants.ButtonBlue4 )
            .onTrue( new MoveArmCommand(armSubsystem, ArmConstants.AlgaeMovingPosition )
+           .andThen( new SetRobotSpeedCommand( drivebase, driveAngularVelocity, SwerveConstants.L4ScaleTranslation, SwerveConstants.L4ScaleRotation) )
            .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.NetAlgaePosition ) )
            .andThen( new MoveArmCommand(armSubsystem, ArmConstants.NetAlgaePosition) ) );
     
@@ -156,6 +168,8 @@ public class RobotContainer
            .whileTrue( new IntakeAlgaeCommand(rollerSubsystem ) );
     operatorController1.button(Controller1Constants.ButtonPlayer2)
            .whileTrue( new OutputAlgaeCommand(rollerSubsystem ) );
+    operatorController1.button(Controller1Constants.ButtonBlack2)
+           .whileTrue( new HoldAlgaeCommand(rollerSubsystem ) );
     
     driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
     driverXbox.back().onTrue(Commands.none());
@@ -166,6 +180,8 @@ public class RobotContainer
     
     driverXbox.rightBumper().onTrue(Commands.none());
     driverXbox.leftBumper().onTrue(Commands.none());
+
+    driverXbox.rightTrigger().whileTrue( new ReduceSwerveTranslationCommand( drivebase, driveAngularVelocity ) );
   }
 
   private void configureAutos()

@@ -2,31 +2,32 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.mechanisms;
+package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.subsystems.mechanisms.ArmSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class MoveElevatorCommand extends Command {
-  private final ElevatorSubsystem m_elevatorSubsystem;
-  private final double m_ElevatorPosition;
+public class MoveArmCommand extends Command {
+  private final ArmSubsystem m_armSubsystem;
+  private final double m_armPosition;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public MoveElevatorCommand(ElevatorSubsystem elevatorSubsystem, double elevatorPosition ) {
-    m_elevatorSubsystem = elevatorSubsystem;
-    m_ElevatorPosition = elevatorPosition;
+  public MoveArmCommand(ArmSubsystem armSubsystem, double armPosition ) {
+    m_armSubsystem = armSubsystem;
+    m_armPosition = armPosition;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevatorSubsystem);
+    addRequirements(armSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_elevatorSubsystem.setElevatorPosition(m_ElevatorPosition);
+    m_armSubsystem.setArmPosition(m_armPosition);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -43,6 +44,6 @@ public class MoveElevatorCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {  
-    return m_elevatorSubsystem.isElevatorAtPose();
+    return m_armSubsystem.isArmAtPose();
   }
 }

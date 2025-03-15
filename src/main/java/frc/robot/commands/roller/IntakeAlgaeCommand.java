@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.mechanisms;
+package frc.robot.commands.roller;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.mechanisms.RollerSubsystem;
 
 /** An example command that uses an example subsystem. */
-public class OutputAlgaeCommand extends Command {
+public class IntakeAlgaeCommand extends Command {
   private final RollerSubsystem m_rollerSubsystem;
 
   /**
@@ -16,7 +16,7 @@ public class OutputAlgaeCommand extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public OutputAlgaeCommand(RollerSubsystem rollerSubsystem) {
+  public IntakeAlgaeCommand(RollerSubsystem rollerSubsystem) {
     m_rollerSubsystem = rollerSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(rollerSubsystem);
@@ -25,7 +25,7 @@ public class OutputAlgaeCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_rollerSubsystem.outputAlgae();
+    m_rollerSubsystem.intakeAlgae();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
