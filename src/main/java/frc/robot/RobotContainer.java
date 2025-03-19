@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -19,7 +20,7 @@ import frc.robot.Constants.Controller1Constants;
 import frc.robot.Constants.Controller2Constants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.commands.RumbleCommand;
+//import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.arm.MoveArmCommand;
 import frc.robot.commands.elevator.MoveElevatorCommand;
 import frc.robot.commands.roller.HoldAlgaeCommand;
@@ -27,12 +28,12 @@ import frc.robot.commands.roller.IntakeAlgaeCommand;
 import frc.robot.commands.roller.IntakeCoralCommand;
 import frc.robot.commands.roller.OutputAlgaeCommand;
 import frc.robot.commands.roller.OutputCoralCommand;
+import frc.robot.commands.roller.OutputCoralWithSensorCommand;
 import frc.robot.subsystems.mechanisms.ArmSubsystem;
 import frc.robot.subsystems.mechanisms.ElevatorSubsystem;
 import frc.robot.subsystems.mechanisms.RollerSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
-import com.pathplanner.lib.auto.NamedCommands;
 import java.io.File;
 
 import frc.robot.commands.swerve.ReduceSwerveTranslationCommand;
@@ -62,10 +63,12 @@ public class RobotContainer
 //  private final AddressableLEDSubsystem m_addressableLEDSubsystem = new AddressableLEDSubsystem();
 //  Trigger intakeTrigger = new Trigger(m_intakeNoteBeamBreakSensor::get );
     
-  private final SendableChooser<String> m_autoDelayChooser = new SendableChooser<>();
+  private final SendableChooser<Integer> m_autoDelayChooser = new SendableChooser<>();
   private final SendableChooser<String> m_autoPathChooser = new SendableChooser<>();
-  private String m_selectedDelayAuto;
+  private final SendableChooser<Double> m_autoLevelChooser = new SendableChooser<>();
+  private Integer m_selectedDelayAuto;
   private String m_selectedPathAuto;
+  private Double m_selectedLevelAuto;
 
 
   /**
@@ -186,25 +189,21 @@ public class RobotContainer
 
   private void configureAutos()
   {
-    //NamedCommands.registerCommand ("DeployArm", new ExtendArmCommand(m_IntakeArmSubsystem));
-
-    // m_autoDelayChooser.setDefaultOption( "0 Sec Delay", "0");
-    // m_autoDelayChooser.addOption( "1 Sec Delay", "1");
-    // m_autoDelayChooser.addOption( "2 Sec Delay", "2");
-    // m_autoDelayChooser.addOption( "3 Sec Delay", "3");
-    // m_autoDelayChooser.addOption( "5 Sec Delay", "5");
+    m_autoDelayChooser.setDefaultOption( "0 Sec Delay", 0);
+    m_autoDelayChooser.addOption( "1 Sec Delay", 1);
+    m_autoDelayChooser.addOption( "2 Sec Delay", 2);
+    m_autoDelayChooser.addOption( "3 Sec Delay", 3);
+    m_autoDelayChooser.addOption( "5 Sec Delay", 5);
     
-    // m_autoPathChooser.setDefaultOption( "Any Pre-loaded Only", "P");
-    // m_autoPathChooser.addOption( "Center M", "C-M");
-    // m_autoPathChooser.addOption( "Center M-A", "C-MA");
-    // m_autoPathChooser.addOption( "Center M-S", "C-MS");
-    // m_autoPathChooser.addOption( "AmpSide A", "A-A");
-    // m_autoPathChooser.addOption( "StageSide Move", "S-Mv");
-    // m_autoPathChooser.addOption( "StageSide Disruptor", "S-Ds");
-    // m_autoPathChooser.addOption( "None", "N");
+    m_autoPathChooser.setDefaultOption( "Center10R", "Center10R");
+    
+    m_autoLevelChooser.setDefaultOption( "L4", ElevatorConstants.Lvl4Position);
+    m_autoLevelChooser.addOption( "L3", ElevatorConstants.Lvl3Position);
+    m_autoLevelChooser.addOption( "L2", ElevatorConstants.Lvl2Position);
     
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
     SmartDashboard.putData("Auto-Drive:", m_autoPathChooser ); 
+    SmartDashboard.putData("Auto-Level:", m_autoLevelChooser ); 
   }
 
   /**
@@ -214,71 +213,52 @@ public class RobotContainer
    */
   public Command getAutonomousCommand()
   {
+    Command delayCommand = null;
+       
+    double armPostionAuto = ArmConstants.Lvl2Position;
+
+    m_selectedDelayAuto = m_autoDelayChooser.getSelected();
+    m_selectedPathAuto = m_autoPathChooser.getSelected();
+    m_selectedLevelAuto = m_autoLevelChooser.getSelected();
+
      
+    if( m_selectedLevelAuto == ElevatorConstants.Lvl2Position )
+       armPostionAuto = ArmConstants.Lvl2Position;
+    else if( m_selectedLevelAuto == ElevatorConstants.Lvl3Position )
+       armPostionAuto = ArmConstants.Lvl3Position;
+    else if( m_selectedLevelAuto == ElevatorConstants.Lvl4Position )
+       armPostionAuto = ArmConstants.Lvl4Position;
+
+    NamedCommands.registerCommand("AutoElevatorCommand",  
+       new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+       .andThen( new MoveElevatorCommand(elevatorSubsystem, m_selectedLevelAuto ) )
+       .andThen( new MoveArmCommand(armSubsystem, armPostionAuto ) ) );
+    NamedCommands.registerCommand("AutoElevatorToHomeCommand",  
+       new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
+       .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.HomePosition ) )
+       .andThen( new MoveArmCommand(armSubsystem, ArmConstants.HomePosition ) ) );
+
+    NamedCommands.registerCommand("AutoOutputCoralCommand", new OutputCoralWithSensorCommand(rollerSubsystem ) );    
     
-    // Command delayCommand = null;
-    // Command pathCommand = null;
-    // m_selectedDelayAuto = m_autoDelayChooser.getSelected();
-    // m_selectedPathAuto = m_autoPathChooser.getSelected();
+    Command pathCommand = drivebase.getAutonomousCommand("Center10R"); ;
+    
+    if( m_selectedDelayAuto > 0 )
+      delayCommand = new WaitCommand(m_selectedDelayAuto); 
+    
+    switch( m_selectedPathAuto )
+    {  
+      case "Center10R":
+         pathCommand = drivebase.getAutonomousCommand("Center10R"); ;
+         break;
+    }
 
-    // switch( m_selectedDelayAuto )
-    // {
-      // case "1":
-      //   delayCommand = new WaitCommand(1);
-      //   break;
-      // case "2":
-      //   delayCommand = new WaitCommand(2);
-      //   break;
-      // case "3":
-      //   delayCommand = new WaitCommand(3);
-      //   break; 
-      // case "4":
-      //   delayCommand = new WaitCommand(4);
-      //   break;   
-      // case "5":
-      //   delayCommand = new WaitCommand(5);
-      //   break;   
-      // case "10":
-      //   delayCommand = new WaitCommand(10);
-      //   break;   
-      
-    // }
-    // switch( m_selectedPathAuto )
-    // {  
-      // case "P":
-      //   pathCommand = new ShootToSpeakerWithDelayCommand(m_shooterSubsystem, m_IntakeGrabberSubsystem, AutoConstants.ShooterDelaySeconds );
-      //   break;
-      // case "C-M":
-      //   pathCommand =  drivebase.getAutonomousCommand("Center-Note2");
-      //   break;
-      // case "C-MA":
-      //   pathCommand =  drivebase.getAutonomousCommand("Center-Note2")
-      //                             .andThen(drivebase.getAutonomousCommand("Center-Note1"));
-      //   break;
-      // case "C-MS":
-      //   pathCommand =  drivebase.getAutonomousCommand("Center-Note2")
-      //                             .andThen(drivebase.getAutonomousCommand("Center-Note3"));
-      //   break;
-      // case "C-A":
-      //   pathCommand =  drivebase.getAutonomousCommand("Center-Note1");
-      //   break;
-      // case "A-A":
-      //   pathCommand =  drivebase.getAutonomousCommand("Left-Note1");
-      //   break;
-      // case "S-Mv":
-      //   pathCommand =  drivebase.getAutonomousCommand("Right-Movement");
-      //   break;
-      // case "S-Ds":
-      //   pathCommand =  drivebase.getAutonomousCommand("Right-Disruptor");
-      //   break;
-    //}
-
-    // if( delayCommand != null && pathCommand != null)
-    //   return delayCommand.andThen(pathCommand);
-    // else if( pathCommand != null )
-    //   return pathCommand;
-    // else
-       return drivebase.getAutonomousCommand("Test");
+   
+    if( delayCommand != null && pathCommand != null)
+       return delayCommand.andThen(pathCommand);
+     else if( pathCommand != null )
+       return pathCommand;
+    else 
+       return Commands.none();
   }
   public void setDriveMode()
   {

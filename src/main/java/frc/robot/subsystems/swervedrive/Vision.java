@@ -22,6 +22,7 @@ import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import java.awt.Desktop;
 import java.util.ArrayList;
@@ -282,9 +283,9 @@ public class Vision
     /**
      * Left Camera
      */
-    FRONT_CAM("OV9281_Camera1",
-             new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
-             new Translation3d(Units.inchesToMeters(-4.5),
+    FRONT_CAM("OV9281_Camera2",
+             new Rotation3d(0, Math.toRadians(23), Math.toRadians(0)),
+             new Translation3d(Units.inchesToMeters(9.75),
                                Units.inchesToMeters(0),
                                Units.inchesToMeters(6.75)),
              VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1))
@@ -467,9 +468,9 @@ public class Vision
       {
         mostRecentTimestamp = Math.max(mostRecentTimestamp, result.getTimestampSeconds());
       }
-      if ((resultsList.isEmpty() || (currentTimestamp - mostRecentTimestamp >= debounceTime)) &&
-          (currentTimestamp - lastReadTimestamp) >= debounceTime)
-      {
+      // if ((resultsList.isEmpty() || (currentTimestamp - mostRecentTimestamp >= debounceTime)) &&
+      //     (currentTimestamp - lastReadTimestamp) >= debounceTime)
+      // {
         resultsList = Robot.isReal() ? camera.getAllUnreadResults() : cameraSim.getCamera().getAllUnreadResults();
         lastReadTimestamp = currentTimestamp;
         resultsList.sort((PhotonPipelineResult a, PhotonPipelineResult b) -> {
@@ -477,9 +478,10 @@ public class Vision
         });
         if (!resultsList.isEmpty())
         {
+          SmartDashboard.putString("Camera Read", "Yes");
           updateEstimatedGlobalPose();
         }
-      }
+      //}
     }
 
     /**
@@ -492,6 +494,8 @@ public class Vision
      * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets used for
      * estimation.
      */
+    private Integer county = 0;
+
     private void updateEstimatedGlobalPose()
     {
       Optional<EstimatedRobotPose> visionEst = Optional.empty();

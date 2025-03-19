@@ -111,7 +111,16 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
-    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::oneEightyGyro));
+    var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent())
+    {
+      if( alliance.get() == DriverStation.Alliance.Red ) 
+      {
+        RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyro));
+      }
+      else  
+        RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::oneEightyGyro) ) ;
+    }
   }
 
   /**
@@ -192,7 +201,7 @@ public class SwerveSubsystem extends SubsystemBase
           // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
           new PPHolonomicDriveController(
               // PPHolonomicController is the built in path following controller for holonomic drive trains
-              new PIDConstants(5.0, 0.0, 0.0),
+              new PIDConstants(8.0, 0.0, 0.0),
               // Translation PID constants
               new PIDConstants(5.0, 0.0, 0.0)
               // Rotation PID constants

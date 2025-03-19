@@ -9,12 +9,6 @@
           "data": {
             "pathName": "CenterStartToReef10R"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Reef1ToHP1"
-          }
         }
       ]
     }
