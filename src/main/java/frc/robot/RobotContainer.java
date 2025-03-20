@@ -174,7 +174,7 @@ public class RobotContainer
     operatorController1.button(Controller1Constants.ButtonBlack2)
            .whileTrue( new HoldAlgaeCommand(rollerSubsystem ) );
     
-    driverXbox.start().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+    driverXbox.start().onTrue((Commands.runOnce(drivebase::resetGyro)));
     driverXbox.back().onTrue(Commands.none());
     driverXbox.a().onTrue( new MoveArmCommand(armSubsystem, ArmConstants.HomePosition ) );
     driverXbox.b().onTrue(Commands.none());
@@ -196,6 +196,7 @@ public class RobotContainer
     m_autoDelayChooser.addOption( "5 Sec Delay", 5);
     
     m_autoPathChooser.setDefaultOption( "Center10R", "Center10R");
+    m_autoPathChooser.setDefaultOption( "OffTheLine", "OffTheLine");
     
     m_autoLevelChooser.setDefaultOption( "L4", ElevatorConstants.Lvl4Position);
     m_autoLevelChooser.addOption( "L3", ElevatorConstants.Lvl3Position);
@@ -240,7 +241,7 @@ public class RobotContainer
 
     NamedCommands.registerCommand("AutoOutputCoralCommand", new OutputCoralWithSensorCommand(rollerSubsystem ) );    
     
-    Command pathCommand = drivebase.getAutonomousCommand("Center10R"); ;
+    Command pathCommand;
     
     if( m_selectedDelayAuto > 0 )
       delayCommand = new WaitCommand(m_selectedDelayAuto); 
@@ -250,6 +251,10 @@ public class RobotContainer
       case "Center10R":
          pathCommand = drivebase.getAutonomousCommand("Center10R"); ;
          break;
+       default:
+         pathCommand = drivebase.getAutonomousCommand("OffTheLine"); ;
+         break;     
+
     }
 
    

@@ -111,16 +111,7 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
-    var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent())
-    {
-      if( alliance.get() == DriverStation.Alliance.Red ) 
-      {
-        RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyro));
-      }
-      else  
-        RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::oneEightyGyro) ) ;
-    }
+    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::resetGyro));
   }
 
   /**
@@ -613,6 +604,16 @@ public class SwerveSubsystem extends SubsystemBase
     resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
   }
 
+  public void resetGyro()
+  {
+    var alliance = DriverStation.getAlliance();
+    if( alliance.get() == DriverStation.Alliance.Red ) 
+    {
+      zeroGyro();
+    }
+    else  
+      oneEightyGyro();
+    }
   /**
    * Checks if the alliance is red, defaults to false if alliance isn't available.
    *
