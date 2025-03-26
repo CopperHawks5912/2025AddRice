@@ -196,7 +196,11 @@ public class RobotContainer
     m_autoDelayChooser.addOption( "5 Sec Delay", 5);
     
     m_autoPathChooser.setDefaultOption( "Center10R", "Center10R");
-    m_autoPathChooser.setDefaultOption( "OffTheLine", "OffTheLine");
+    m_autoPathChooser.addOption( "Center10R-StationRobotRight", "Center10RToStationR");
+    m_autoPathChooser.addOption( "Center10R-StationRobotLeft", "Center10RToStationL");
+    //m_autoPathChooser.addOption( "Center10R-StationRobotRight-Reef", "Center10RToStationRTo6");
+    //m_autoPathChooser.addOption( "Center10R-StationRobotLeft-Reef", "Center10RToStationLTo8");
+    m_autoPathChooser.addOption( "OffTheLine", "OffTheLine");
     
     m_autoLevelChooser.setDefaultOption( "L4", ElevatorConstants.Lvl4Position);
     m_autoLevelChooser.addOption( "L3", ElevatorConstants.Lvl3Position);

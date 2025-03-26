@@ -5,11 +5,13 @@
       "/SmartDashboard/Alerts": "Alerts",
       "/SmartDashboard/Auto-Delay:": "String Chooser",
       "/SmartDashboard/Auto-Drive:": "String Chooser",
+      "/SmartDashboard/Auto-Level:": "String Chooser",
       "/SmartDashboard/Encoders": "Alerts",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/IMU": "Alerts",
       "/SmartDashboard/JSON": "Alerts",
       "/SmartDashboard/Motors": "Alerts",
+      "/SmartDashboard/PathPlanner": "Alerts",
       "/SmartDashboard/Swerve Drive": "Alerts"
     },
     "windows": {
