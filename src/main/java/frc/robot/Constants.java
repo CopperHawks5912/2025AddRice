@@ -207,13 +207,12 @@ public final class Constants
     public static double Lvl1Position = 50.0;
     public static double Lvl2Position = 215.0;//255.0;
     public static double Lvl3Position = 550.0;//605.0;
-    public static double Lvl4Position = 1110.0;//1150.0;
+    public static double Lvl4Position = 1120.0;//1150.0;
     public static double MaxHeightPosition = 1150.0;
     
     public static double LowerAlgaePosition = 330.0;
     public static double UpperAlgaePosition = 645.0;
     public static double NetAlgaePosition = 1080.0;
-    
 
     public static double ErrorThreshold = 30.0;
 

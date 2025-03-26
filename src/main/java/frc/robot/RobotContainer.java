@@ -65,7 +65,6 @@ public class RobotContainer
     
   private final SendableChooser<Integer> m_autoDelayChooser = new SendableChooser<>();
   private final SendableChooser<String> m_autoPathChooser = new SendableChooser<>();
-  private final SendableChooser<Double> m_autoLevelChooser = new SendableChooser<>();
   private Integer m_selectedDelayAuto;
   private String m_selectedPathAuto;
   private Double m_selectedLevelAuto;
@@ -202,13 +201,8 @@ public class RobotContainer
     //m_autoPathChooser.addOption( "Center10R-StationRobotLeft-Reef", "Center10RToStationLTo8");
     m_autoPathChooser.addOption( "OffTheLine", "OffTheLine");
     
-    m_autoLevelChooser.setDefaultOption( "L4", ElevatorConstants.Lvl4Position);
-    m_autoLevelChooser.addOption( "L3", ElevatorConstants.Lvl3Position);
-    m_autoLevelChooser.addOption( "L2", ElevatorConstants.Lvl2Position);
-    
     SmartDashboard.putData("Auto-Delay:", m_autoDelayChooser );
     SmartDashboard.putData("Auto-Drive:", m_autoPathChooser ); 
-    SmartDashboard.putData("Auto-Level:", m_autoLevelChooser ); 
   }
 
   /**
@@ -224,20 +218,12 @@ public class RobotContainer
 
     m_selectedDelayAuto = m_autoDelayChooser.getSelected();
     m_selectedPathAuto = m_autoPathChooser.getSelected();
-    m_selectedLevelAuto = m_autoLevelChooser.getSelected();
-
+    
      
-    if( m_selectedLevelAuto == ElevatorConstants.Lvl2Position )
-       armPostionAuto = ArmConstants.Lvl2Position;
-    else if( m_selectedLevelAuto == ElevatorConstants.Lvl3Position )
-       armPostionAuto = ArmConstants.Lvl3Position;
-    else if( m_selectedLevelAuto == ElevatorConstants.Lvl4Position )
-       armPostionAuto = ArmConstants.Lvl4Position;
-
-    NamedCommands.registerCommand("AutoElevatorCommand",  
+   NamedCommands.registerCommand("AutoElevatorCommand",  
        new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
-       .andThen( new MoveElevatorCommand(elevatorSubsystem, m_selectedLevelAuto ) )
-       .andThen( new MoveArmCommand(armSubsystem, armPostionAuto ) ) );
+       .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.Lvl4Position ) )
+       .andThen( new MoveArmCommand(armSubsystem, ArmConstants.Lvl4Position ) ) );
     NamedCommands.registerCommand("AutoElevatorToHomeCommand",  
        new MoveArmCommand(armSubsystem, ArmConstants.CoralMovingPosition )
        .andThen( new MoveElevatorCommand(elevatorSubsystem, ElevatorConstants.HomePosition ) )
