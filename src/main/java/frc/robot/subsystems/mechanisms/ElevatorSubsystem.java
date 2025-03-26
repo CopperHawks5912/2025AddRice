@@ -67,13 +67,16 @@ public class ElevatorSubsystem extends SubsystemBase {
     
     rightElevatorMotor.setControl(new Follower(CANConstants.LeftElevatorID, false));
     zeroPoint = leftElevatorMotor.getPosition().getValueAsDouble();
+
+    leftElevatorMotor.setControl(new Follower(CANConstants.RightElevatorID, false));
+    zeroPoint = rightElevatorMotor.getPosition().getValueAsDouble();
   }
  
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator Pos", leftElevatorMotor.getPosition().getValueAsDouble() );
+    SmartDashboard.putNumber("Elevator Pos", rightElevatorMotor.getPosition().getValueAsDouble() );
     SmartDashboard.putNumber("Elevator Target",targetPosition );
     isElevatorAtPose();
   }
@@ -92,26 +95,26 @@ public class ElevatorSubsystem extends SubsystemBase {
    public void setElevatorPosition(double position){
     targetPosition = position + zeroPoint;
     MotionMagicVoltage request = new MotionMagicVoltage(targetPosition);
-    leftElevatorMotor.setControl(request);
+    rightElevatorMotor.setControl(request);
   }
 
 
   public boolean isElevatorAtPose() {
-    boolean atPose = Math.abs( leftElevatorMotor.getPosition().getValueAsDouble() - targetPosition ) < ElevatorConstants.ErrorThreshold; 
-    SmartDashboard.putNumber("Elevator Error",  leftElevatorMotor.getClosedLoopError().getValueAsDouble() );
+    boolean atPose = Math.abs( rightElevatorMotor.getPosition().getValueAsDouble() - targetPosition ) < ElevatorConstants.ErrorThreshold; 
+    SmartDashboard.putNumber("Elevator Error",  rightElevatorMotor.getClosedLoopError().getValueAsDouble() );
     SmartDashboard.putBoolean("Elevator At Pose", atPose );
     return atPose;
     
   }
   public double getPIDTarget() {
-    return leftElevatorMotor.getClosedLoopReference().getValueAsDouble();
+    return rightElevatorMotor.getClosedLoopReference().getValueAsDouble();
   }
   public void stopElevator(){
-    leftElevatorMotor.set(0);
+    rightElevatorMotor.set(0);
   }
 
   public void setZeroPoint( ){
-    zeroPoint = leftElevatorMotor.getPosition().getValueAsDouble();;
+    zeroPoint = rightElevatorMotor.getPosition().getValueAsDouble();;
   }
 
 }

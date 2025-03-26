@@ -494,8 +494,6 @@ public class Vision
      * @return An {@link EstimatedRobotPose} with an estimated pose, estimate timestamp, and targets used for
      * estimation.
      */
-    private Integer county = 0;
-
     private void updateEstimatedGlobalPose()
     {
       Optional<EstimatedRobotPose> visionEst = Optional.empty();
