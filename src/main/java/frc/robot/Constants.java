@@ -23,7 +23,7 @@ public final class Constants
 {
   public static class SwerveConstants
   {
-    public static final double MaxSpeed  = Units.feetToMeters( 10 ); //14.5);
+    public static final double MaxSpeed  = Units.feetToMeters( 13 ); //14.5);
     public static final double WheelLockTime = 10; // seconds
     public static final double RobotMass = (134) * 0.453592; // 32lbs * kg per pound
     public static final Matter Chassis    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), RobotMass);
@@ -35,10 +35,10 @@ public final class Constants
     public static final double TurnConstant   = 6;
 
     public static final double DefaultScaleTranslation = 0.8;
-    public static final double L1ScaleTranslation = 0.6;
-    public static final double L2ScaleTranslation = 0.5;
-    public static final double L3ScaleTranslation = 0.4;
-    public static final double L4ScaleTranslation = 0.3;
+    public static final double L1ScaleTranslation = 0.8;
+    public static final double L2ScaleTranslation = 0.8;
+    public static final double L3ScaleTranslation = 0.5;
+    public static final double L4ScaleTranslation = 0.4;
     public static final double SlowModeScaleTranlastion = 0.3;
 
     public static final double DefaultScaleRotation = 0.8;
@@ -205,17 +205,17 @@ public final class Constants
   {
     public static double HomePosition = 0.0;
     public static double Lvl1Position = 50.0;
-    public static double Lvl2Position = 255.0;
-    public static double Lvl3Position = 605.0;
-    public static double Lvl4Position = 1150.0;
+    public static double Lvl2Position = 215.0;//255.0;
+    public static double Lvl3Position = 550.0;//605.0;
+    public static double Lvl4Position = 1110.0;//1150.0;
     public static double MaxHeightPosition = 1150.0;
     
     public static double LowerAlgaePosition = 330.0;
-    public static double UpperAlgaePosition = 675.0;
-    public static double NetAlgaePosition = 1120.0;
+    public static double UpperAlgaePosition = 645.0;
+    public static double NetAlgaePosition = 1080.0;
     
 
-    public static double ErrorThreshold = 5.0;
+    public static double ErrorThreshold = 30.0;
 
     public static double MMVelocity = 1200;
     public static double MMAcceleration = 3000;
@@ -233,7 +233,7 @@ public final class Constants
     public static double Lvl1Position = 15.0;
     public static double Lvl2Position = 3.0;
     public static double Lvl3Position = 3.0;
-    public static double Lvl4Position = 5.5;
+    public static double Lvl4Position = 5.7;
     public static double ProcessorAlgaePosition = 19.001465;
     public static double LowerAlgaePosition = 18.001465;
     public static double UpperAlgaePosition = 18.001465;
