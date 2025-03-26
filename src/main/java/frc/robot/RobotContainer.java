@@ -244,6 +244,7 @@ public class RobotContainer
        .andThen( new MoveArmCommand(armSubsystem, ArmConstants.HomePosition ) ) );
 
     NamedCommands.registerCommand("AutoOutputCoralCommand", new OutputCoralWithSensorCommand(rollerSubsystem ) );    
+    NamedCommands.registerCommand("AutoIntakeCoralCommand", new IntakeCoralCommand(rollerSubsystem ) );    
     
     Command pathCommand;
     
@@ -253,14 +254,24 @@ public class RobotContainer
     switch( m_selectedPathAuto )
     {  
       case "Center10R":
-         pathCommand = drivebase.getAutonomousCommand("Center10R"); ;
-         break;
-       default:
-         pathCommand = drivebase.getAutonomousCommand("OffTheLine"); ;
-         break;     
-
+        pathCommand = drivebase.getAutonomousCommand("Center10R"); ;
+        break;
+      case "Center10RToStationR":
+        pathCommand = drivebase.getAutonomousCommand("Center10RToStationR"); ;
+        break;
+      case "Center10RToStationL":
+        pathCommand = drivebase.getAutonomousCommand("Center10RToStationL"); ;
+        break;
+      case "Center10RToStationRTo6":
+        pathCommand = drivebase.getAutonomousCommand("Center10RToStationRTo6"); ;
+        break;
+      case "Center10RToStationLTo8":
+        pathCommand = drivebase.getAutonomousCommand("Center10RToStationLTo8"); ;
+        break;
+      default:
+        pathCommand = drivebase.getAutonomousCommand("OffTheLine"); ;
+        break;    
     }
-
    
     if( delayCommand != null && pathCommand != null)
        return delayCommand.andThen(pathCommand);
