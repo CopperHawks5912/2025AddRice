@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.502861201298701,
-        "y": 7.251521915584415
+        "x": 1.5823770491803275,
+        "y": 7.195747950819672
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.128753246753246,
-        "y": 6.23241396103896
+        "x": 2.2082690946348724,
+        "y": 6.176639996274217
       },
       "isLocked": false,
       "linkedName": "StationR"
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -56.30993247402029
+    "rotation": -56.3099324740203
   },
   "reversed": false,
   "folder": null,
